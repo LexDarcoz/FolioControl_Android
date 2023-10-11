@@ -2,7 +2,6 @@ package foliocontrol.android.foliocontrolandroid
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,15 +22,12 @@ import foliocontrol.android.foliocontrolandroid.screens.LoginScreen
 import foliocontrol.android.foliocontrolandroid.screens.SearchScreen
 import foliocontrol.android.foliocontrolandroid.screens.SettingScreen
 
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FolioControlApplication() {
-
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-
 
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
@@ -42,10 +38,9 @@ fun FolioControlApplication() {
         },
         topBar = {
             Navbar(scrollBehavior)
-        },
+        }
 
-
-        ) { innerPadding ->
+    ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             NavHost(navController = navController, startDestination = "Login") {
                 composable("Login") { LoginScreen(navController) }
@@ -56,6 +51,4 @@ fun FolioControlApplication() {
             }
         }
     }
-
 }
-
