@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -16,6 +15,7 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -28,7 +28,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import foliocontrol.android.foliocontrolandroid.ui.theme.FolioControl_AndroidTheme
+import foliocontrol.android.foliocontrolandroid.ui.theme.FolioControlAndroidTheme
 
 data class BottomNavigationItem(
     val title: String,
@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            FolioControl_AndroidTheme {
+            FolioControlAndroidTheme {
                 val items = listOf(
                     BottomNavigationItem(
                         title = "Home",
@@ -85,9 +85,14 @@ class MainActivity : ComponentActivity() {
 
                 ) {
                     Scaffold(
-                        Modifier.background(MaterialTheme.colorScheme.secondary),
+                        modifier = Modifier.fillMaxSize(),
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        containerColor = MaterialTheme.colorScheme.primary,
                         bottomBar = {
-                            NavigationBar {
+                            NavigationBar(
+                                contentColor = MaterialTheme.colorScheme.primary,
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer
+                            ) {
                                 items.forEachIndexed { index, item ->
                                     NavigationBarItem(
                                         selected = selectedIcon == index,
@@ -100,7 +105,10 @@ class MainActivity : ComponentActivity() {
                                         },
                                         alwaysShowLabel = false,
                                         icon = {
-                                            item.unselectedIcon
+                                            Icon(
+                                                imageVector = if (selectedIcon == index) item.selectedIcon else item.unselectedIcon,
+                                                contentDescription = item.title
+                                            )
                                         }
 
                                     )
