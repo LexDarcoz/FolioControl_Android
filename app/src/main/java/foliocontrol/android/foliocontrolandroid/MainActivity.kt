@@ -28,15 +28,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.compose.rememberNavController
+import foliocontrol.android.foliocontrolandroid.components.BottomNavigation
+import foliocontrol.android.foliocontrolandroid.components.Navbar
+import foliocontrol.android.foliocontrolandroid.screens.HomeScreen
 import foliocontrol.android.foliocontrolandroid.ui.theme.FolioControlAndroidTheme
 
-data class BottomNavigationItem(
-    val title: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val onClick: () -> Unit
-
-)
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -45,78 +42,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             FolioControlAndroidTheme {
-                val items = listOf(
-                    BottomNavigationItem(
-                        title = "Home",
-                        selectedIcon = Icons.Filled.Home,
-                        unselectedIcon = Icons.Outlined.Home,
-                        onClick = { /*TODO*/ }
 
-                    ),
-                    BottomNavigationItem(
-                        title = "Search",
-                        selectedIcon = Icons.Filled.Search,
-                        unselectedIcon = Icons.Outlined.Search,
-                        onClick = { /*TODO*/ }
-
-                    ),
-                    BottomNavigationItem(
-                        title = "Profile",
-                        selectedIcon = Icons.Filled.AccountCircle,
-                        unselectedIcon = Icons.Outlined.AccountCircle,
-                        onClick = { /*TODO*/ }
-
-                    ),
-                    BottomNavigationItem(
-                        title = "Settings",
-                        selectedIcon = Icons.Filled.Settings,
-                        unselectedIcon = Icons.Outlined.Settings,
-                        onClick = { /*TODO*/ }
-
-                    )
-                )
-                var selectedIcon by rememberSaveable {
-                    mutableStateOf(0)
-                }
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.secondary
 
-                ) {
-                    Scaffold(
-                        modifier = Modifier.fillMaxSize(),
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        bottomBar = {
-                            NavigationBar(
-                                contentColor = MaterialTheme.colorScheme.primary,
-                                containerColor = MaterialTheme.colorScheme.secondaryContainer
-                            ) {
-                                items.forEachIndexed { index, item ->
-                                    NavigationBarItem(
-                                        selected = selectedIcon == index,
-                                        onClick = {
-                                            selectedIcon = index
-                                            // navController.navigate(item.title)
-                                        },
-                                        label = {
-                                            Text(text = item.title)
-                                        },
-                                        alwaysShowLabel = false,
-                                        icon = {
-                                            Icon(
-                                                imageVector = if (selectedIcon == index) item.selectedIcon else item.unselectedIcon,
-                                                contentDescription = item.title
-                                            )
-                                        }
-
-                                    )
-                                }
-                            }
-                        }
                     ) {
-                    }
+                    FolioControlApplication()
+
                 }
             }
         }
