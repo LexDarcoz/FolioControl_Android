@@ -19,6 +19,7 @@ import foliocontrol.android.foliocontrolandroid.components.BottomNavigation
 import foliocontrol.android.foliocontrolandroid.components.Navbar
 import foliocontrol.android.foliocontrolandroid.screens.AccountScreen
 import foliocontrol.android.foliocontrolandroid.screens.HomeScreen
+import foliocontrol.android.foliocontrolandroid.screens.LoginScreen
 import foliocontrol.android.foliocontrolandroid.screens.SearchScreen
 import foliocontrol.android.foliocontrolandroid.screens.SettingScreen
 
@@ -46,9 +47,10 @@ fun FolioControlApplication() {
 
         ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            NavHost(navController = navController, startDestination = "Home") {
+            NavHost(navController = navController, startDestination = "Login") {
+                composable("Login") { LoginScreen(navController) }
                 composable("Home") { HomeScreen(/*...*/) }
-                composable("Account") { AccountScreen(/*...*/) }
+                composable("Account") { AccountScreen() }
                 composable("Settings") { SettingScreen(/*...*/) }
                 composable("Search") { SearchScreen(/*...*/) }
             }
