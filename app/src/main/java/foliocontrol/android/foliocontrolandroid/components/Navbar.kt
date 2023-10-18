@@ -31,15 +31,7 @@ fun Navbar(scrollBehavior: TopAppBarScrollBehavior) {
                 overflow = TextOverflow.Ellipsis, color = MaterialTheme.colorScheme.secondary
             )
         },
-        navigationIcon = {
-            IconButton(onClick = { /* do something */ }) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Localized description",
-                    tint = MaterialTheme.colorScheme.secondary
-                )
-            }
-        },
+
         actions = {
             IconButton(onClick = { /* do something */ }) {
                 Icon(

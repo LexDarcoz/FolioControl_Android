@@ -9,7 +9,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import foliocontrol.android.foliocontrolandroid.ui.theme.FolioControlAndroidTheme
-
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

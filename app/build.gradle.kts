@@ -61,7 +61,9 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-
+// Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.5.0")
     implementation("com.google.accompanist:accompanist-flowlayout:0.24.8-beta")
 
     testImplementation("junit:junit:4.13.2")

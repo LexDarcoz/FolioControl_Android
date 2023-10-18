@@ -13,26 +13,48 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import foliocontrol.android.foliocontrolandroid.api.UserLoginRequest
+import foliocontrol.android.foliocontrolandroid.api.UserLoginRequestData
+
+
+import foliocontrol.android.foliocontrolandroid.models.ProfileModel
+import kotlin.math.log
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navController: NavController) {
+    val profile = remember {
+        mutableStateOf(
+            ProfileModel(
+                name = "",
+                firstName = "",
+                lastName = "",
+                street = "",
+                streetNumber = "",
+                zipCode = "",
+                city = "",
+                email = ""
+            )
+        )
+    }
+
     var password by rememberSaveable { mutableStateOf("") }
-    var username by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
+            .padding(16.dp), contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -40,9 +62,9 @@ fun LoginScreen(navController: NavController) {
             modifier = Modifier.padding(16.dp)
         ) {
             TextField(
-                value = username,
-                onValueChange = { username = it }, // Update the username, not password
-                label = { Text("Enter username") }, // Correct the label text
+                value = email,
+                onValueChange = { email = it }, // Update the username, not password
+                label = { Text("Enter email") }, // Correct the label text
 
             )
             TextField(
@@ -52,7 +74,17 @@ fun LoginScreen(navController: NavController) {
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
             )
-            Button(onClick = { navController.navigate("Home") }) {
+            Button(onClick = {
+
+                println("Login")
+                println("Email: $email")
+                println("Password: $password")
+                val token = UserLoginRequest(UserLoginRequestData(email, password), profile)
+                println(token)
+
+
+                navController.navigate("Home")
+            }) {
                 Text(text = "Login")
             }
         }
