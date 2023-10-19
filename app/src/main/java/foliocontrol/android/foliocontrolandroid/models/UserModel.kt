@@ -1,6 +1,11 @@
 package foliocontrol.android.foliocontrolandroid.models
 
-data class ProfileModel(
+data class UserModel(
+
+    var id: String,
+    var token: String,
+    var email: String,
+    var password: String,
     var name: String,
     var firstName: String,
     var lastName: String,
@@ -8,10 +13,6 @@ data class ProfileModel(
     var streetNumber: String,
     var zipCode: String,
     var city: String,
-    var email: String,
-    )
+    var country: String
 
-data class UserModel(
-    var profile: ProfileModel,
-    var token: String
 )
