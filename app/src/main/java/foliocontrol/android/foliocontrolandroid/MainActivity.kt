@@ -4,14 +4,18 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import foliocontrol.android.foliocontrolandroid.context.AuthViewModel
 import foliocontrol.android.foliocontrolandroid.ui.theme.FolioControlAndroidTheme
 import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
+
 class MainActivity : ComponentActivity() {
+    private val viewModel by viewModels<AuthViewModel>()
+
     @OptIn(ExperimentalMaterial3Api::class)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
 
                 ) {
-                    FolioControlApplication()
+                    FolioControlApplication(viewModel)
                 }
             }
         }
