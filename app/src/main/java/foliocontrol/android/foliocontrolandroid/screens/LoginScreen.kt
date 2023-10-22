@@ -26,10 +26,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import foliocontrol.android.foliocontrolandroid.api.UserLoginRequest
-import foliocontrol.android.foliocontrolandroid.api.UserLoginRequestData
-import foliocontrol.android.foliocontrolandroid.context.LocalTokenState
 import foliocontrol.android.foliocontrolandroid.context.User
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,14 +44,16 @@ fun LoginScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp), contentAlignment = Alignment.Center
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.padding(16.dp)
         ) {
-            TextField(value = email,
+            TextField(
+                value = email,
                 onValueChange = { email = it }, // Update the username, not password
                 label = { Text("Enter email") } // Correct the label text
 
@@ -68,17 +67,15 @@ fun LoginScreen(navController: NavController) {
             )
             val context = LocalContext.current
             Button(onClick = {
-
                 if (email.isNotEmpty() && password.isNotEmpty()) {
-                    //await the result
+                    // await the result
 
                     scope.launch {
-
                         UserLoginRequest(email, password, userState)
 
                         if (userState.value.token.isNotEmpty()) {
                             navController.navigate("Home")
-                            Toast.makeText(context, "Welcome ${email}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Welcome $email", Toast.LENGTH_SHORT).show()
                         } else {
 //                    throw a toast
                             Toast.makeText(
@@ -88,7 +85,6 @@ fun LoginScreen(navController: NavController) {
                             ).show()
                         }
                     }
-
                 } else {
                     Toast.makeText(context, "Please enter email and password", Toast.LENGTH_SHORT)
                         .show()

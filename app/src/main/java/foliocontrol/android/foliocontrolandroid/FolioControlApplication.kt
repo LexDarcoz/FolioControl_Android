@@ -10,14 +10,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import foliocontrol.android.foliocontrolandroid.components.BottomNavigation
 import foliocontrol.android.foliocontrolandroid.components.Navbar
-import foliocontrol.android.foliocontrolandroid.context.LocalTokenState
 import foliocontrol.android.foliocontrolandroid.screens.AccountScreen
 import foliocontrol.android.foliocontrolandroid.screens.HomeScreen
 import foliocontrol.android.foliocontrolandroid.screens.LoginScreen
@@ -30,8 +28,7 @@ import foliocontrol.android.foliocontrolandroid.screens.SettingScreen
 fun FolioControlApplication() {
     val navController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val tokenAuth = LocalTokenState.current
-CompositionLocalProvider(LocalTokenState provides tokenAuth) {
+
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
         contentColor = MaterialTheme.colorScheme.primary,
@@ -54,5 +51,4 @@ CompositionLocalProvider(LocalTokenState provides tokenAuth) {
             }
         }
     }
-}
 }
