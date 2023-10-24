@@ -9,6 +9,11 @@ interface AuthService {
     fun configureAuth(context: Context)
 
     fun signUp(signUpState: SignUpState, onComplete: () -> Unit)
-    fun login(loginState: LoginState, onComplete: () -> Unit)
+    fun login(
+        loginState: LoginState,
+        onComplete: () -> Unit,
+        updateUserState: (String) -> Unit
+    ): Boolean
+
     fun logOut(onComplete: () -> Unit)
 }

@@ -57,6 +57,8 @@ fun LoginScreen(viewModel: AuthViewModel) {
             val context = LocalContext.current
             Button( // Change the text
                 onClick = {
+                    viewModel.login()
+
                     Toast.makeText(context, "Login clicked", Toast.LENGTH_SHORT).show()
                 }
             ) {

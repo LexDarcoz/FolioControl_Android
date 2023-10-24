@@ -13,10 +13,28 @@ class AuthViewModel : ViewModel() {
     var userState = mutableStateOf(User())
         private set
 
-
-    fun updateuserState(user: User){
-
-
+    fun updateUserState(
+        email: String? = null,
+        name: String? = null,
+        lastName: String? = null,
+        firstName: String? = null,
+        token: String? = null
+    ) {
+        email?.let {
+            userState.value = userState.value.copy(email = it)
+        }
+        name?.let {
+            userState.value = userState.value.copy(name = it)
+        }
+        firstName?.let {
+            userState.value = userState.value.copy(firstName = it)
+        }
+        lastName?.let {
+            userState.value = userState.value.copy(lastName = it)
+        }
+        token?.let {
+            userState.value = userState.value.copy(token = it)
+        }
     }
 
     fun updateLoginState(
@@ -59,9 +77,12 @@ class AuthViewModel : ViewModel() {
         navigateTo("Login")
     }
 
-    fun login() {
-
-        navigateTo("Home")
+    fun login(): Boolean {
+        return authService.login(
+            loginState.value,
+            onComplete = { navigateTo("Home") },
+            { updateUserState() }
+        )
     }
 
     fun logOut() {

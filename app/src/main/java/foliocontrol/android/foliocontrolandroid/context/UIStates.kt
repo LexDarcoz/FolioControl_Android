@@ -17,9 +17,6 @@ data class User(
     var name: String = "",
     var firstName: String = "",
     var lastName: String = "",
-
     var email: String = "",
-
-    var token: String = "",
-
-    )
+    var token: String = ""
+)
