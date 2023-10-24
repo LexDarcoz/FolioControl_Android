@@ -10,6 +10,5 @@ interface AuthService {
 
     fun signUp(signUpState: SignUpState, onComplete: () -> Unit)
     fun login(loginState: LoginState, onComplete: () -> Unit)
-
     fun logOut(onComplete: () -> Unit)
 }

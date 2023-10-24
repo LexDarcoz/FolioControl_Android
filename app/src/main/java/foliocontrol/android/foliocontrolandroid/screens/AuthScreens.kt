@@ -113,7 +113,7 @@ fun SignUpScreen(viewModel: AuthViewModel) {
             ) {
                 Text("Make account")
             }
-            TextButton(onClick = { viewModel.navigateTo("Login") }) {
+            TextButton(onClick = { viewModel.showLogin() }) {
                 Text(text = "Already have an account? Login here!")
             }
         }

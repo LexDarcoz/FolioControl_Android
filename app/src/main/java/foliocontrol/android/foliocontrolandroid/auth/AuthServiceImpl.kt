@@ -10,7 +10,7 @@ class AuthServiceImpl : AuthService {
     }
 
     override fun signUp(signUpState: SignUpState, onComplete: () -> Unit) {
-        TODO("Not yet implemented")
+
     }
 
     override fun login(loginState: LoginState, onComplete: () -> Unit) {

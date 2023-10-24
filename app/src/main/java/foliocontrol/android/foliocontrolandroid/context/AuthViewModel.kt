@@ -10,6 +10,15 @@ class AuthViewModel : ViewModel() {
     var loginState = mutableStateOf(LoginState())
         private set
 
+    var userState = mutableStateOf(User())
+        private set
+
+
+    fun updateuserState(user: User){
+
+
+    }
+
     fun updateLoginState(
         email: String? = null,
         password: String? = null
@@ -51,6 +60,7 @@ class AuthViewModel : ViewModel() {
     }
 
     fun login() {
+
         navigateTo("Home")
     }
 
