@@ -20,7 +20,6 @@ class AuthViewModel : ViewModel() {
     private val authService = AuthServiceImpl()
     var loginUiState: LoginUiState by mutableStateOf(
         LoginUiState.LoggedOut("You are not logged in")
-//        LoginUiState.Success(true)
     )
         private set
 
