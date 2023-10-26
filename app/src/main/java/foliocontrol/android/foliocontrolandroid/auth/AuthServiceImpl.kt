@@ -13,13 +13,11 @@ class AuthServiceImpl : AuthService {
     override fun signUp(signUpState: SignUpState, onComplete: () -> Unit) {
     }
 
-    override fun login(
+    override suspend fun login(
         loginState: LoginState,
-        onComplete: () -> Unit,
         updateUserState: (String) -> Unit
     ): Boolean {
         return if (UserLoginRequest(loginState, updateUserState)) {
-            onComplete()
             println("User succesfully logged in")
             true
         } else {

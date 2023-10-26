@@ -33,7 +33,7 @@ fun Navbar(scrollBehavior: TopAppBarScrollBehavior, viewModel: AuthViewModel) {
         },
 
         actions = {
-            IconButton(onClick = { viewModel.navigateTo("Login") }) {
+            IconButton(onClick = { viewModel.navigateTo("AuthScreen") }) {
                 Icon(
                     imageVector = Icons.Filled.ExitToApp,
                     contentDescription = "Localized description",

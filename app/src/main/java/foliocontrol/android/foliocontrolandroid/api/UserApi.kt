@@ -1,12 +1,14 @@
 package foliocontrol.android.foliocontrolandroid.api
 
 import android.util.Log
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import foliocontrol.android.foliocontrolandroid.context.LoginState
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -20,43 +22,29 @@ data class UserTokenRequestData(
 interface UserApi {
     @Headers("Accept: application/json")
     @POST("api/user/login")
-    fun login(@Body userState: LoginState): Call<UserTokenRequestData>
+    suspend fun login(@Body userState: JsonObject): JsonObject
 
     @GET("api/user")
-    fun getUser(@Header("Authorization") token: String): Call<LoginState>
+    suspend fun getUser(@Header("Authorization") token: String): JsonObject
 }
 
-fun UserLoginRequest(
+suspend fun UserLoginRequest(
     loginCredentials: LoginState,
     updateUserState: (String) -> Unit
 
 ): Boolean {
     val retrofit = Retrofit.Builder().baseUrl("http://10.0.2.2:9000")
-        .addConverterFactory(GsonConverterFactory.create()).build()
-
+        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType())).build()
     val api = retrofit.create(UserApi::class.java)
+    var mapGuy: Map<String, JsonElement> = emptyMap()
+    mapGuy = mapGuy.plus(Pair("email", JsonPrimitive(loginCredentials.email)))
+    mapGuy = mapGuy.plus(Pair("password", JsonPrimitive(loginCredentials.password)))
 
-    val call: Call<UserTokenRequestData> = api.login(loginCredentials)
-    var token = ""
-    call.enqueue(object : Callback<UserTokenRequestData> {
-        override fun onResponse(
-            call: Call<UserTokenRequestData>,
-            response: Response<UserTokenRequestData>
-        ) {
-            if (response.isSuccessful) {
-                Log.d("Main", "Success! " + response.body().toString())
-                token = response.body()!!.token
-                updateUserState(token)
-            }
-        }
-
-        override fun onFailure(call: Call<UserTokenRequestData>, t: Throwable) {
-            println("Failed")
-            Log.e("Main", "Failed" + t.message.toString())
-        }
-    })
-
-    println("token: $token")
+    var obj: JsonObject = JsonObject(content = mapGuy)
+    Log.i("UserLoginRequest", "obj: $obj")
+    val call: JsonObject = api.login(obj)
+    Log.i("UserLoginRequest", "call: $call")
+    var token = call["token"].toString()
     return token.isNotEmpty()
 }
 
