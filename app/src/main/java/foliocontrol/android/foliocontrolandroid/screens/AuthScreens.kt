@@ -30,7 +30,7 @@ fun AuthScreen(authViewModel: AuthViewModel = viewModel(factory = AppViewModelPr
 // Main auth
     when (authViewModel.loginUiState) {
         is LoginUiState.LoggedOut -> {
-            LoginScreen()
+            LoginScreen(errorName = (authViewModel.loginUiState as LoginUiState.LoggedOut).message)
         }
 
         is LoginUiState.Success -> {
@@ -46,6 +46,7 @@ fun AuthScreen(authViewModel: AuthViewModel = viewModel(factory = AppViewModelPr
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
+    errorName: String,
     authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     var state = authViewModel.loginState.value
@@ -74,6 +75,7 @@ fun LoginScreen(
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
             )
+            Text(text = errorName)
             val context = LocalContext.current
             Button( // Change the text
                 onClick = {
