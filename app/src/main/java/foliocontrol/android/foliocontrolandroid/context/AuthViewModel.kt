@@ -20,6 +20,7 @@ class AuthViewModel : ViewModel() {
     private val authService = AuthServiceImpl()
     var loginUiState: LoginUiState by mutableStateOf(
         LoginUiState.LoggedOut("You are not logged in")
+//        LoginUiState.Success(true)
     )
         private set
 
@@ -67,22 +68,6 @@ class AuthViewModel : ViewModel() {
 
     var signUpState = mutableStateOf(SignUpState())
         private set
-
-    fun updateSignUpState(
-        username: String? = null,
-        email: String? = null,
-        password: String? = null
-    ) {
-        username?.let {
-            signUpState.value = signUpState.value.copy(username = it)
-        }
-        email?.let {
-            signUpState.value = signUpState.value.copy(email = it)
-        }
-        password?.let {
-            signUpState.value = signUpState.value.copy(password = it)
-        }
-    }
 
     fun showLogin() {
         navigateTo("Login")

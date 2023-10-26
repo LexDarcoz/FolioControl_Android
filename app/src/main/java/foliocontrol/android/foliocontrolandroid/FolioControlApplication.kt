@@ -11,6 +11,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,10 +29,12 @@ import foliocontrol.android.foliocontrolandroid.screens.SettingScreen
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FolioControlApplication(viewModel: AuthViewModel) {
+fun FolioControlApplication(
+    authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val navController = rememberNavController()
-    viewModel.navigateTo = {
+    authViewModel.navigateTo = {
         navController.navigate(it)
     }
     Scaffold(
@@ -39,26 +42,30 @@ fun FolioControlApplication(viewModel: AuthViewModel) {
         contentColor = MaterialTheme.colorScheme.primary,
         containerColor = MaterialTheme.colorScheme.secondary,
         bottomBar = {
-            if (viewModel.loginUiState is LoginUiState.Success) {
-                BottomNavigation(viewModel = viewModel)
+            if (authViewModel.loginUiState is LoginUiState.Success) {
+                BottomNavigation(viewModel = authViewModel)
             }
         },
         topBar = {
-            Navbar(scrollBehavior, viewModel = viewModel)
+            Navbar(scrollBehavior, viewModel = authViewModel)
         }
 
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            AppNavigator(viewModel = viewModel, navController = navController)
+            AppNavigator(navController = navController)
         }
     }
 }
 
 @Composable
-fun AppNavigator(viewModel: AuthViewModel, navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "Login") {
+fun AppNavigator(
+    navController: NavHostController
+) {
+    NavHost(navController = navController, startDestination = "AuthScreen") {
         // Auth
-        composable("AuthScreen") { AuthScreen(loginUiState = viewModel.loginUiState) }
+        composable("AuthScreen") {
+            AuthScreen()
+        }
         // Main
         composable("Home") { HomeScreen(/*...*/) }
         composable("Account") { AccountScreen() }

@@ -26,7 +26,7 @@ interface UserApi {
     fun getUser(@Header("Authorization") token: String): Call<LoginState>
 }
 
-fun UserLoginRequest(
+suspend fun UserLoginRequest(
     loginCredentials: LoginState,
     updateUserState: (String) -> Unit
 
@@ -46,6 +46,11 @@ fun UserLoginRequest(
             if (response.isSuccessful) {
                 Log.d("Main", "Success! " + response.body().toString())
                 token = response.body()!!.token
+                if (token.isNotEmpty()) {
+                    println("We got here")
+                } else {
+                    throw Exception("No token found for given user")
+                }
                 updateUserState(token)
             }
         }
