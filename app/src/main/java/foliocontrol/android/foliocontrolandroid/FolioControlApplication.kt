@@ -18,12 +18,12 @@ import androidx.navigation.compose.rememberNavController
 import foliocontrol.android.foliocontrolandroid.components.BottomNavigation
 import foliocontrol.android.foliocontrolandroid.components.Navbar
 import foliocontrol.android.foliocontrolandroid.context.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.context.LoginUiState
 import foliocontrol.android.foliocontrolandroid.screens.AccountScreen
+import foliocontrol.android.foliocontrolandroid.screens.AuthScreen
 import foliocontrol.android.foliocontrolandroid.screens.HomeScreen
-import foliocontrol.android.foliocontrolandroid.screens.LoginScreen
 import foliocontrol.android.foliocontrolandroid.screens.SearchScreen
 import foliocontrol.android.foliocontrolandroid.screens.SettingScreen
-import foliocontrol.android.foliocontrolandroid.screens.SignUpScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +39,9 @@ fun FolioControlApplication(viewModel: AuthViewModel) {
         contentColor = MaterialTheme.colorScheme.primary,
         containerColor = MaterialTheme.colorScheme.secondary,
         bottomBar = {
-            BottomNavigation(viewModel = viewModel)
+            if (viewModel.loginUiState is LoginUiState.Success) {
+                BottomNavigation(viewModel = viewModel)
+            }
         },
         topBar = {
             Navbar(scrollBehavior, viewModel = viewModel)
@@ -56,9 +58,7 @@ fun FolioControlApplication(viewModel: AuthViewModel) {
 fun AppNavigator(viewModel: AuthViewModel, navController: NavHostController) {
     NavHost(navController = navController, startDestination = "Login") {
         // Auth
-        composable("SignUp") { SignUpScreen(viewModel = viewModel) }
-        composable("Login") { LoginScreen(viewModel = viewModel) }
-
+        composable("AuthScreen") { AuthScreen(loginUiState = viewModel.loginUiState) }
         // Main
         composable("Home") { HomeScreen(/*...*/) }
         composable("Account") { AccountScreen() }

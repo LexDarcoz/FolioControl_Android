@@ -1,12 +1,28 @@
 package foliocontrol.android.foliocontrolandroid.context
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import foliocontrol.android.foliocontrolandroid.auth.AuthServiceImpl
+import kotlinx.coroutines.launch
+
+sealed interface LoginUiState {
+
+    data class Success(val message: Boolean) : LoginUiState
+    data class LoggedOut(val message: String) : LoginUiState
+    data object Loading : LoginUiState
+}
 
 class AuthViewModel : ViewModel() {
     lateinit var navigateTo: (String) -> Unit
     private val authService = AuthServiceImpl()
+    var loginUiState: LoginUiState by mutableStateOf(
+        LoginUiState.LoggedOut("You are not logged in")
+    )
+        private set
+
     var loginState = mutableStateOf(LoginState())
         private set
 
@@ -68,21 +84,24 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    // Navigation
-    fun showSignUp() {
-        authService.signUp(SignUpState(), onComplete = { navigateTo("SignUp") })
-    }
-
     fun showLogin() {
         navigateTo("Login")
     }
 
-    fun login(): Boolean {
-        return authService.login(
-            loginState.value,
-            onComplete = { navigateTo("Home") },
-            { updateUserState() }
-        )
+    fun login() {
+        viewModelScope.launch {
+            loginUiState = LoginUiState.Loading
+
+            try {
+                var auth = authService.login(
+                    loginState.value,
+                    { updateUserState() }
+                )
+                loginUiState = LoginUiState.Success(true)
+            } catch (e: Exception) {
+                loginUiState = LoginUiState.LoggedOut(e.localizedMessage ?: "You logged out")
+            }
+        }
     }
 
     fun logOut() {
