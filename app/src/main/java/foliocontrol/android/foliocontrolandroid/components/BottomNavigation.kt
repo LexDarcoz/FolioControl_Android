@@ -22,12 +22,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.lifecycle.viewmodel.compose.viewModel
+
+import foliocontrol.android.foliocontrolandroid.AppViewModelProvider
 import foliocontrol.android.foliocontrolandroid.context.AuthViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomNavigation(viewModel: AuthViewModel) {
+fun BottomNavigation(authViewModel: AuthViewModel ){
     data class BottomNavigationItem(
         val title: String,
         val selectedIcon: ImageVector,
@@ -42,7 +45,6 @@ fun BottomNavigation(viewModel: AuthViewModel) {
             selectedIcon = Icons.Filled.Home,
             unselectedIcon = Icons.Outlined.Home,
             onClick = { }
-
         ),
         BottomNavigationItem(
             title = "Search",
@@ -78,7 +80,7 @@ fun BottomNavigation(viewModel: AuthViewModel) {
                 selected = selectedIcon == index,
                 onClick = {
                     selectedIcon = index
-                    viewModel.navigateTo(item.title)
+                    authViewModel.navigateTo(item.title)
                 },
                 label = {
                     Text(text = item.title, color = MaterialTheme.colorScheme.secondary)

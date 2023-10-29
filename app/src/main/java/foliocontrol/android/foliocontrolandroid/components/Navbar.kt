@@ -12,11 +12,14 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.lifecycle.viewmodel.compose.viewModel
+import foliocontrol.android.foliocontrolandroid.AppViewModelProvider
 import foliocontrol.android.foliocontrolandroid.context.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.context.LoginUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Navbar(scrollBehavior: TopAppBarScrollBehavior, viewModel: AuthViewModel) {
+fun Navbar(scrollBehavior: TopAppBarScrollBehavior, authViewModel: AuthViewModel) {
     CenterAlignedTopAppBar(
 
         colors = TopAppBarDefaults.largeTopAppBarColors(
@@ -31,16 +34,29 @@ fun Navbar(scrollBehavior: TopAppBarScrollBehavior, viewModel: AuthViewModel) {
                 color = MaterialTheme.colorScheme.secondary
             )
         },
-
         actions = {
-            IconButton(onClick = { viewModel.navigateTo("AuthScreen") }) {
-                Icon(
-                    imageVector = Icons.Filled.ExitToApp,
-                    contentDescription = "Localized description",
-                    tint = MaterialTheme.colorScheme.secondary
-                )
+            when (authViewModel.loginUiState) {
+                is LoginUiState.Success -> {
+                    IconButton(onClick = {
+                        authViewModel.logOut()
+                        authViewModel.navigateTo("AuthScreen")
+
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.ExitToApp,
+                            contentDescription = "Localized description",
+                            tint = MaterialTheme.colorScheme.secondary
+                        )
+                    }
+                }
+
+                else -> {
+
+                }
             }
         },
+
+
         scrollBehavior = scrollBehavior
     )
 }

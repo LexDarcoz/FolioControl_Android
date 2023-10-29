@@ -1,12 +1,5 @@
 package foliocontrol.android.foliocontrolandroid.context
 
-data class SignUpState(
-    var username: String = "",
-    var password: String = "",
-    var email: String = ""
-
-)
-
 data class LoginState(
     var email: String = "",
     var password: String = ""
@@ -18,5 +11,15 @@ data class User(
     var firstName: String = "",
     var lastName: String = "",
     var email: String = "",
-    var token: String = ""
 )
+
+data class Property(
+    var name: String = "",
+    var value: String = "",
+)
+
+data class Token(
+    var token: String = "",
+)
+
+

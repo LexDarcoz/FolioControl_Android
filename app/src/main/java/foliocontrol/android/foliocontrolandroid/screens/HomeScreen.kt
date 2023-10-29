@@ -1,5 +1,6 @@
 package foliocontrol.android.foliocontrolandroid.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -13,21 +14,47 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.components.PropertyCard
+import foliocontrol.android.foliocontrolandroid.context.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.context.Token
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(authViewModel: AuthViewModel) {
+
+
+var token by rememberSaveable {
+        mutableStateOf("")
+}
+
+
+    fun handleClick() {
+        if (token.isNotBlank()){
+            token = ""
+
+
+        }else{
+            token = authViewModel.getToken().token
+            Log.i("token", token)
+        }
+
+    }
+
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = {}) {
+            FloatingActionButton(onClick = {handleClick()}) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
+
             }
         },
         topBar = {
@@ -42,6 +69,7 @@ fun HomeScreen() {
             )
         }
     ) { values ->
+
         LazyColumn(contentPadding = values) {
             items(20) {
                 PropertyCard(
@@ -56,6 +84,11 @@ fun HomeScreen() {
                         "hamburger burgdoggen.",
                     modifier = Modifier.padding(16.dp)
                 )
+
+                if (token.isNotBlank()){
+                    Text(text = token, color = MaterialTheme.colorScheme.primary
+                        )
+                }
             }
         }
     }

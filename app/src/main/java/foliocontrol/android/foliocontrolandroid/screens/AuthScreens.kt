@@ -12,29 +12,25 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import foliocontrol.android.foliocontrolandroid.AppViewModelProvider
 import foliocontrol.android.foliocontrolandroid.context.AuthViewModel
 import foliocontrol.android.foliocontrolandroid.context.LoginUiState
 
 @Composable
-fun AuthScreen(authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory)) {
+fun AuthScreen(authViewModel: AuthViewModel) {
 // Main auth
     when (authViewModel.loginUiState) {
         is LoginUiState.LoggedOut -> {
-            LoginScreen(errorName = (authViewModel.loginUiState as LoginUiState.LoggedOut).message)
+            LoginScreen(errorName = (authViewModel.loginUiState as LoginUiState.LoggedOut).message, authViewModel)
         }
 
         is LoginUiState.Success -> {
-            HomeScreen()
+            HomeScreen(authViewModel)
         }
 
         is LoginUiState.Loading -> {
@@ -47,7 +43,7 @@ fun AuthScreen(authViewModel: AuthViewModel = viewModel(factory = AppViewModelPr
 @Composable
 fun LoginScreen(
     errorName: String,
-    authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    authViewModel: AuthViewModel
 ) {
     var state = authViewModel.loginState.value
 

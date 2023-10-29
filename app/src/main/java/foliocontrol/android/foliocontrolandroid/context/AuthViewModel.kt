@@ -1,5 +1,6 @@
 package foliocontrol.android.foliocontrolandroid.context
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -28,13 +29,14 @@ class AuthViewModel : ViewModel() {
 
     var userState = mutableStateOf(User())
         private set
+    var userToken = mutableStateOf(Token())
+        private set
 
     fun updateUserState(
         email: String? = null,
         name: String? = null,
         lastName: String? = null,
         firstName: String? = null,
-        token: String? = null
     ) {
         email?.let {
             userState.value = userState.value.copy(email = it)
@@ -48,9 +50,23 @@ class AuthViewModel : ViewModel() {
         lastName?.let {
             userState.value = userState.value.copy(lastName = it)
         }
+    }
+    fun updateTokenState(
+        token: String? = null,
+    ) {
+        Log.d("Token", "tokenLogin: $token")
         token?.let {
-            userState.value = userState.value.copy(token = it)
+            userToken.value = userToken.value.copy(token = it)
         }
+    }
+
+    fun getToken() : Token{
+        return this.userToken.value
+    }
+
+    fun verify(Token: Token){
+
+
     }
 
     fun updateLoginState(
@@ -65,13 +81,6 @@ class AuthViewModel : ViewModel() {
         }
     }
 
-    var signUpState = mutableStateOf(SignUpState())
-        private set
-
-    fun showLogin() {
-        navigateTo("Login")
-    }
-
     fun login() {
         viewModelScope.launch {
             loginUiState = LoginUiState.Loading
@@ -79,9 +88,12 @@ class AuthViewModel : ViewModel() {
             try {
                 var auth = authService.login(
                     loginState.value,
-                    { updateUserState() }
+                    updateTokenState = { token ->
+                        updateTokenState(token)
+                    }
                 )
                 loginUiState = LoginUiState.Success(true)
+
             } catch (e: Exception) {
                 loginUiState = LoginUiState.LoggedOut(e.localizedMessage ?: "You logged out")
             }
@@ -89,6 +101,6 @@ class AuthViewModel : ViewModel() {
     }
 
     fun logOut() {
-        navigateTo("Login")
+        loginUiState = LoginUiState.LoggedOut("You logged out")
     }
 }

@@ -30,8 +30,7 @@ interface UserApi {
 
 suspend fun UserLoginRequest(
     loginCredentials: LoginState,
-    updateUserState: (String) -> Unit
-
+    updateTokenState: (String) -> Unit,
 ): Boolean {
     val retrofit = Retrofit.Builder().baseUrl("http://10.0.2.2:9000")
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType())).build()
@@ -45,6 +44,8 @@ suspend fun UserLoginRequest(
     val call: JsonObject = api.login(obj)
     Log.i("UserLoginRequest", "call: $call")
     var token = call["token"].toString()
+    updateTokenState(token);
+
     return token.isNotEmpty()
 }
 
@@ -53,8 +54,9 @@ suspend fun UserLoginRequest(
 //        .addConverterFactory(GsonConverterFactory.create()).build()
 //
 //    val api = retrofit.create(UserApi::class.java)
-//
-//    val call: Call<User> = api.getUser(token) // Include the token in the Authorization header
+//     var mapper: Map<String, JsonElement> = emptyMap()
+//     mapper = mapper.plus(Pair("email", JsonPrimitive(loginCredentials.email)))
+//     mapper = mapper.plus(Pair("password", JsonPrimitive(loginCredentials.password)))
 //
 //    call.enqueue(object : Callback<User> {
 //        override fun onResponse(call: Call<User>, response: Response<User>) {

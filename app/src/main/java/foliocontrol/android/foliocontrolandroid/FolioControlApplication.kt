@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import foliocontrol.android.foliocontrolandroid.components.BottomNavigation
 import foliocontrol.android.foliocontrolandroid.components.Navbar
 import foliocontrol.android.foliocontrolandroid.context.AuthViewModel
+
 import foliocontrol.android.foliocontrolandroid.context.LoginUiState
 import foliocontrol.android.foliocontrolandroid.screens.AccountScreen
 import foliocontrol.android.foliocontrolandroid.screens.AuthScreen
@@ -34,40 +35,44 @@ fun FolioControlApplication(
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val navController = rememberNavController()
-    authViewModel.navigateTo = {
-        navController.navigate(it)
-    }
-    Scaffold(
-        modifier = Modifier.fillMaxWidth(),
+    Scaffold(modifier = Modifier.fillMaxWidth(),
         contentColor = MaterialTheme.colorScheme.primary,
         containerColor = MaterialTheme.colorScheme.secondary,
         bottomBar = {
-            if (authViewModel.loginUiState is LoginUiState.Success) {
-                BottomNavigation(viewModel = authViewModel)
+            when (authViewModel.loginUiState) {
+                is LoginUiState.Success -> {
+                    BottomNavigation(authViewModel = authViewModel)
+                }
+                else -> {
+
+                }
             }
         },
         topBar = {
-            Navbar(scrollBehavior, viewModel = authViewModel)
+            Navbar(scrollBehavior,authViewModel =  authViewModel)
         }
 
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            AppNavigator(navController = navController)
+            AppNavigator(navController = navController, authViewModel = authViewModel)
         }
     }
 }
 
 @Composable
 fun AppNavigator(
-    navController: NavHostController
+    navController: NavHostController, authViewModel: AuthViewModel
 ) {
+    authViewModel.navigateTo = {
+        navController.navigate(it)
+    }
     NavHost(navController = navController, startDestination = "AuthScreen") {
         // Auth
         composable("AuthScreen") {
-            AuthScreen()
+            AuthScreen(authViewModel = authViewModel)
         }
         // Main
-        composable("Home") { HomeScreen(/*...*/) }
+        composable("Home") { HomeScreen(authViewModel) }
         composable("Account") { AccountScreen() }
         composable("Settings") { SettingScreen(/*...*/) }
         composable("Search") { SearchScreen(/*...*/) }
