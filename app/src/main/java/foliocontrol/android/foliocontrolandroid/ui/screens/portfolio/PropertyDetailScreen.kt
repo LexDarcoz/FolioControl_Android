@@ -13,6 +13,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -34,12 +35,12 @@ fun PropertyDetailScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+
                 .verticalScroll(rememberScrollState())
         ) {
             Image(
@@ -51,7 +52,7 @@ fun PropertyDetailScreen(
                     .height(200.dp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+
 
             Surface(
                color = MaterialTheme.colorScheme.secondary,
@@ -118,13 +119,14 @@ fun PropertyDetailScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PropertyField(label: String, value: String, onValueChange: (String) -> Unit) {
     Column(
         modifier = Modifier.padding(vertical = 8.dp)
     ) {
         Text(text = label, style = MaterialTheme.typography.bodyMedium)
-        BasicTextField(
+        OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -137,7 +139,7 @@ fun PropertyField(label: String, value: String, onValueChange: (String) -> Unit)
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primary)
+                .background(MaterialTheme.colorScheme.secondary)
                 .padding(8.dp)
         )
     }
