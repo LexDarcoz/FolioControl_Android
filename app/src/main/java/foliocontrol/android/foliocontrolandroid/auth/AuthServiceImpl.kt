@@ -2,7 +2,7 @@ package foliocontrol.android.foliocontrolandroid.auth
 
 import android.content.Context
 import foliocontrol.android.foliocontrolandroid.api.UserLoginRequest
-import foliocontrol.android.foliocontrolandroid.context.LoginState
+import foliocontrol.android.foliocontrolandroid.data.LoginState
 
 
 class AuthServiceImpl : AuthService {

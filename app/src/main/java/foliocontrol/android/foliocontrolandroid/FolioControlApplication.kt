@@ -1,5 +1,6 @@
 package foliocontrol.android.foliocontrolandroid
 
+import PropertyDetailScreen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,19 +14,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import foliocontrol.android.foliocontrolandroid.components.BottomNavigation
 import foliocontrol.android.foliocontrolandroid.components.Navbar
-import foliocontrol.android.foliocontrolandroid.context.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
 
-import foliocontrol.android.foliocontrolandroid.context.LoginUiState
+import foliocontrol.android.foliocontrolandroid.viewModels.LoginUiState
 import foliocontrol.android.foliocontrolandroid.screens.AccountScreen
 import foliocontrol.android.foliocontrolandroid.screens.AuthScreen
 import foliocontrol.android.foliocontrolandroid.screens.HomeScreen
 import foliocontrol.android.foliocontrolandroid.screens.SearchScreen
 import foliocontrol.android.foliocontrolandroid.screens.SettingScreen
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,13 +47,14 @@ fun FolioControlApplication(
                 is LoginUiState.Success -> {
                     BottomNavigation(authViewModel = authViewModel)
                 }
+
                 else -> {
 
                 }
             }
         },
         topBar = {
-            Navbar(scrollBehavior,authViewModel =  authViewModel)
+            Navbar(scrollBehavior, authViewModel = authViewModel, navController = navController)
         }
 
     ) { innerPadding ->
@@ -66,15 +71,23 @@ fun AppNavigator(
     authViewModel.navigateTo = {
         navController.navigate(it)
     }
-    NavHost(navController = navController, startDestination = "AuthScreen") {
+    NavHost(navController = navController, startDestination = "Home") {
         // Auth
-        composable("AuthScreen") {
-            AuthScreen(authViewModel = authViewModel)
+        composable("Home") {
+            AuthScreen(authViewModel = authViewModel) { navController.navigate("PropertyDetail/$it") }
         }
         // Main
-        composable("Home") { HomeScreen(authViewModel) }
         composable("Account") { AccountScreen() }
         composable("Settings") { SettingScreen(/*...*/) }
         composable("Search") { SearchScreen(/*...*/) }
+        //Portfolio
+        composable(
+            "PropertyDetail/{id}", arguments = listOf(
+                navArgument("id") { type = NavType.IntType },
+
+                )
+        ) { PropertyDetailScreen(/*...*/) }
+
+
     }
 }

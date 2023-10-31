@@ -1,5 +1,6 @@
 package foliocontrol.android.foliocontrolandroid.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,34 +25,36 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
+import foliocontrol.android.foliocontrolandroid.data.Property
 import kotlin.random.Random
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PropertyCard(
     title: String,
-    description: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateTo: (Any?) -> Unit,
+    property: Property
 ) {
     Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(
+        modifier = modifier, colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
-        ),
-        shape = MaterialTheme.shapes.medium
+        ), shape = MaterialTheme.shapes.medium
     ) {
         Image(
             painter = rememberAsyncImagePainter(
                 model = "https://picsum.photos/seed/${Random.nextInt()}/300/200"
             ),
             contentDescription = null,
-            modifier = Modifier.clip(MaterialTheme.shapes.large).fillMaxSize().aspectRatio(3f / 2f)
+            modifier = Modifier
+                .clip(MaterialTheme.shapes.large)
+                .fillMaxSize()
+                .aspectRatio(3f / 2f)
 
         )
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = title,
-                style = MaterialTheme.typography.titleLarge
+                text = title, style = MaterialTheme.typography.titleLarge
             )
             Spacer(modifier = Modifier.height(8.dp))
             FlowRow(
@@ -60,18 +63,14 @@ fun PropertyCard(
                 mainAxisSpacing = 8.dp
 
             ) {
-                AssistChip(
-                    onClick = { /*TODO*/ },
-                    colors = AssistChipDefaults.assistChipColors(
-                        leadingIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                    ),
-                    leadingIcon = {
-                        Icon(imageVector = Icons.Outlined.Edit, contentDescription = null)
-                    },
-                    label = {
-                        Text(text = "Edit")
-                    }
-                )
+                AssistChip(onClick = { Log.i("prop", "wa")
+                    navigateTo(property.propertyID)}, colors = AssistChipDefaults.assistChipColors(
+                    leadingIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                ), leadingIcon = {
+                    Icon(imageVector = Icons.Outlined.Edit, contentDescription = null)
+                }, label = {
+                    Text(text = "Edit")
+                })
 
 //
             }

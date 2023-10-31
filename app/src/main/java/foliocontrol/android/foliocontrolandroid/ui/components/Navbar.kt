@@ -1,6 +1,7 @@
 package foliocontrol.android.foliocontrolandroid.components
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -11,35 +12,55 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.lifecycle.viewmodel.compose.viewModel
-import foliocontrol.android.foliocontrolandroid.AppViewModelProvider
-import foliocontrol.android.foliocontrolandroid.context.AuthViewModel
-import foliocontrol.android.foliocontrolandroid.context.LoginUiState
+import androidx.navigation.NavHostController
+import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.viewModels.LoginUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Navbar(scrollBehavior: TopAppBarScrollBehavior, authViewModel: AuthViewModel) {
-    CenterAlignedTopAppBar(
+fun Navbar(
+    scrollBehavior: TopAppBarScrollBehavior,
+    authViewModel: AuthViewModel,
+    navController: NavHostController
+) {
+    CenterAlignedTopAppBar(colors = TopAppBarDefaults.largeTopAppBarColors(
+        containerColor = MaterialTheme.colorScheme.primary,
+        titleContentColor = MaterialTheme.colorScheme.secondary
+    ), title = {
+        Text(
+            "FolioControl",
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            color = MaterialTheme.colorScheme.secondary
+        )
 
-        colors = TopAppBarDefaults.largeTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.secondary
-        ),
-        title = {
-            Text(
-                "FolioControl",
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.secondary
-            )
-        },
+
+    }, navigationIcon = {
+        val navIcon = if (navController.navigateUp()) {
+            Icons.Default.ArrowBack
+        } else {
+            null
+        }
+
+        if (navIcon != null) {
+            IconButton(onClick = { navController.navigateUp() }) {
+                Icon(
+                    tint = MaterialTheme.colorScheme.secondary,
+                    imageVector = navIcon,
+                    contentDescription = "Back"
+                )
+            }
+        }
+    },
+
         actions = {
             when (authViewModel.loginUiState) {
                 is LoginUiState.Success -> {
                     IconButton(onClick = {
                         authViewModel.logOut()
-                        authViewModel.navigateTo("AuthScreen")
+                        navController.navigate("Home")
 
                     }) {
                         Icon(

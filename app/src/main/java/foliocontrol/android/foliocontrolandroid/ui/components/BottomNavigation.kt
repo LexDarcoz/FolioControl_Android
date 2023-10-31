@@ -22,10 +22,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.lifecycle.viewmodel.compose.viewModel
 
-import foliocontrol.android.foliocontrolandroid.AppViewModelProvider
-import foliocontrol.android.foliocontrolandroid.context.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
