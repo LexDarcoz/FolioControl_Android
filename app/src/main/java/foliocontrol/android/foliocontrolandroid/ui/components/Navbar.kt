@@ -12,11 +12,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
 import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
 import foliocontrol.android.foliocontrolandroid.viewModels.LoginUiState
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,20 +44,14 @@ fun Navbar(
 
 
     }, navigationIcon = {
-        val navIcon = if (navController.navigateUp()) {
-            Icons.Default.ArrowBack
-        } else {
-            null
-        }
 
-        if (navIcon != null) {
-            IconButton(onClick = { navController.navigateUp() }) {
-                Icon(
-                    tint = MaterialTheme.colorScheme.secondary,
-                    imageVector = navIcon,
-                    contentDescription = "Back"
-                )
-            }
+
+        IconButton(onClick = { navController.navigateUp() }) {
+            Icon(
+                tint = MaterialTheme.colorScheme.secondary,
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Back"
+            )
         }
     },
 
