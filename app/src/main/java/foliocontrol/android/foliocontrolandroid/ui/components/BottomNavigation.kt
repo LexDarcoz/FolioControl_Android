@@ -1,15 +1,16 @@
 package foliocontrol.android.foliocontrolandroid.components
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,13 +23,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
-
 import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BottomNavigation(authViewModel: AuthViewModel ){
+fun BottomNavigation(authViewModel: AuthViewModel) {
+    var partnershipList = authViewModel.partnershipList
+    Log.i("NAVBAR", "PARTNERSHIPLIST: $partnershipList ")
     data class BottomNavigationItem(
         val title: String,
         val selectedIcon: ImageVector,
@@ -37,6 +39,9 @@ fun BottomNavigation(authViewModel: AuthViewModel ){
 
     )
 
+    var selectedIcon by rememberSaveable {
+        mutableStateOf(0)
+    }
     val items = listOf(
         BottomNavigationItem(
             title = "Home",
@@ -59,31 +64,32 @@ fun BottomNavigation(authViewModel: AuthViewModel ){
 
         ),
         BottomNavigationItem(
-            title = "Settings",
-            selectedIcon = Icons.Filled.Settings,
-            unselectedIcon = Icons.Outlined.Settings,
+            title = "Partnerships",
+            selectedIcon = Icons.Filled.Menu,
+            unselectedIcon = Icons.Outlined.Menu,
             onClick = { }
 
         )
     )
-    var selectedIcon by rememberSaveable {
-        mutableStateOf(0)
-    }
+
     NavigationBar(
         contentColor = MaterialTheme.colorScheme.primary,
         containerColor = MaterialTheme.colorScheme.primary
     ) {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
-                selected = selectedIcon == index,
+                selected =
+                selectedIcon == index,
                 onClick = {
-                    selectedIcon = index
-                    authViewModel.navigateTo(item.title)
+                    if (item.title != "Partnerships") {
+                        selectedIcon = index
+                        authViewModel.navigateTo(item.title)
+                    }
                 },
                 label = {
                     Text(text = item.title, color = MaterialTheme.colorScheme.secondary)
                 },
-                alwaysShowLabel = false,
+                alwaysShowLabel = item.title == "Partnerships",
                 icon = {
                     Icon(
                         imageVector = if (selectedIcon == index) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length

@@ -6,10 +6,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import foliocontrol.android.foliocontrolandroid.auth.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.data.LoginState
+import foliocontrol.android.foliocontrolandroid.data.Partnership
 import foliocontrol.android.foliocontrolandroid.data.Token
-import foliocontrol.android.foliocontrolandroid.data.User
+import foliocontrol.android.foliocontrolandroid.service.AuthServiceImpl
 import kotlinx.coroutines.launch
 
 sealed interface LoginUiState {
@@ -23,21 +23,32 @@ sealed interface LoginUiState {
 class AuthViewModel : ViewModel() {
     lateinit var navigateTo: (String) -> Unit
     private val authService = AuthServiceImpl()
+    var partnershipList by mutableStateOf(listOf<Partnership>())
+        private set
+    var loginState = mutableStateOf(LoginState())
+        private set
+    var userToken = mutableStateOf(Token())
+        private set
+
+    fun getPartnershipListForLoggedInUser(token: String) {
+        viewModelScope.launch {
+            try {
+                partnershipList = authService.getPartnershipsForLoggedInUser(token)
+            } catch (e: Exception) {
+                println("Error: ${e.message}")
+            } finally {
+                println("Finally")
+            }
+        }
+    }
+
     var loginUiState: LoginUiState by mutableStateOf(
         LoginUiState.LoggedOut("You are not logged in")
     )
         private set
 
-
-    var loginState = mutableStateOf(LoginState())
-        private set
-
-    var userToken = mutableStateOf(Token())
-        private set
-
-
     fun updateTokenState(
-        token: String? = null,
+        token: String? = null
     ) {
         Log.d("Token", "tokenLogin: $token")
         token?.let {
@@ -54,12 +65,12 @@ class AuthViewModel : ViewModel() {
     }
 
     fun verify(Token: Token) {
-
-
+        // TODO
     }
 
     fun updateLoginState(
-        email: String? = null, password: String? = null
+        email: String? = null,
+        password: String? = null
     ) {
         email?.let {
             loginState.value = loginState.value.copy(email = it)
@@ -70,28 +81,23 @@ class AuthViewModel : ViewModel() {
     }
 
     fun login() {
+        viewModelScope.launch {
+            loginUiState = LoginUiState.Loading
 
-    viewModelScope.launch {
-        loginUiState = LoginUiState.Loading
-
-        try {
-            var auth = authService.login(loginState.value, updateTokenState = { token ->
-                updateTokenState(token)
-
-            })
-            loginUiState = LoginUiState.Success(true)
-
-
-        } catch (e: Exception) {
-            loginUiState = LoginUiState.LoggedOut(e.localizedMessage ?: "You logged out")
+            try {
+                var auth = authService.login(loginState.value, updateTokenState = { token ->
+                    updateTokenState(token)
+                })
+                getPartnershipListForLoggedInUser(userToken.value.token)
+                loginUiState = LoginUiState.Success(true)
+            } catch (e: Exception) {
+                loginUiState = LoginUiState.LoggedOut(e.localizedMessage ?: "You logged out")
+            }
         }
-    }
-
     }
 
     fun logOut() {
         resetToken()
         loginUiState = LoginUiState.LoggedOut("You logged out")
-
     }
 }

@@ -1,9 +1,10 @@
-package foliocontrol.android.foliocontrolandroid.auth
+package foliocontrol.android.foliocontrolandroid.service
 
 import android.content.Context
 import foliocontrol.android.foliocontrolandroid.api.UserLoginRequest
+import foliocontrol.android.foliocontrolandroid.api.getUserPartnerships
 import foliocontrol.android.foliocontrolandroid.data.LoginState
-
+import foliocontrol.android.foliocontrolandroid.data.Partnership
 
 class AuthServiceImpl : AuthService {
     override fun configureAuth(context: Context) {
@@ -12,7 +13,7 @@ class AuthServiceImpl : AuthService {
 
     override suspend fun login(
         loginState: LoginState,
-        updateTokenState: (String) -> Unit,
+        updateTokenState: (String) -> Unit
     ): Boolean {
         return if (UserLoginRequest(loginState, updateTokenState)) {
             println("User succesfully logged in")
@@ -27,7 +28,8 @@ class AuthServiceImpl : AuthService {
         TODO("Not yet implemented")
     }
 
-
-
-
+    override suspend fun getPartnershipsForLoggedInUser(token: String): List<Partnership> {
+        // TODO
+        return getUserPartnerships(token)
+    }
 }

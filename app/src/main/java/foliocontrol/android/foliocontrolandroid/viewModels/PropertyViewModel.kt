@@ -1,14 +1,12 @@
 package foliocontrol.android.foliocontrolandroid.viewModels
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import foliocontrol.android.foliocontrolandroid.data.Property
+import foliocontrol.android.foliocontrolandroid.service.AuthServiceImpl
 
 class PropertyViewModel : ViewModel() {
-
-
+    private val authService = AuthServiceImpl()
     var propertyListState = mutableStateOf(listOf<Property>())
         private set
 
@@ -22,9 +20,9 @@ class PropertyViewModel : ViewModel() {
         streetNumber: String? = null,
         city: String? = null,
         zipCode: String? = null,
-        country: String? = null,
+        country: String? = null
 
-        ) {
+    ) {
         propertyName?.let {
             propertyState.value = propertyState.value.copy(propertyName = it)
         }
@@ -46,26 +44,14 @@ class PropertyViewModel : ViewModel() {
         country?.let {
             propertyState.value = propertyState.value.copy(country = it)
         }
-
-
     }
 
     fun handlePropertySave() {
-
     }
 
     fun handlePropertyDelete() {
-
     }
 
     fun handlePropertyAdd() {
-
     }
-
-    fun getPropertyListForLoggedInUser() {
-
-
-    }
-
-
 }

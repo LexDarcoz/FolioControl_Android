@@ -21,25 +21,25 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import foliocontrol.android.foliocontrolandroid.components.BottomNavigation
 import foliocontrol.android.foliocontrolandroid.components.Navbar
-import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
-
-import foliocontrol.android.foliocontrolandroid.viewModels.LoginUiState
 import foliocontrol.android.foliocontrolandroid.screens.AccountScreen
 import foliocontrol.android.foliocontrolandroid.screens.AuthScreen
-import foliocontrol.android.foliocontrolandroid.screens.HomeScreen
 import foliocontrol.android.foliocontrolandroid.screens.SearchScreen
 import foliocontrol.android.foliocontrolandroid.screens.SettingScreen
-
+import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.viewModels.LoginUiState
+import foliocontrol.android.foliocontrolandroid.viewModels.PropertyViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FolioControlApplication(
-    authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    propertyViewModel: PropertyViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val navController = rememberNavController()
-    Scaffold(modifier = Modifier.fillMaxWidth(),
+    Scaffold(
+        modifier = Modifier.fillMaxWidth(),
         contentColor = MaterialTheme.colorScheme.primary,
         containerColor = MaterialTheme.colorScheme.secondary,
         bottomBar = {
@@ -49,7 +49,6 @@ fun FolioControlApplication(
                 }
 
                 else -> {
-
                 }
             }
         },
@@ -59,14 +58,20 @@ fun FolioControlApplication(
 
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            AppNavigator(navController = navController, authViewModel = authViewModel)
+            AppNavigator(
+                navController = navController,
+                authViewModel = authViewModel,
+                propertyViewModel = propertyViewModel
+            )
         }
     }
 }
 
 @Composable
 fun AppNavigator(
-    navController: NavHostController, authViewModel: AuthViewModel
+    navController: NavHostController,
+    authViewModel: AuthViewModel,
+    propertyViewModel: PropertyViewModel
 ) {
     authViewModel.navigateTo = {
         navController.navigate(it)
@@ -74,20 +79,23 @@ fun AppNavigator(
     NavHost(navController = navController, startDestination = "Home") {
         // Auth
         composable("Home") {
-            AuthScreen(authViewModel = authViewModel) { navController.navigate("PropertyDetail/$it") }
+            AuthScreen(authViewModel = authViewModel, propertyViewModel = propertyViewModel) {
+                navController.navigate(
+                    "PropertyDetail/$it"
+                )
+            }
         }
         // Main
         composable("Account") { AccountScreen() }
         composable("Settings") { SettingScreen(/*...*/) }
         composable("Search") { SearchScreen(/*...*/) }
-        //Portfolio
+        // Portfolio
         composable(
-            "PropertyDetail/{id}", arguments = listOf(
-                navArgument("id") { type = NavType.IntType },
+            "PropertyDetail/{id}",
+            arguments = listOf(
+                navArgument("id") { type = NavType.IntType }
 
-                )
+            )
         ) { PropertyDetailScreen(/*...*/) }
-
-
     }
 }

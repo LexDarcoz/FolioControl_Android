@@ -15,25 +15,23 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-
-
-import androidx.compose.runtime.saveable.rememberSaveable
-
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-
-import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
 import foliocontrol.android.foliocontrolandroid.data.Property
-
+import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.viewModels.PropertyViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(authViewModel: AuthViewModel, navigateTo: (Any?) -> Unit = {}) {
+fun HomeScreen(authViewModel: AuthViewModel, propertyViewModel: PropertyViewModel,navigateTo: (Any?) -> Unit = {}) {
+
+
 
 
     val properties = remember {
@@ -89,25 +87,24 @@ fun HomeScreen(authViewModel: AuthViewModel, navigateTo: (Any?) -> Unit = {}) {
                 "Belgium",
                 "qhubdqzibdqiyz",
                 1
-            ),
+            )
         )
     }
+
+
+
 
     var token by rememberSaveable {
         mutableStateOf("")
     }
 
-
     fun handleClick() {
         if (token.isNotBlank()) {
             token = ""
-
-
         } else {
             token = authViewModel.getToken().token
             Log.i("token", token)
         }
-
     }
 
     Scaffold(floatingActionButton = {
@@ -117,13 +114,13 @@ fun HomeScreen(authViewModel: AuthViewModel, navigateTo: (Any?) -> Unit = {}) {
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onPrimaryContainer
             )
-
         }
     }, topBar = {
         TopAppBar(
             title = {
                 Text(text = "Property overview")
-            }, colors = TopAppBarDefaults.smallTopAppBarColors(
+            },
+            colors = TopAppBarDefaults.smallTopAppBarColors(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
                 titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -138,7 +135,6 @@ fun HomeScreen(authViewModel: AuthViewModel, navigateTo: (Any?) -> Unit = {}) {
                     navigateTo = navigateTo
                 )
             }
-
         }
     }
 }
