@@ -11,9 +11,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -29,11 +26,11 @@ import foliocontrol.android.foliocontrolandroid.viewModels.PropertyViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(authViewModel: AuthViewModel, propertyViewModel: PropertyViewModel,navigateTo: (Any?) -> Unit = {}) {
-
-
-
-
+fun HomeScreen(
+    authViewModel: AuthViewModel,
+    propertyViewModel: PropertyViewModel,
+    navigateTo: (Any?) -> Unit = {}
+) {
     val properties = remember {
         mutableStateListOf(
             Property(
@@ -91,9 +88,6 @@ fun HomeScreen(authViewModel: AuthViewModel, propertyViewModel: PropertyViewMode
         )
     }
 
-
-
-
     var token by rememberSaveable {
         mutableStateOf("")
     }
@@ -115,16 +109,6 @@ fun HomeScreen(authViewModel: AuthViewModel, propertyViewModel: PropertyViewMode
                 tint = MaterialTheme.colorScheme.onPrimaryContainer
             )
         }
-    }, topBar = {
-        TopAppBar(
-            title = {
-                Text(text = "Property overview")
-            },
-            colors = TopAppBarDefaults.smallTopAppBarColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        )
     }) { values ->
 
         LazyColumn(contentPadding = values) {

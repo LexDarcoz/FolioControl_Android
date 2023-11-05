@@ -25,6 +25,8 @@ class AuthViewModel : ViewModel() {
     private val authService = AuthServiceImpl()
     var partnershipList by mutableStateOf(listOf<Partnership>())
         private set
+    var currentPartnership by mutableStateOf(Partnership())
+        private set
     var loginCredentials = mutableStateOf(LoginState())
         private set
     var userToken by mutableStateOf("")
@@ -34,6 +36,7 @@ class AuthViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 partnershipList = authService.getPartnershipsForLoggedInUser(token)
+                switchPartnership(partnershipList[0])
             } catch (e: Exception) {
                 println("Error: ${e.message}")
             } finally {
@@ -52,8 +55,13 @@ class AuthViewModel : ViewModel() {
     ) {
         Log.d("Token", "tokenLogin: $token")
         token?.let {
-            userToken =  it
+            userToken = it
         }
+    }
+
+    fun switchPartnership(partnership: Partnership) {
+        Log.i("TESTING", "switchPartnership:$partnership ")
+        currentPartnership = partnership
     }
 
     fun getToken(): String {
@@ -87,9 +95,9 @@ class AuthViewModel : ViewModel() {
             try {
                 var auth = authService.login(loginCredentials.value, updateTokenState = { token ->
                     updateTokenState(token)
-
                 })
                 getPartnershipListForLoggedInUser(userToken)
+
                 loginUiState = LoginUiState.Success("You have logged in")
             } catch (e: Exception) {
                 loginUiState = LoginUiState.LoggedOut(e.localizedMessage ?: "You logged out")

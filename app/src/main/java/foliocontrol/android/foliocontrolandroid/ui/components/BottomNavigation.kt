@@ -2,16 +2,18 @@ package foliocontrol.android.foliocontrolandroid.components
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Menu
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -22,14 +24,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavigation(authViewModel: AuthViewModel) {
     var partnershipList = authViewModel.partnershipList
+    var currentPartnership = authViewModel.currentPartnership
+
     Log.i("NAVBAR", "PARTNERSHIPLIST: $partnershipList ")
     data class BottomNavigationItem(
         val title: String,
@@ -42,6 +48,7 @@ fun BottomNavigation(authViewModel: AuthViewModel) {
     var selectedIcon by rememberSaveable {
         mutableStateOf(0)
     }
+
     val items = listOf(
         BottomNavigationItem(
             title = "Home",
@@ -49,13 +56,7 @@ fun BottomNavigation(authViewModel: AuthViewModel) {
             unselectedIcon = Icons.Outlined.Home,
             onClick = { }
         ),
-        BottomNavigationItem(
-            title = "Search",
-            selectedIcon = Icons.Filled.Search,
-            unselectedIcon = Icons.Outlined.Search,
-            onClick = { }
 
-        ),
         BottomNavigationItem(
             title = "Account",
             selectedIcon = Icons.Filled.AccountCircle,
@@ -64,13 +65,17 @@ fun BottomNavigation(authViewModel: AuthViewModel) {
 
         ),
         BottomNavigationItem(
-            title = "Partnerships",
+            title = currentPartnership.name,
             selectedIcon = Icons.Filled.Menu,
             unselectedIcon = Icons.Outlined.Menu,
             onClick = { }
 
         )
+
     )
+    Log.i("TESTING", "currentpartnership:${currentPartnership.name}  ")
+    val isPartnershipsSelected =
+        selectedIcon == items.indexOfFirst { it.title == currentPartnership.name }
 
     NavigationBar(
         contentColor = MaterialTheme.colorScheme.primary,
@@ -78,18 +83,17 @@ fun BottomNavigation(authViewModel: AuthViewModel) {
     ) {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
-                selected =
-                selectedIcon == index,
+                selected = selectedIcon == index,
                 onClick = {
-                    if (item.title != "Partnerships") {
-                        selectedIcon = index
+                    selectedIcon = index
+                    if (item.title != currentPartnership.name) {
                         authViewModel.navigateTo(item.title)
                     }
                 },
                 label = {
                     Text(text = item.title, color = MaterialTheme.colorScheme.secondary)
                 },
-                alwaysShowLabel = item.title == "Partnerships",
+                alwaysShowLabel = item.title == currentPartnership.name,
                 icon = {
                     Icon(
                         imageVector = if (selectedIcon == index) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length
@@ -100,6 +104,43 @@ fun BottomNavigation(authViewModel: AuthViewModel) {
                 }
 
             )
+        }
+        if (isPartnershipsSelected) {
+            DropdownMenu(
+                modifier = Modifier.padding(8.dp)
+                    .offset { IntOffset(0, 0) } // Set the desired offset here
+                    .fillMaxWidth(),
+                expanded = true,
+                onDismissRequest = {
+                    // Dismiss the dropdown when clicked outside
+                    selectedIcon = -1
+                }
+            ) {
+                partnershipList.forEach { partnership ->
+                    DropdownMenuItem(
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Home,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary
+                            )
+                        },
+
+                        text = {
+                            Text(
+                                text = partnership.name,
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        },
+                        onClick = {
+                            authViewModel.switchPartnership(partnership)
+//                            TODO: Navigate to home screen
+//                            authViewModel.navigateTo("Home")
+                            selectedIcon = 0
+                        }
+                    )
+                }
+            }
         }
     }
 }
