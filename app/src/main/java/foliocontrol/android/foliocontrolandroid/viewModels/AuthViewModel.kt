@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 sealed interface LoginUiState {
 
-    data class Success(val message: Boolean) : LoginUiState
+    data class Success(val message: String) : LoginUiState
     data class LoggedOut(val message: String) : LoginUiState
     data class Error(val message: String) : LoginUiState
     data object Loading : LoginUiState
@@ -25,9 +25,9 @@ class AuthViewModel : ViewModel() {
     private val authService = AuthServiceImpl()
     var partnershipList by mutableStateOf(listOf<Partnership>())
         private set
-    var loginState = mutableStateOf(LoginState())
+    var loginCredentials = mutableStateOf(LoginState())
         private set
-    var userToken = mutableStateOf(Token())
+    var userToken by mutableStateOf("")
         private set
 
     fun getPartnershipListForLoggedInUser(token: String) {
@@ -52,16 +52,16 @@ class AuthViewModel : ViewModel() {
     ) {
         Log.d("Token", "tokenLogin: $token")
         token?.let {
-            userToken.value = userToken.value.copy(token = it)
+            userToken =  it
         }
     }
 
-    fun getToken(): Token {
-        return this.userToken.value
+    fun getToken(): String {
+        return this.userToken
     }
 
     fun resetToken() {
-        userToken.value = userToken.value.copy(token = "")
+        userToken = ""
     }
 
     fun verify(Token: Token) {
@@ -73,10 +73,10 @@ class AuthViewModel : ViewModel() {
         password: String? = null
     ) {
         email?.let {
-            loginState.value = loginState.value.copy(email = it)
+            loginCredentials.value = loginCredentials.value.copy(email = it)
         }
         password?.let {
-            loginState.value = loginState.value.copy(password = it)
+            loginCredentials.value = loginCredentials.value.copy(password = it)
         }
     }
 
@@ -85,11 +85,12 @@ class AuthViewModel : ViewModel() {
             loginUiState = LoginUiState.Loading
 
             try {
-                var auth = authService.login(loginState.value, updateTokenState = { token ->
+                var auth = authService.login(loginCredentials.value, updateTokenState = { token ->
                     updateTokenState(token)
+
                 })
-                getPartnershipListForLoggedInUser(userToken.value.token)
-                loginUiState = LoginUiState.Success(true)
+                getPartnershipListForLoggedInUser(userToken)
+                loginUiState = LoginUiState.Success("You have logged in")
             } catch (e: Exception) {
                 loginUiState = LoginUiState.LoggedOut(e.localizedMessage ?: "You logged out")
             }

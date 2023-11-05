@@ -79,7 +79,7 @@ fun LoginScreen(
     authViewModel: AuthViewModel
 ) {
     val scope = rememberCoroutineScope()
-    var state by remember { authViewModel.loginState }
+    var state by remember { authViewModel.loginCredentials }
     val context = LocalContext.current
 
     Box(
@@ -149,8 +149,8 @@ fun LoginScreen(
                         authViewModel.login()
                         scope.launch {
                             val token = authViewModel.getToken()
-                            if (token.token.isNotBlank()) {
-                                setEncryptedPreference(token.token, context)
+                            if (token.isNotBlank()) {
+                                setEncryptedPreference(token, context)
                                 Toast.makeText(context, "Welcome!", Toast.LENGTH_SHORT).show()
                             } else {
                                 Toast.makeText(context, "Failed to log in", Toast.LENGTH_SHORT)

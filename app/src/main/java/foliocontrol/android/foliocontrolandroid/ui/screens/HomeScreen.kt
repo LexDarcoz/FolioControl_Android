@@ -102,7 +102,7 @@ fun HomeScreen(authViewModel: AuthViewModel, propertyViewModel: PropertyViewMode
         if (token.isNotBlank()) {
             token = ""
         } else {
-            token = authViewModel.getToken().token
+            token = authViewModel.getToken()
             Log.i("token", token)
         }
     }
