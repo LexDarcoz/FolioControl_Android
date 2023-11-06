@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import foliocontrol.android.foliocontrolandroid.data.LoginState
 import foliocontrol.android.foliocontrolandroid.data.Partnership
 import foliocontrol.android.foliocontrolandroid.data.Token
-import foliocontrol.android.foliocontrolandroid.service.AuthServiceImpl
+import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import kotlinx.coroutines.launch
 
 sealed interface LoginUiState {

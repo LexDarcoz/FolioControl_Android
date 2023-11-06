@@ -1,4 +1,4 @@
-package foliocontrol.android.foliocontrolandroid.service
+package foliocontrol.android.foliocontrolandroid.data.repository
 
 import foliocontrol.android.foliocontrolandroid.data.Property
 

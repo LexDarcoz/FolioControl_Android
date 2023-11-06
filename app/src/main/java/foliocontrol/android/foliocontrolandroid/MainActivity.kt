@@ -1,6 +1,7 @@
 package foliocontrol.android.foliocontrolandroid
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,6 +15,7 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        appContext = applicationContext
         setContent {
             FolioControlAndroidTheme {
                 // A surface container using the 'background' color from the theme
@@ -25,5 +27,9 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    companion object {
+        lateinit var appContext: Context
     }
 }

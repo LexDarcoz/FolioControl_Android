@@ -1,10 +1,10 @@
-package foliocontrol.android.foliocontrolandroid.service
+package foliocontrol.android.foliocontrolandroid.data.repository
 
 import android.content.Context
-import foliocontrol.android.foliocontrolandroid.api.UserLoginRequest
-import foliocontrol.android.foliocontrolandroid.api.getUserPartnerships
 import foliocontrol.android.foliocontrolandroid.data.LoginState
 import foliocontrol.android.foliocontrolandroid.data.Partnership
+import foliocontrol.android.foliocontrolandroid.data.remote.UserLoginRequest
+import foliocontrol.android.foliocontrolandroid.data.remote.getUserPartnerships
 
 class AuthServiceImpl : AuthService {
     override fun configureAuth(context: Context) {

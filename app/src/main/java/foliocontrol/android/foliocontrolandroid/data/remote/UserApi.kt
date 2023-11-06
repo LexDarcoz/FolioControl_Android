@@ -1,4 +1,4 @@
-package foliocontrol.android.foliocontrolandroid.api
+package foliocontrol.android.foliocontrolandroid.data.remote
 
 import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory

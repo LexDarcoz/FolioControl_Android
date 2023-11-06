@@ -3,7 +3,7 @@ package foliocontrol.android.foliocontrolandroid.viewModels
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import foliocontrol.android.foliocontrolandroid.data.Property
-import foliocontrol.android.foliocontrolandroid.service.AuthServiceImpl
+import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 
 class PropertyViewModel : ViewModel() {
     private val authService = AuthServiceImpl()
