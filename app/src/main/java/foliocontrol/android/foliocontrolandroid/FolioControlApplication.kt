@@ -41,7 +41,7 @@ fun FolioControlApplication(
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
         contentColor = MaterialTheme.colorScheme.primary,
-        containerColor = MaterialTheme.colorScheme.secondary,
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             when (authViewModel.loginUiState) {
                 is LoginUiState.Success -> {

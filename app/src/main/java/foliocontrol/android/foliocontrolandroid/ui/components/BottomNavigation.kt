@@ -26,6 +26,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
@@ -78,7 +79,7 @@ fun BottomNavigation(authViewModel: AuthViewModel) {
         selectedIcon == items.indexOfFirst { it.title == currentPartnership.name }
 
     NavigationBar(
-        contentColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.secondary,
         containerColor = MaterialTheme.colorScheme.primary
     ) {
         items.forEachIndexed { index, item ->
@@ -107,14 +108,14 @@ fun BottomNavigation(authViewModel: AuthViewModel) {
         }
         if (isPartnershipsSelected) {
             DropdownMenu(
-                modifier = Modifier.padding(8.dp)
-                    .offset { IntOffset(0, 0) } // Set the desired offset here
-                    .fillMaxWidth(),
+//                modifier = Modifier // Set the desired offset here
+////                    .fillMaxWidth(),
                 expanded = true,
                 onDismissRequest = {
                     // Dismiss the dropdown when clicked outside
                     selectedIcon = -1
-                }
+                },
+                offset = DpOffset(x = 256.dp, y = (-50).dp)
             ) {
                 partnershipList.forEach { partnership ->
                     DropdownMenuItem(
@@ -135,7 +136,7 @@ fun BottomNavigation(authViewModel: AuthViewModel) {
                         onClick = {
                             authViewModel.switchPartnership(partnership)
 //                            TODO: Navigate to home screen
-//                            authViewModel.navigateTo("Home")
+                            authViewModel.navigateTo("Home")
                             selectedIcon = 0
                         }
                     )

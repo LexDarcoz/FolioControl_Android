@@ -106,7 +106,7 @@ fun HomeScreen(
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimaryContainer
+                tint = MaterialTheme.colorScheme.secondary
             )
         }
     }) { values ->
