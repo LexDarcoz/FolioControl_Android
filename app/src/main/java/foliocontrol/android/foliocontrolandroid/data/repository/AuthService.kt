@@ -1,8 +1,8 @@
 package foliocontrol.android.foliocontrolandroid.data.repository
 
 import android.content.Context
-import foliocontrol.android.foliocontrolandroid.data.LoginState
-import foliocontrol.android.foliocontrolandroid.data.Partnership
+import foliocontrol.android.foliocontrolandroid.domain.dataModels.LoginState
+import foliocontrol.android.foliocontrolandroid.domain.dataModels.Partnership
 
 interface AuthService {
 

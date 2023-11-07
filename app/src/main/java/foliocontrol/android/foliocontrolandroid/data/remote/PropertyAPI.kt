@@ -1,32 +1,141 @@
 package foliocontrol.android.foliocontrolandroid.data.remote
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import foliocontrol.android.foliocontrolandroid.data.Property
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
-import retrofit2.Retrofit
+import android.util.Log
+import foliocontrol.android.foliocontrolandroid.data.remote.common.createRetrofit
+import foliocontrol.android.foliocontrolandroid.domain.dataModels.Partnership
+import foliocontrol.android.foliocontrolandroid.domain.dataModels.Property
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.int
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Headers
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
 interface PropertyAPI {
-    @GET("api/property/partnership") // Change the endpoint as needed
-    suspend fun getProperties(@Header("Authorization") partnershipID: Int): List<Property>
+    @Headers("Accept: application/json")
+    @GET("api/property/partnership/{partnershipID}")
+    suspend fun getProperties(
+        @Header("Authorization") token: String,
+        @Path("partnershipID") partnershipID: Int
+    ): JsonArray
+
+    @Headers("Accept: application/json")
+    @PUT("api/property/{propertyID}")
+    suspend fun savePropertyByPropertyID(
+        @Header("Authorization") token: String,
+        @Path("propertyID") propertyID: Int,
+        @Body property: JsonObject
+
+    )
+
+    @Headers("Accept: application/json")
+    @GET("api/user/getPartnerships")
+    suspend fun getUserPartnerships(@Header("Authorization") token: String): JsonArray
 }
 
-fun createRetrofit(): PropertyAPI {
-    val retrofit = Retrofit.Builder().baseUrl("http://10.0.2.2:9000")
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType())).build()
+private val propertyApi = createRetrofit(PropertyAPI::class.java)
 
-    return retrofit.create(PropertyAPI::class.java)
-}
-
-suspend fun fetchProperties(partnershipID: Int): List<Property>? {
-    val api = createRetrofit()
-
+suspend fun fetchProperties(token: String, partnershipID: Int): List<Property>? {
     try {
-        return api.getProperties(partnershipID)
+        var properties = propertyApi.getProperties(token, partnershipID)
+
+        return properties.map {
+            Property(
+                it.jsonObject["propertyID"]?.jsonPrimitive?.int ?: 0,
+                it.jsonObject["propertyName"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["propertyType"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["propertyImg"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["street"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["streetNumber"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["city"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["zipCode"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["country"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["propertyDescription"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["partnershipID"]?.jsonPrimitive?.int ?: 0
+            )
+        }
     } catch (e: Exception) {
-        e.printStackTrace()
-        return null
+        return emptyList()
+    }
+}
+
+suspend fun getUserPartnerships(
+    token: String
+): List<Partnership> {
+    try {
+        val response: JsonArray = propertyApi.getUserPartnerships(token = token)
+        return parseResponse(response)
+    } catch (e: Exception) {
+        // Handle exceptions here if the network request fails
+        Log.e("TESTING", "getUserPartnerships failed", e)
+    }
+
+    return emptyList()
+}
+
+fun parseResponse(response: JsonArray): List<Partnership> {
+    val partnerships = mutableListOf<Partnership>()
+
+    response.forEach { element ->
+        if (element is JsonObject) {
+            val partnershipID = element["partnershipID"]
+            val name = element["name"]
+            val logoImg = element["logoImg"]
+            val countryCode = element["countryCode"]
+            val vatNumber = element["vatNumber"]
+            val street = element["street"]
+            val streetNumber = element["streetNumber"]
+            val zipCode = element["zipCode"]
+            val city = element["city"]
+            val country = element["country"]
+
+            if (name != null && vatNumber != null) {
+                val partnership = Partnership(
+                    partnershipID = partnershipID?.jsonPrimitive?.int ?: 0,
+                    name = name.jsonPrimitive.content,
+                    logoImg = logoImg?.jsonPrimitive?.content ?: "",
+                    countryCode = countryCode?.jsonPrimitive?.content ?: "",
+                    vatNumber = vatNumber.jsonPrimitive.content,
+                    street = street?.jsonPrimitive?.content ?: "",
+                    streetNumber = streetNumber?.jsonPrimitive?.content ?: "",
+                    zipCode = zipCode?.jsonPrimitive?.content ?: "",
+                    city = city?.jsonPrimitive?.content ?: "",
+                    country = country?.jsonPrimitive?.content ?: ""
+                )
+                partnerships.add(partnership)
+            }
+        }
+    }
+
+    return partnerships
+}
+
+suspend fun savePropertyByID(token: String, property: Property) {
+    try {
+        var body = buildJsonObject {
+            put("propertyID", JsonPrimitive(property.propertyID))
+            put("propertyName", JsonPrimitive(property.propertyName))
+            put("propertyType", JsonPrimitive(property.propertyType))
+            put("propertyImg", JsonPrimitive(property.propertyImg))
+            put("street", JsonPrimitive(property.street))
+            put("streetNumber", JsonPrimitive(property.streetNumber))
+            put("city", JsonPrimitive(property.city))
+            put("zipCode", JsonPrimitive(property.zipCode))
+            put("country", JsonPrimitive(property.country))
+            put("propertyDescription", JsonPrimitive(property.propertyDescription))
+            put("partnershipID", JsonPrimitive(property.FK_partnershipID))
+        }
+
+        propertyApi.savePropertyByPropertyID(token, property.propertyID, body)
+    } catch (e: Exception) {
+        // Handle exceptions here if the network request fails
+        Log.e("TESTING", "savePropertyByPropertyID failed", e)
     }
 }

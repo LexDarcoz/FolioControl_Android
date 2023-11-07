@@ -13,16 +13,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
-import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
-import foliocontrol.android.foliocontrolandroid.viewModels.LoginUiState
-
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.LoginUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,30 +25,32 @@ fun Navbar(
     scrollBehavior: TopAppBarScrollBehavior,
     authViewModel: AuthViewModel,
     navController: NavHostController
+//    canNavigateBack: Boolean,
 ) {
-    CenterAlignedTopAppBar(colors = TopAppBarDefaults.largeTopAppBarColors(
-        containerColor = MaterialTheme.colorScheme.primary,
-        titleContentColor = MaterialTheme.colorScheme.secondary
-    ), title = {
-        Text(
-            "FolioControl",
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colorScheme.secondary
-        )
-
-
-    }, navigationIcon = {
-
-
-        IconButton(onClick = { navController.navigateUp() }) {
-            Icon(
-                tint = MaterialTheme.colorScheme.secondary,
-                imageVector = Icons.Filled.ArrowBack,
-                contentDescription = "Back"
+    CenterAlignedTopAppBar(
+        colors = TopAppBarDefaults.largeTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.secondary
+        ),
+        title = {
+            Text(
+                "FolioControl",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.secondary
             )
-        }
-    },
+        },
+        navigationIcon = {
+//        if (canNavigateBack) {
+            IconButton(onClick = { navController.navigateUp() }) {
+                Icon(
+                    tint = MaterialTheme.colorScheme.secondary,
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Back"
+                )
+            }
+//        }
+        },
 
         actions = {
             when (authViewModel.loginUiState) {
@@ -61,7 +58,6 @@ fun Navbar(
                     IconButton(onClick = {
                         authViewModel.logOut()
                         navController.navigate("Home")
-
                     }) {
                         Icon(
                             imageVector = Icons.Filled.ExitToApp,
@@ -72,11 +68,9 @@ fun Navbar(
                 }
 
                 else -> {
-
                 }
             }
         },
-
 
         scrollBehavior = scrollBehavior
     )

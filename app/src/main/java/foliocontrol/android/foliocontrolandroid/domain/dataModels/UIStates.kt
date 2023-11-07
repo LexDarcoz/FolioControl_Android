@@ -1,4 +1,4 @@
-package foliocontrol.android.foliocontrolandroid.data
+package foliocontrol.android.foliocontrolandroid.domain.dataModels
 
 data class LoginState(
     var email: String = "",
@@ -14,17 +14,17 @@ data class User(
 )
 
 data class Property(
-    var propertyID: Int = 0,
-    var propertyName: String = "",
-    var propertyType: String = "",
-    var propertyImg: String = "",
-    var street: String = "",
-    var streetNumber: String = "",
-    var city: String = "",
-    var zipCode: String = "",
-    var country: String = "",
-    var propertyDescription: String = "",
-    var FK_partnershipID: Int = 0
+    val propertyID: Int = 0,
+    val propertyName: String = "",
+    val propertyType: String = "",
+    val propertyImg: String = "",
+    val street: String = "",
+    val streetNumber: String = "",
+    val city: String = "",
+    val zipCode: String = "",
+    val country: String = "",
+    val propertyDescription: String = "",
+    val FK_partnershipID: Int = 0
 
 )
 

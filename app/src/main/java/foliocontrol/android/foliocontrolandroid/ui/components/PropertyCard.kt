@@ -1,3 +1,4 @@
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,16 +24,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import foliocontrol.android.foliocontrol_android.R
-import foliocontrol.android.foliocontrolandroid.data.Property
+import foliocontrol.android.foliocontrolandroid.domain.dataModels.Property
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.PropertyViewModel
 
 @Composable
 fun PropertyCard(
+    propertyViewModel: PropertyViewModel,
     property: Property,
-
-    navigateTo: (Any?) -> Unit = {},
-    modifier: Modifier = Modifier
+    navigateTo: (Any?) -> Unit = {}
 ) {
-
     val propertyTypesIcons: Map<String, ImageVector> = mapOf(
         "Type1" to Icons.Default.Home,
         "Type2" to Icons.Default.Home,
@@ -90,7 +90,11 @@ fun PropertyCard(
                 modifier = Modifier.padding(top = 8.dp)
             )
             Button(
-                onClick = { navigateTo(property.propertyID) },
+                onClick = {
+                    Log.i("TEST", "PropertyCard:selected property: $property")
+                    propertyViewModel.selectProperty(property)
+                    navigateTo("PropertyDetail")
+                },
                 modifier = Modifier.fillMaxWidth().padding(top = 4.dp)
             ) {
                 Text(text = "View Property")

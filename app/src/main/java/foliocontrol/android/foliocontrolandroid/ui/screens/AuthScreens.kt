@@ -1,6 +1,5 @@
 package foliocontrol.android.foliocontrolandroid.screens
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,30 +17,24 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
-import foliocontrol.android.foliocontrolandroid.viewModels.LoginUiState
-import foliocontrol.android.foliocontrolandroid.viewModels.PropertyViewModel
-import foliocontrol.android.foliocontrolandroid.viewModels.setEncryptedPreference
-import kotlinx.coroutines.launch
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.LoginUiState
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.PropertyViewModel
 
 @Composable
 fun AuthScreen(
@@ -55,11 +48,12 @@ fun AuthScreen(
             LoginScreen(
                 errorName = (authViewModel.loginUiState as LoginUiState.LoggedOut).message,
                 authViewModel
+
             )
         }
 
         is LoginUiState.Success -> {
-            HomeScreen(authViewModel, propertyViewModel, navigateTo)
+            HomeScreen(propertyViewModel, navigateTo)
         }
 
         is LoginUiState.Loading -> {
@@ -72,44 +66,35 @@ fun AuthScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     errorName: String,
     authViewModel: AuthViewModel
-) {
-    val scope = rememberCoroutineScope()
-    var state by remember { authViewModel.loginCredentials }
-    val context = LocalContext.current
 
+) {
     Box(
         modifier = Modifier.fillMaxWidth().fillMaxHeight(0.8f),
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+            modifier = Modifier.fillMaxWidth().padding(16.dp)
         ) {
             Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                 Text(
                     text = "Sign In",
                     style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier
-                        .padding(bottom = 6.dp)
+                    modifier = Modifier.padding(bottom = 6.dp)
 
                 )
                 Icon(imageVector = Icons.Default.ExitToApp, contentDescription = null)
             }
 
             Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.padding(16.dp).fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 OutlinedTextField(
-                    value = state.email,
+                    value = authViewModel.loginCredentials.email,
                     onValueChange = { authViewModel.updateLoginState(email = it) },
                     label = { Text("Email") },
                     singleLine = true,
@@ -124,7 +109,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
-                    value = state.password,
+                    value = authViewModel.loginCredentials.password,
                     onValueChange = { authViewModel.updateLoginState(password = it) },
                     label = { Text("Password") },
                     visualTransformation = PasswordVisualTransformation(),
@@ -147,21 +132,8 @@ fun LoginScreen(
                 Button(
                     onClick = {
                         authViewModel.login()
-                        scope.launch {
-                            val token = authViewModel.getToken()
-                            if (token.isNotBlank()) {
-                                setEncryptedPreference(token, context)
-                                Toast.makeText(context, "Welcome!", Toast.LENGTH_SHORT).show()
-                            } else {
-                                Toast.makeText(context, "Failed to log in", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                        }
                     },
-                    modifier = Modifier
-                        .height(64.dp)
-                        .width(200.dp)
-                        .padding(top = 16.dp)
+                    modifier = Modifier.height(64.dp).width(200.dp).padding(top = 16.dp)
                 ) {
                     Text(
                         "Login",
@@ -178,9 +150,7 @@ fun LoginScreen(
 @Composable
 fun LoadingScreen() {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxSize().padding(16.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(

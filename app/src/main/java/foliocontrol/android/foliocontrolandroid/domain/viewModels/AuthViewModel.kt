@@ -1,15 +1,16 @@
-package foliocontrol.android.foliocontrolandroid.viewModels
+package foliocontrol.android.foliocontrolandroid.domain.viewModels
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import foliocontrol.android.foliocontrolandroid.data.LoginState
-import foliocontrol.android.foliocontrolandroid.data.Partnership
-import foliocontrol.android.foliocontrolandroid.data.Token
+import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreference
+import foliocontrol.android.foliocontrolandroid.data.local.removeEncryptedPreference
+import foliocontrol.android.foliocontrolandroid.data.local.saveEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
+import foliocontrol.android.foliocontrolandroid.domain.dataModels.LoginState
+import foliocontrol.android.foliocontrolandroid.domain.dataModels.Token
 import kotlinx.coroutines.launch
 
 sealed interface LoginUiState {
@@ -23,49 +24,37 @@ sealed interface LoginUiState {
 class AuthViewModel : ViewModel() {
     lateinit var navigateTo: (String) -> Unit
     private val authService = AuthServiceImpl()
-    var partnershipList by mutableStateOf(listOf<Partnership>())
-        private set
-    var currentPartnership by mutableStateOf(Partnership())
-        private set
-    var loginCredentials = mutableStateOf(LoginState())
+
+    var loginCredentials by mutableStateOf(LoginState())
         private set
     var userToken by mutableStateOf("")
         private set
-
-    fun getPartnershipListForLoggedInUser(token: String) {
-        viewModelScope.launch {
-            try {
-                partnershipList = authService.getPartnershipsForLoggedInUser(token)
-                switchPartnership(partnershipList[0])
-            } catch (e: Exception) {
-                println("Error: ${e.message}")
-            } finally {
-                println("Finally")
-            }
-        }
-    }
-
     var loginUiState: LoginUiState by mutableStateOf(
         LoginUiState.LoggedOut("You are not logged in")
     )
         private set
 
+    init {
+        try {
+            if (getToken().isNotEmpty()) {
+                userToken = getToken()
+                loginUiState = LoginUiState.Success("You have logged in")
+            }
+        } catch (e: Exception) {
+            println("User not valid token")
+        }
+    }
+
     fun updateTokenState(
         token: String? = null
     ) {
-        Log.d("Token", "tokenLogin: $token")
         token?.let {
             userToken = it
         }
     }
 
-    fun switchPartnership(partnership: Partnership) {
-        Log.i("TESTING", "switchPartnership:$partnership ")
-        currentPartnership = partnership
-    }
-
     fun getToken(): String {
-        return this.userToken
+        return getEncryptedPreference("token")
     }
 
     fun resetToken() {
@@ -81,10 +70,10 @@ class AuthViewModel : ViewModel() {
         password: String? = null
     ) {
         email?.let {
-            loginCredentials.value = loginCredentials.value.copy(email = it)
+            loginCredentials = loginCredentials.copy(email = it)
         }
         password?.let {
-            loginCredentials.value = loginCredentials.value.copy(password = it)
+            loginCredentials = loginCredentials.copy(password = it)
         }
     }
 
@@ -93,12 +82,18 @@ class AuthViewModel : ViewModel() {
             loginUiState = LoginUiState.Loading
 
             try {
-                var auth = authService.login(loginCredentials.value, updateTokenState = { token ->
+                var auth = authService.login(loginCredentials, updateTokenState = { token ->
                     updateTokenState(token)
                 })
-                getPartnershipListForLoggedInUser(userToken)
 
-                loginUiState = LoginUiState.Success("You have logged in")
+                if (auth) {
+                    saveEncryptedPreference("token", userToken)
+                    loginUiState = LoginUiState.Success("You have logged in")
+                } else {
+                    loginUiState = LoginUiState.LoggedOut(
+                        "Something went wrong logging in, check credentials"
+                    )
+                }
             } catch (e: Exception) {
                 loginUiState = LoginUiState.LoggedOut(e.localizedMessage ?: "You logged out")
             }
@@ -107,6 +102,7 @@ class AuthViewModel : ViewModel() {
 
     fun logOut() {
         resetToken()
+        removeEncryptedPreference("token")
         loginUiState = LoginUiState.LoggedOut("You logged out")
     }
 }
