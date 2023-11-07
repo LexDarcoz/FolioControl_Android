@@ -3,7 +3,8 @@ package foliocontrol.android.foliocontrolandroid.data.local
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
-import foliocontrol.android.foliocontrolandroid.MainApplication
+import foliocontrol.android.foliocontrolandroid.MainActivity
+
 
 val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
 
@@ -23,7 +24,7 @@ private fun getSharedPreferences(): SharedPreferences {
     return EncryptedSharedPreferences.create(
         "preferences",
         masterKeyAlias,
-        MainApplication.appContext,
+        MainActivity.appContext,
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )

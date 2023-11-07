@@ -11,14 +11,13 @@ import androidx.compose.ui.Modifier
 import foliocontrol.android.foliocontrolandroid.ui.theme.FolioControlAndroidTheme
 import retrofit2.*
 
-class MainApplication : ComponentActivity() {
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appContext = applicationContext
         setContent {
             FolioControlAndroidTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize()
 
