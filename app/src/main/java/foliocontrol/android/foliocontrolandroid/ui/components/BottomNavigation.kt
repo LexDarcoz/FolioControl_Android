@@ -26,12 +26,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.domain.viewModels.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.PropertyViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun BottomNavigation(authViewModel: AuthViewModel) {
-    var partnershipList = authViewModel.partnershipList
-    var currentPartnership = authViewModel.currentPartnership
+fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthViewModel) {
+    var partnershipList = propertyViewModel.partnershipList
+    var currentPartnership = propertyViewModel.currentPartnership
 
     Log.i("NAVBAR", "PARTNERSHIPLIST: $partnershipList ")
     data class BottomNavigationItem(
@@ -130,8 +131,7 @@ fun BottomNavigation(authViewModel: AuthViewModel) {
                             )
                         },
                         onClick = {
-                            authViewModel.switchPartnership(partnership)
-//                            TODO: Navigate to home screen
+                            propertyViewModel.switchPartnership(partnership)
                             authViewModel.navigateTo("Home")
                             selectedIcon = 0
                         }

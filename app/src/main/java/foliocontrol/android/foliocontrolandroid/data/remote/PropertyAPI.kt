@@ -1,22 +1,106 @@
 package foliocontrol.android.foliocontrolandroid.data.remote
 
+import android.util.Log
 import foliocontrol.android.foliocontrolandroid.data.remote.common.createRetrofit
+import foliocontrol.android.foliocontrolandroid.domain.dataModels.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.dataModels.Property
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.int
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Headers
+import retrofit2.http.Path
 
 interface PropertyAPI {
-    @GET("api/property/partnership") // Change the endpoint as needed
-    suspend fun getProperties(@Header("Authorization") partnershipID: Int): List<Property>
+    @Headers("Accept: application/json")
+    @GET("api/property/partnership/{partnershipID}")
+    suspend fun getProperties(
+        @Header("Authorization") token: String,
+        @Path("partnershipID") partnershipID: Int
+    ): JsonArray
+
+    @Headers("Accept: application/json")
+    @GET("api/user/getPartnerships")
+    suspend fun getUserPartnerships(@Header("Authorization") token: String): JsonArray
 }
 
 private val propertyApi = createRetrofit(PropertyAPI::class.java)
 
-suspend fun fetchProperties(partnershipID: Int): List<Property>? {
+suspend fun fetchProperties(token: String, partnershipID: Int): List<Property>? {
     try {
-        return propertyApi.getProperties(partnershipID)
+        var properties = propertyApi.getProperties(token, partnershipID)
+
+        return properties.map {
+            Property(
+                it.jsonObject["propertyID"]?.jsonPrimitive?.int ?: 0,
+                it.jsonObject["propertyName"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["propertyType"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["propertyImg"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["street"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["streetNumber"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["city"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["zipCode"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["country"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["propertyDescription"]?.jsonPrimitive?.content ?: "",
+                it.jsonObject["partnershipID"]?.jsonPrimitive?.int ?: 0
+            )
+        }
     } catch (e: Exception) {
-        e.printStackTrace()
-        return null
+        return emptyList()
     }
+}
+
+suspend fun getUserPartnerships(
+    token: String
+): List<Partnership> {
+    try {
+        val response: JsonArray = propertyApi.getUserPartnerships(token = token)
+        return parseResponse(response)
+    } catch (e: Exception) {
+        // Handle exceptions here if the network request fails
+        Log.e("TESTING", "getUserPartnerships failed", e)
+    }
+
+    return emptyList()
+}
+
+fun parseResponse(response: JsonArray): List<Partnership> {
+    val partnerships = mutableListOf<Partnership>()
+
+    response.forEach { element ->
+        if (element is JsonObject) {
+            val partnershipID = element["partnershipID"]
+            val name = element["name"]
+            val logoImg = element["logoImg"]
+            val countryCode = element["countryCode"]
+            val vatNumber = element["vatNumber"]
+            val street = element["street"]
+            val streetNumber = element["streetNumber"]
+            val zipCode = element["zipCode"]
+            val city = element["city"]
+            val country = element["country"]
+
+            if (name != null && vatNumber != null) {
+                Log.i("TESTING", "parseResponse: $name")
+                val partnership = Partnership(
+                    partnershipID = partnershipID?.jsonPrimitive?.int ?: 0,
+                    name = name.jsonPrimitive.content,
+                    logoImg = logoImg?.jsonPrimitive?.content ?: "",
+                    countryCode = countryCode?.jsonPrimitive?.content ?: "",
+                    vatNumber = vatNumber.jsonPrimitive.content,
+                    street = street?.jsonPrimitive?.content ?: "",
+                    streetNumber = streetNumber?.jsonPrimitive?.content ?: "",
+                    zipCode = zipCode?.jsonPrimitive?.content ?: "",
+                    city = city?.jsonPrimitive?.content ?: "",
+                    country = country?.jsonPrimitive?.content ?: ""
+                )
+                partnerships.add(partnership)
+            }
+        }
+    }
+    Log.i("TESTING", "parseResponse: $partnerships")
+    return partnerships
 }

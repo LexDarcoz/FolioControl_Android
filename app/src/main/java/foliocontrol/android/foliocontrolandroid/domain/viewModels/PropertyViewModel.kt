@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.data.repository.PropertyServiceImpl
 import foliocontrol.android.foliocontrolandroid.domain.dataModels.Partnership
@@ -14,22 +15,59 @@ import kotlinx.coroutines.launch
 class PropertyViewModel : ViewModel() {
     private val authService = AuthServiceImpl()
     private val propertyService = PropertyServiceImpl()
+
+    var partnershipList by mutableStateOf(listOf<Partnership>())
+        private set
+    var currentPartnership by mutableStateOf(Partnership())
+        private set
     var propertyListState by mutableStateOf(listOf<Property>())
         private set
 
     var propertyState by mutableStateOf(Property())
         private set
 
-    fun getPropertyListForPartnership(token: String, partnership: Partnership) {
+    fun getData() {
+        getPartnershipListForLoggedInUser()
+        if (partnershipList.isNotEmpty() && currentPartnership.partnershipID == 0) {
+            defaultPartnership()
+        }
+        getPropertyListForPartnership()
+    }
+
+    fun getPropertyListForPartnership() {
         viewModelScope.launch {
             try {
-                propertyListState = propertyService.getProperties(token, partnership)
+                propertyListState = propertyService.getProperties(
+                    getEncryptedPreference("token"),
+                    currentPartnership
+                )
             } catch (e: Exception) {
                 println("Error: ${e.message}")
             } finally {
                 println("Finally")
             }
         }
+    }
+
+    fun getPartnershipListForLoggedInUser() {
+        viewModelScope.launch {
+            try {
+                partnershipList =
+                    authService.getPartnershipsForLoggedInUser(getEncryptedPreference("token"))
+            } catch (e: Exception) {
+                println("Error: ${e.message}")
+            } finally {
+                println("Finally")
+            }
+        }
+    }
+
+    fun switchPartnership(partnership: Partnership) {
+        currentPartnership = partnership
+    }
+
+    fun defaultPartnership() {
+        currentPartnership = partnershipList[0]
     }
 
     fun handlePropertyEdit(
@@ -40,7 +78,6 @@ class PropertyViewModel : ViewModel() {
         city: String? = null,
         zipCode: String? = null,
         country: String? = null
-
     ) {
         propertyName?.let {
             propertyState = propertyState.copy(propertyName = it)

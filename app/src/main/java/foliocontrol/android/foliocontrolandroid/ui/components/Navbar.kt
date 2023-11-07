@@ -24,31 +24,33 @@ import foliocontrol.android.foliocontrolandroid.domain.viewModels.LoginUiState
 fun Navbar(
     scrollBehavior: TopAppBarScrollBehavior,
     authViewModel: AuthViewModel,
-    navController: NavHostController,
+    navController: NavHostController
 //    canNavigateBack: Boolean,
 ) {
-    CenterAlignedTopAppBar(colors = TopAppBarDefaults.largeTopAppBarColors(
-        containerColor = MaterialTheme.colorScheme.primary,
-        titleContentColor = MaterialTheme.colorScheme.secondary
-    ), title = {
-        Text(
-            "FolioControl",
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colorScheme.secondary
-        )
-    }, navigationIcon = {
-//        if (canNavigateBack) {
-        IconButton(onClick = { navController.navigateUp() }) {
-            Icon(
-                tint = MaterialTheme.colorScheme.secondary,
-                imageVector = Icons.Filled.ArrowBack,
-                contentDescription = "Back"
+    CenterAlignedTopAppBar(
+        colors = TopAppBarDefaults.largeTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.secondary
+        ),
+        title = {
+            Text(
+                "FolioControl",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.secondary
             )
-        }
+        },
+        navigationIcon = {
+//        if (canNavigateBack) {
+            IconButton(onClick = { navController.navigateUp() }) {
+                Icon(
+                    tint = MaterialTheme.colorScheme.secondary,
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Back"
+                )
+            }
 //        }
-
-    },
+        },
 
         actions = {
             when (authViewModel.loginUiState) {

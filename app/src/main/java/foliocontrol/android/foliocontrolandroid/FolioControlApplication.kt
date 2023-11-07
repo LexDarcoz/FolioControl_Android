@@ -39,13 +39,17 @@ fun FolioControlApplication(
 
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    Scaffold(modifier = Modifier.fillMaxWidth(),
+    Scaffold(
+        modifier = Modifier.fillMaxWidth(),
         contentColor = MaterialTheme.colorScheme.primary,
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             when (authViewModel.loginUiState) {
                 is LoginUiState.Success -> {
-                    BottomNavigation(authViewModel = authViewModel)
+                    BottomNavigation(
+                        authViewModel = authViewModel,
+                        propertyViewModel = propertyViewModel
+                    )
                 }
 
                 else -> {
@@ -56,7 +60,7 @@ fun FolioControlApplication(
             Navbar(
                 scrollBehavior,
                 authViewModel = authViewModel,
-                navController = navController,
+                navController = navController
 //                navController.previousBackStackEntry != null
             )
         }
@@ -95,9 +99,12 @@ fun AppNavigator(
         composable("Settings") { SettingScreen(/*...*/) }
         composable("Search") { SearchScreen(/*...*/) }
         // Portfolio
-        composable("PropertyDetail/{id}",
-            arguments = listOf(navArgument("id") { type = NavType.IntType }
+        composable(
+            "PropertyDetail/{id}",
+            arguments = listOf(
+                navArgument("id") { type = NavType.IntType }
 
-            )) { PropertyDetailScreen(/*...*/) }
+            )
+        ) { PropertyDetailScreen(/*...*/) }
     }
 }
