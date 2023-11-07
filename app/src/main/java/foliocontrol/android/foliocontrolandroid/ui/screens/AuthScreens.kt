@@ -53,7 +53,7 @@ fun AuthScreen(
         }
 
         is LoginUiState.Success -> {
-            HomeScreen(propertyViewModel, navigateTo)
+            HomeScreen(authViewModel, propertyViewModel, navigateTo)
         }
 
         is LoginUiState.Loading -> {
