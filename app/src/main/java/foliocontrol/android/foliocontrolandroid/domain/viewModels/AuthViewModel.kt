@@ -105,4 +105,12 @@ class AuthViewModel : ViewModel() {
         removeEncryptedPreference("token")
         loginUiState = LoginUiState.LoggedOut("You logged out")
     }
+
+    fun setLoading(boolean: Boolean) {
+        if (boolean) {
+            loginUiState = LoginUiState.Loading
+        } else {
+            loginUiState = LoginUiState.Success("Succesfully got data")
+        }
+    }
 }
