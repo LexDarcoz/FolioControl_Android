@@ -23,7 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import foliocontrol.android.foliocontrol_android.R
-import foliocontrol.android.foliocontrolandroid.data.Property
+import foliocontrol.android.foliocontrolandroid.domain.dataModels.Property
 
 @Composable
 fun PropertyCard(
@@ -32,7 +32,6 @@ fun PropertyCard(
     navigateTo: (Any?) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-
     val propertyTypesIcons: Map<String, ImageVector> = mapOf(
         "Type1" to Icons.Default.Home,
         "Type2" to Icons.Default.Home,

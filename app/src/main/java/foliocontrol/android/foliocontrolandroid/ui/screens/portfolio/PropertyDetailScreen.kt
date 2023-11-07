@@ -1,17 +1,13 @@
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -20,85 +16,70 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrol_android.R
-import foliocontrol.android.foliocontrolandroid.viewModels.PropertyViewModel
-
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.PropertyViewModel
 
 @Composable
 fun PropertyDetailScreen(
     propertyViewModel: PropertyViewModel = PropertyViewModel()
 ) {
-    var state by propertyViewModel.propertyState
-
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
 
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_default), // Replace with your image resource
                 contentDescription = "Property Image",
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
+                modifier = Modifier.fillMaxWidth().height(200.dp)
             )
 
-
-
             Surface(
-               color = MaterialTheme.colorScheme.secondary,
+                color = MaterialTheme.colorScheme.secondary,
                 contentColor = MaterialTheme.colorScheme.primary,
                 shape = MaterialTheme.shapes.medium,
                 shadowElevation = 4.dp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
+                modifier = Modifier.fillMaxWidth().padding(16.dp)
 
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
+                    modifier = Modifier.fillMaxSize().padding(16.dp)
                 ) {
                     Text(
                         text = "Property Details",
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
-                    PropertyField("Name", state.propertyName) {
+                    PropertyField("Name", propertyViewModel.propertyState.propertyName) {
                         propertyViewModel.handlePropertyEdit(
                             propertyName = it
                         )
                     }
-                    PropertyField("Type", state.propertyType) {
+                    PropertyField("Type", propertyViewModel.propertyState.propertyType) {
                         propertyViewModel.handlePropertyEdit(
                             propertyType = it
                         )
                     }
-                    PropertyField("Street", state.street) {
+                    PropertyField("Street", propertyViewModel.propertyState.street) {
                         propertyViewModel.handlePropertyEdit(street = it)
                     }
-                    PropertyField("Street Number", state.streetNumber) {
+                    PropertyField("Street Number", propertyViewModel.propertyState.streetNumber) {
                         propertyViewModel.handlePropertyEdit(streetNumber = it)
                     }
-                    PropertyField("Zip Code", state.zipCode) {
+                    PropertyField("Zip Code", propertyViewModel.propertyState.zipCode) {
                         propertyViewModel.handlePropertyEdit(
                             zipCode = it
                         )
                     }
-                    PropertyField("City", state.city) {
+                    PropertyField("City", propertyViewModel.propertyState.city) {
                         propertyViewModel.handlePropertyEdit(city = it)
                     }
-                    PropertyField("Country", state.country) {
+                    PropertyField("Country", propertyViewModel.propertyState.country) {
                         propertyViewModel.handlePropertyEdit(
                             country = it
                         )
@@ -107,9 +88,8 @@ fun PropertyDetailScreen(
                     Button(
                         onClick = {
                             // Handle save button click
-                        }, modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp)
+                        },
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
                     ) {
                         Text(text = "Save")
                     }
@@ -137,9 +117,7 @@ fun PropertyField(label: String, value: String, onValueChange: (String) -> Unit)
             }),
             textStyle = MaterialTheme.typography.bodySmall,
             singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.secondary)
+            modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.secondary)
                 .padding(8.dp)
         )
     }

@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import foliocontrol.android.foliocontrolandroid.ui.theme.FolioControlAndroidTheme
 import retrofit2.*
 
-class MainActivity : ComponentActivity() {
+class MainApplication : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -25,7 +25,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -37,10 +36,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
-import foliocontrol.android.foliocontrolandroid.viewModels.LoginUiState
-import foliocontrol.android.foliocontrolandroid.viewModels.PropertyViewModel
-import foliocontrol.android.foliocontrolandroid.viewModels.setEncryptedPreference
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.LoginUiState
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.PropertyViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -79,7 +77,6 @@ fun LoginScreen(
     authViewModel: AuthViewModel
 ) {
     val scope = rememberCoroutineScope()
-    var state by remember { authViewModel.loginCredentials }
     val context = LocalContext.current
 
     Box(
@@ -109,7 +106,7 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 OutlinedTextField(
-                    value = state.email,
+                    value = authViewModel.loginCredentials.email,
                     onValueChange = { authViewModel.updateLoginState(email = it) },
                     label = { Text("Email") },
                     singleLine = true,
@@ -124,7 +121,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedTextField(
-                    value = state.password,
+                    value = authViewModel.loginCredentials.password,
                     onValueChange = { authViewModel.updateLoginState(password = it) },
                     label = { Text("Password") },
                     visualTransformation = PasswordVisualTransformation(),
@@ -150,7 +147,6 @@ fun LoginScreen(
                         scope.launch {
                             val token = authViewModel.getToken()
                             if (token.isNotBlank()) {
-                                setEncryptedPreference(token, context)
                                 Toast.makeText(context, "Welcome!", Toast.LENGTH_SHORT).show()
                             } else {
                                 Toast.makeText(context, "Failed to log in", Toast.LENGTH_SHORT)

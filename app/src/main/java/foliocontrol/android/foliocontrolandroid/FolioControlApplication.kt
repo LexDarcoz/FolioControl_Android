@@ -21,13 +21,13 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import foliocontrol.android.foliocontrolandroid.components.BottomNavigation
 import foliocontrol.android.foliocontrolandroid.components.Navbar
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.LoginUiState
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.screens.AccountScreen
 import foliocontrol.android.foliocontrolandroid.screens.AuthScreen
 import foliocontrol.android.foliocontrolandroid.screens.SearchScreen
 import foliocontrol.android.foliocontrolandroid.screens.SettingScreen
-import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
-import foliocontrol.android.foliocontrolandroid.viewModels.LoginUiState
-import foliocontrol.android.foliocontrolandroid.viewModels.PropertyViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)

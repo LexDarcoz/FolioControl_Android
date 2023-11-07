@@ -1,4 +1,4 @@
-package foliocontrol.android.foliocontrolandroid.data
+package foliocontrol.android.foliocontrolandroid.domain.dataModels
 
 data class LoginState(
     var email: String = "",

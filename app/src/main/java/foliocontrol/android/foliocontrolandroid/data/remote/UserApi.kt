@@ -1,10 +1,9 @@
 package foliocontrol.android.foliocontrolandroid.data.remote
 
 import android.util.Log
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import foliocontrol.android.foliocontrolandroid.data.LoginState
-import foliocontrol.android.foliocontrolandroid.data.Partnership
-import kotlinx.serialization.json.Json
+import foliocontrol.android.foliocontrolandroid.data.remote.common.createRetrofit
+import foliocontrol.android.foliocontrolandroid.domain.dataModels.LoginState
+import foliocontrol.android.foliocontrolandroid.domain.dataModels.Partnership
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -12,8 +11,6 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import okhttp3.MediaType.Companion.toMediaType
-import retrofit2.Retrofit
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -33,20 +30,22 @@ interface UserApi {
     suspend fun getUserPartnerships(@Header("Authorization") token: String): JsonArray
 }
 
+private val userApi = createRetrofit(UserApi::class.java)
 suspend fun UserLoginRequest(
     loginCredentials: LoginState,
     updateTokenState: (String) -> Unit
 ): Boolean {
-    val retrofit = Retrofit.Builder().baseUrl("http://10.0.2.2:9000")
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType())).build()
-    val api = retrofit.create(UserApi::class.java)
-
     var body = buildJsonObject {
         put("email", JsonPrimitive(loginCredentials.email))
         put("password", JsonPrimitive(loginCredentials.password))
     }
-    val call: JsonObject = api.login(body)
-    val token = call.jsonObject["token"]?.jsonPrimitive?.content
+    var token: String? = null
+    try {
+        val call: JsonObject = userApi.login(body)
+        token = call.jsonObject["token"]?.jsonPrimitive?.content
+    } catch (e: Exception) {
+        Log.e("TESTING", "UserLoginRequest: ", e)
+    }
     return if (token != null) {
         updateTokenState(token)
         true
@@ -58,11 +57,8 @@ suspend fun UserLoginRequest(
 suspend fun getUserPartnerships(
     token: String
 ): List<Partnership> {
-    val retrofit = Retrofit.Builder().baseUrl("http://10.0.2.2:9000")
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType())).build()
-    val api = retrofit.create(UserApi::class.java)
     try {
-        val response: JsonArray = api.getUserPartnerships(token = token)
+        val response: JsonArray = userApi.getUserPartnerships(token = token)
         return parseResponse(response)
     } catch (e: Exception) {
         // Handle exceptions here if the network request fails

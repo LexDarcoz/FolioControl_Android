@@ -20,9 +20,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import foliocontrol.android.foliocontrolandroid.data.Property
-import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
-import foliocontrol.android.foliocontrolandroid.viewModels.PropertyViewModel
+import foliocontrol.android.foliocontrolandroid.domain.dataModels.Property
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.PropertyViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -2,9 +2,7 @@ package foliocontrol.android.foliocontrolandroid.components
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
@@ -24,12 +22,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import foliocontrol.android.foliocontrolandroid.viewModels.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.domain.viewModels.AuthViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -109,7 +105,7 @@ fun BottomNavigation(authViewModel: AuthViewModel) {
         if (isPartnershipsSelected) {
             DropdownMenu(
 //                modifier = Modifier // Set the desired offset here
-////                    .fillMaxWidth(),
+// //                    .fillMaxWidth(),
                 expanded = true,
                 onDismissRequest = {
                     // Dismiss the dropdown when clicked outside
