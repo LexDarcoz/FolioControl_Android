@@ -6,12 +6,16 @@ import foliocontrol.android.foliocontrolandroid.domain.dataModels.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.dataModels.Property
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface PropertyAPI {
@@ -21,6 +25,15 @@ interface PropertyAPI {
         @Header("Authorization") token: String,
         @Path("partnershipID") partnershipID: Int
     ): JsonArray
+
+    @Headers("Accept: application/json")
+    @PUT("api/property/{propertyID}")
+    suspend fun savePropertyByPropertyID(
+        @Header("Authorization") token: String,
+        @Path("propertyID") propertyID: Int,
+        @Body property: JsonObject
+
+    )
 
     @Headers("Accept: application/json")
     @GET("api/user/getPartnerships")
@@ -84,7 +97,6 @@ fun parseResponse(response: JsonArray): List<Partnership> {
             val country = element["country"]
 
             if (name != null && vatNumber != null) {
-                Log.i("TESTING", "parseResponse: $name")
                 val partnership = Partnership(
                     partnershipID = partnershipID?.jsonPrimitive?.int ?: 0,
                     name = name.jsonPrimitive.content,
@@ -101,6 +113,29 @@ fun parseResponse(response: JsonArray): List<Partnership> {
             }
         }
     }
-    Log.i("TESTING", "parseResponse: $partnerships")
+
     return partnerships
+}
+
+suspend fun savePropertyByID(token: String, property: Property) {
+    try {
+        var body = buildJsonObject {
+            put("propertyID", JsonPrimitive(property.propertyID))
+            put("propertyName", JsonPrimitive(property.propertyName))
+            put("propertyType", JsonPrimitive(property.propertyType))
+            put("propertyImg", JsonPrimitive(property.propertyImg))
+            put("street", JsonPrimitive(property.street))
+            put("streetNumber", JsonPrimitive(property.streetNumber))
+            put("city", JsonPrimitive(property.city))
+            put("zipCode", JsonPrimitive(property.zipCode))
+            put("country", JsonPrimitive(property.country))
+            put("propertyDescription", JsonPrimitive(property.propertyDescription))
+            put("partnershipID", JsonPrimitive(property.FK_partnershipID))
+        }
+
+        propertyApi.savePropertyByPropertyID(token, property.propertyID, body)
+    } catch (e: Exception) {
+        // Handle exceptions here if the network request fails
+        Log.e("TESTING", "savePropertyByPropertyID failed", e)
+    }
 }

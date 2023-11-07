@@ -34,6 +34,10 @@ class PropertyViewModel : ViewModel() {
         getPropertyListForPartnership()
     }
 
+    fun selectProperty(property: Property) {
+        propertyState = property
+    }
+
     fun getPropertyListForPartnership() {
         viewModelScope.launch {
             try {
@@ -103,6 +107,18 @@ class PropertyViewModel : ViewModel() {
     }
 
     fun handlePropertySave() {
+        viewModelScope.launch {
+            try {
+                propertyService.savePropertyByPropertyID(
+                    getEncryptedPreference("token"),
+                    propertyState
+                )
+            } catch (e: Exception) {
+                println("Error: ${e.message}")
+            } finally {
+                println("Finally")
+            }
+        }
     }
 
     fun handlePropertyDelete() {

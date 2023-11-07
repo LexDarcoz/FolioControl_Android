@@ -36,8 +36,8 @@ class AuthViewModel : ViewModel() {
 
     init {
         try {
-            if (getEncryptedPreference("token").isNotEmpty()) {
-                userToken = getEncryptedPreference("token")
+            if (getToken().isNotEmpty()) {
+                userToken = getToken()
                 loginUiState = LoginUiState.Success("You have logged in")
             }
         } catch (e: Exception) {
@@ -54,7 +54,7 @@ class AuthViewModel : ViewModel() {
     }
 
     fun getToken(): String {
-        return this.userToken
+        return getEncryptedPreference("token")
     }
 
     fun resetToken() {

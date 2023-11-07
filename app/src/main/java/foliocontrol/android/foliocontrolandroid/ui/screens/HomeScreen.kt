@@ -1,7 +1,6 @@
 package foliocontrol.android.foliocontrolandroid.screens
 
 import PropertyCard
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -14,8 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.domain.viewModels.PropertyViewModel
 
 @Composable
@@ -45,7 +42,7 @@ fun HomeScreen(
         LazyColumn(contentPadding = values) {
             items(propertyViewModel.propertyListState) { property ->
                 PropertyCard(
-                    modifier = Modifier.padding(16.dp),
+                    propertyViewModel = propertyViewModel,
                     property = property,
                     navigateTo = navigateTo
                 )

@@ -14,11 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import foliocontrol.android.foliocontrolandroid.components.BottomNavigation
 import foliocontrol.android.foliocontrolandroid.components.Navbar
 import foliocontrol.android.foliocontrolandroid.domain.viewModels.AuthViewModel
@@ -90,7 +88,8 @@ fun AppNavigator(
         composable("Home") {
             AuthScreen(authViewModel = authViewModel, propertyViewModel = propertyViewModel) {
                 navController.navigate(
-                    "PropertyDetail/$it"
+//                    "PropertyDetail/" +
+                    "$it"
                 )
             }
         }
@@ -99,12 +98,10 @@ fun AppNavigator(
         composable("Settings") { SettingScreen(/*...*/) }
         composable("Search") { SearchScreen(/*...*/) }
         // Portfolio
-        composable(
-            "PropertyDetail/{id}",
-            arguments = listOf(
-                navArgument("id") { type = NavType.IntType }
-
-            )
-        ) { PropertyDetailScreen(/*...*/) }
+        composable("PropertyDetail") {
+            PropertyDetailScreen(
+                propertyViewModel
+            ) { navController.navigate("$it") }
+        }
     }
 }

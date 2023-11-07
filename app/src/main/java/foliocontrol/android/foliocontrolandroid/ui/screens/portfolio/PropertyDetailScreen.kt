@@ -5,9 +5,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -16,14 +14,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrol_android.R
 import foliocontrol.android.foliocontrolandroid.domain.viewModels.PropertyViewModel
 
 @Composable
 fun PropertyDetailScreen(
-    propertyViewModel: PropertyViewModel = PropertyViewModel()
+    propertyViewModel: PropertyViewModel,
+    navigateTo: (Any?) -> Unit = {}
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -87,7 +85,8 @@ fun PropertyDetailScreen(
                     Spacer(modifier = Modifier.weight(1f))
                     Button(
                         onClick = {
-                            // Handle save button click
+                            propertyViewModel.handlePropertySave()
+                            navigateTo("Home")
                         },
                         modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
                     ) {
@@ -99,13 +98,12 @@ fun PropertyDetailScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PropertyField(label: String, value: String, onValueChange: (String) -> Unit) {
     Column(
         modifier = Modifier.padding(vertical = 8.dp)
     ) {
-        Text(text = label, style = MaterialTheme.typography.bodyMedium)
+        Text(text = label, style = MaterialTheme.typography.bodyLarge)
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
@@ -121,10 +119,4 @@ fun PropertyField(label: String, value: String, onValueChange: (String) -> Unit)
                 .padding(8.dp)
         )
     }
-}
-
-@Preview
-@Composable
-fun PropertyDetailScreenPreview() {
-    PropertyDetailScreen()
 }
