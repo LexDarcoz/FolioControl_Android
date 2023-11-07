@@ -34,12 +34,12 @@ import foliocontrol.android.foliocontrolandroid.screens.SettingScreen
 @Composable
 fun FolioControlApplication(
     authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    propertyViewModel: PropertyViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    propertyViewModel: PropertyViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    navController: NavHostController = rememberNavController()
+
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val navController = rememberNavController()
-    Scaffold(
-        modifier = Modifier.fillMaxWidth(),
+    Scaffold(modifier = Modifier.fillMaxWidth(),
         contentColor = MaterialTheme.colorScheme.primary,
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
@@ -53,7 +53,12 @@ fun FolioControlApplication(
             }
         },
         topBar = {
-            Navbar(scrollBehavior, authViewModel = authViewModel, navController = navController)
+            Navbar(
+                scrollBehavior,
+                authViewModel = authViewModel,
+                navController = navController,
+//                navController.previousBackStackEntry != null
+            )
         }
 
     ) { innerPadding ->
@@ -90,12 +95,9 @@ fun AppNavigator(
         composable("Settings") { SettingScreen(/*...*/) }
         composable("Search") { SearchScreen(/*...*/) }
         // Portfolio
-        composable(
-            "PropertyDetail/{id}",
-            arguments = listOf(
-                navArgument("id") { type = NavType.IntType }
+        composable("PropertyDetail/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.IntType }
 
-            )
-        ) { PropertyDetailScreen(/*...*/) }
+            )) { PropertyDetailScreen(/*...*/) }
     }
 }
