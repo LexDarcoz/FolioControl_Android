@@ -11,6 +11,7 @@ import foliocontrol.android.foliocontrolandroid.data.repository.PropertyServiceI
 import foliocontrol.android.foliocontrolandroid.domain.dataModels.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.dataModels.Property
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 class PropertyViewModel : ViewModel() {
     private val authService = AuthServiceImpl()
@@ -27,11 +28,18 @@ class PropertyViewModel : ViewModel() {
         private set
 
     fun getData() {
-        getPartnershipListForLoggedInUser()
-        if (partnershipList.isNotEmpty() && currentPartnership.partnershipID == 0) {
-            defaultPartnership()
+        try {
+            getPartnershipListForLoggedInUser()
+            if (partnershipList.isNotEmpty() && currentPartnership.partnershipID == 0) {
+                defaultPartnership()
+            }
+            getPropertyListForPartnership()
+        } catch (e: IOException) {
+            println("Error: ${e.message}")
+        } finally {
+            println("Finally")
         }
-        getPropertyListForPartnership()
+
     }
 
     fun selectProperty(property: Property) {

@@ -26,6 +26,7 @@ import foliocontrol.android.foliocontrolandroid.screens.AccountScreen
 import foliocontrol.android.foliocontrolandroid.screens.AuthScreen
 import foliocontrol.android.foliocontrolandroid.screens.SearchScreen
 import foliocontrol.android.foliocontrolandroid.screens.SettingScreen
+import foliocontrol.android.foliocontrolandroid.ui.screens.portfolio.PropertyOverviewScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -99,7 +100,7 @@ fun AppNavigator(
         composable("Search") { SearchScreen(/*...*/) }
         // Portfolio
         composable("PropertyDetail") {
-            PropertyDetailScreen(
+            PropertyOverviewScreen(
                 propertyViewModel
             ) { navController.navigate("$it") }
         }

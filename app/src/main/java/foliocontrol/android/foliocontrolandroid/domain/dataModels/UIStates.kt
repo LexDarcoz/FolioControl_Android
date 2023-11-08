@@ -1,5 +1,7 @@
 package foliocontrol.android.foliocontrolandroid.domain.dataModels
 
+import kotlinx.serialization.Serializable
+
 data class LoginState(
     var email: String = "",
     var password: String = ""
@@ -13,6 +15,7 @@ data class User(
     var email: String = ""
 )
 
+@Serializable
 data class Property(
     val propertyID: Int = 0,
     val propertyName: String = "",

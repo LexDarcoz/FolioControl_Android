@@ -22,8 +22,7 @@ interface PropertyAPI {
     @Headers("Accept: application/json")
     @GET("api/property/partnership/{partnershipID}")
     suspend fun getProperties(
-        @Header("Authorization") token: String,
-        @Path("partnershipID") partnershipID: Int
+        @Header("Authorization") token: String, @Path("partnershipID") partnershipID: Int
     ): JsonArray
 
     @Headers("Accept: application/json")
@@ -45,7 +44,8 @@ private val propertyApi = createRetrofit(PropertyAPI::class.java)
 suspend fun fetchProperties(token: String, partnershipID: Int): List<Property>? {
     try {
         var properties = propertyApi.getProperties(token, partnershipID)
-
+        Log.i("TEST", "fetchProperties: $properties")
+//        return properties
         return properties.map {
             Property(
                 it.jsonObject["propertyID"]?.jsonPrimitive?.int ?: 0,

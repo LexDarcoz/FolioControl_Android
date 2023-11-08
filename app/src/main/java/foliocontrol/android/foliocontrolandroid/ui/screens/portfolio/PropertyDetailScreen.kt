@@ -49,7 +49,7 @@ fun PropertyDetailScreen(
                     modifier = Modifier.fillMaxSize().padding(16.dp)
                 ) {
                     Text(
-                        text = "Property Details",
+                        text = "Details - ${propertyViewModel.propertyState.propertyName}",
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
