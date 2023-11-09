@@ -10,8 +10,8 @@ import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.data.repository.PropertyServiceImpl
 import foliocontrol.android.foliocontrolandroid.domain.dataModels.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.dataModels.Property
-import kotlinx.coroutines.launch
 import java.io.IOException
+import kotlinx.coroutines.launch
 
 class PropertyViewModel : ViewModel() {
     private val authService = AuthServiceImpl()
@@ -39,7 +39,6 @@ class PropertyViewModel : ViewModel() {
         } finally {
             println("Finally")
         }
-
     }
 
     fun selectProperty(property: Property) {

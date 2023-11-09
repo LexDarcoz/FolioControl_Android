@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,7 +51,6 @@ fun PropertyCard(
         ),
         shape = MaterialTheme.shapes.small,
         colors = CardDefaults.cardColors(
-
             contentColor = MaterialTheme.colorScheme.primary,
             containerColor = MaterialTheme.colorScheme.secondary
         )
@@ -71,6 +73,21 @@ fun PropertyCard(
                 tint = Color.White,
                 modifier = Modifier.size(40.dp).align(Alignment.BottomStart).padding(8.dp)
             )
+            IconButton(
+                onClick = { /*TODO*/ },
+                modifier = Modifier.align(Alignment.TopEnd),
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(40.dp).padding(8.dp)
+                )
+            }
         }
         Column(
             modifier = Modifier.padding(16.dp)

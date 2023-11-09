@@ -1,12 +1,10 @@
 package foliocontrol.android.foliocontrolandroid.screens
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -35,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.domain.viewModels.AuthViewModel
 import foliocontrol.android.foliocontrolandroid.domain.viewModels.LoginUiState
 import foliocontrol.android.foliocontrolandroid.domain.viewModels.PropertyViewModel
+import foliocontrol.android.foliocontrolandroid.ui.components.LoadingScreen
 
 @Composable
 fun AuthScreen(
@@ -42,7 +41,7 @@ fun AuthScreen(
     propertyViewModel: PropertyViewModel,
     navigateTo: (Any?) -> Unit = {}
 ) {
-// Main auth
+// Main auth for every screen an viewmodel is needed
     when (authViewModel.loginUiState) {
         is LoginUiState.LoggedOut -> {
             LoginScreen(
@@ -143,22 +142,6 @@ fun LoginScreen(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun LoadingScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text("Loading...")
         }
     }
 }
