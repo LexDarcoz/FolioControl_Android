@@ -1,8 +1,8 @@
-package foliocontrol.android.foliocontrolandroid.domain.dataModels
+package foliocontrol.android.foliocontrolandroid.domain
 
 import kotlinx.serialization.Serializable
 
-data class LoginState(
+data class LoginCredentials(
     var email: String = "",
     var password: String = ""
 

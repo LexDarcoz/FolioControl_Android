@@ -1,4 +1,4 @@
-package foliocontrol.android.foliocontrolandroid.domain.viewModels
+package foliocontrol.android.foliocontrolandroid.ui.viewModels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,36 +9,31 @@ import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreferenc
 import foliocontrol.android.foliocontrolandroid.data.local.removeEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.local.saveEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
-import foliocontrol.android.foliocontrolandroid.domain.dataModels.LoginState
-import foliocontrol.android.foliocontrolandroid.domain.dataModels.Token
+import foliocontrol.android.foliocontrolandroid.domain.LoginCredentials
+import foliocontrol.android.foliocontrolandroid.domain.Token
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import kotlinx.coroutines.launch
-
-sealed interface LoginUiState {
-
-    data class Success(val message: String) : LoginUiState
-    data class LoggedOut(val message: String) : LoginUiState
-    data class Error(val message: String) : LoginUiState
-    data object Loading : LoginUiState
-}
 
 class AuthViewModel : ViewModel() {
     lateinit var navigateTo: (String) -> Unit
     private val authService = AuthServiceImpl()
 
-    var loginCredentials by mutableStateOf(LoginState())
+
+    var loginUiState: UiState by mutableStateOf(
+        UiState.LoggedOut("You are not logged in")
+    )
+        private set
+    var loginCredentials by mutableStateOf(LoginCredentials())
         private set
     var userToken by mutableStateOf("")
         private set
-    var loginUiState: LoginUiState by mutableStateOf(
-        LoginUiState.LoggedOut("You are not logged in")
-    )
-        private set
+
 
     init {
         try {
             if (getToken().isNotEmpty()) {
                 userToken = getToken()
-                loginUiState = LoginUiState.Success("You have logged in")
+                loginUiState = UiState.Success("You have logged in")
             }
         } catch (e: Exception) {
             println("User not valid token")
@@ -79,7 +74,7 @@ class AuthViewModel : ViewModel() {
 
     fun login() {
         viewModelScope.launch {
-            loginUiState = LoginUiState.Loading
+            loginUiState = UiState.Loading
 
             try {
                 var auth = authService.login(loginCredentials, updateTokenState = { token ->
@@ -88,14 +83,14 @@ class AuthViewModel : ViewModel() {
 
                 if (auth) {
                     saveEncryptedPreference("token", userToken)
-                    loginUiState = LoginUiState.Success("You have logged in")
+                    loginUiState = UiState.Success("You have logged in")
                 } else {
-                    loginUiState = LoginUiState.LoggedOut(
+                    loginUiState = UiState.LoggedOut(
                         "Something went wrong logging in, check credentials"
                     )
                 }
             } catch (e: Exception) {
-                loginUiState = LoginUiState.LoggedOut(e.localizedMessage ?: "You logged out")
+                loginUiState = UiState.LoggedOut(e.localizedMessage ?: "You logged out")
             }
         }
     }
@@ -103,14 +98,14 @@ class AuthViewModel : ViewModel() {
     fun logOut() {
         resetToken()
         removeEncryptedPreference("token")
-        loginUiState = LoginUiState.LoggedOut("You logged out")
+        loginUiState = UiState.LoggedOut("You logged out")
     }
 
     fun setLoading(boolean: Boolean) {
         if (boolean) {
-            loginUiState = LoginUiState.Loading
+            loginUiState = UiState.Loading
         } else {
-            loginUiState = LoginUiState.Success("Succesfully got data")
+            loginUiState = UiState.Success("Succesfully got data")
         }
     }
 }

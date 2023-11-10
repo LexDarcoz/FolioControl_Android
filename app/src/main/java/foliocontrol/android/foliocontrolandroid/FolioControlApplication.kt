@@ -19,14 +19,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import foliocontrol.android.foliocontrolandroid.components.BottomNavigation
 import foliocontrol.android.foliocontrolandroid.components.Navbar
-import foliocontrol.android.foliocontrolandroid.domain.viewModels.AuthViewModel
-import foliocontrol.android.foliocontrolandroid.domain.viewModels.LoginUiState
-import foliocontrol.android.foliocontrolandroid.domain.viewModels.PropertyViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.screens.AccountScreen
 import foliocontrol.android.foliocontrolandroid.screens.AuthScreen
 import foliocontrol.android.foliocontrolandroid.screens.SearchScreen
 import foliocontrol.android.foliocontrolandroid.screens.SettingScreen
 import foliocontrol.android.foliocontrolandroid.ui.screens.portfolio.PropertyOverviewScreen
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,16 +38,14 @@ fun FolioControlApplication(
 
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    Scaffold(
-        modifier = Modifier.fillMaxWidth(),
+    Scaffold(modifier = Modifier.fillMaxWidth(),
         contentColor = MaterialTheme.colorScheme.primary,
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             when (authViewModel.loginUiState) {
-                is LoginUiState.Success -> {
+                is UiState.Success -> {
                     BottomNavigation(
-                        authViewModel = authViewModel,
-                        propertyViewModel = propertyViewModel
+                        authViewModel = authViewModel, propertyViewModel = propertyViewModel
                     )
                 }
 
@@ -57,9 +55,7 @@ fun FolioControlApplication(
         },
         topBar = {
             Navbar(
-                scrollBehavior,
-                authViewModel = authViewModel,
-                navController = navController
+                scrollBehavior, authViewModel = authViewModel, navController = navController
 //                navController.previousBackStackEntry != null
             )
         }

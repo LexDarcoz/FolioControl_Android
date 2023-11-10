@@ -2,7 +2,7 @@ package foliocontrol.android.foliocontrolandroid.data.remote
 
 import android.util.Log
 import foliocontrol.android.foliocontrolandroid.data.remote.common.createRetrofit
-import foliocontrol.android.foliocontrolandroid.domain.dataModels.LoginState
+import foliocontrol.android.foliocontrolandroid.domain.LoginCredentials
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
@@ -25,7 +25,7 @@ interface UserApi {
 
 private val userApi = createRetrofit(UserApi::class.java)
 suspend fun UserLoginRequest(
-    loginCredentials: LoginState,
+    loginCredentials: LoginCredentials,
     updateTokenState: (String) -> Unit
 ): Boolean {
     var body = buildJsonObject {

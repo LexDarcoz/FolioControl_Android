@@ -2,8 +2,8 @@ package foliocontrol.android.foliocontrolandroid.data.remote
 
 import android.util.Log
 import foliocontrol.android.foliocontrolandroid.data.remote.common.createRetrofit
-import foliocontrol.android.foliocontrolandroid.domain.dataModels.Partnership
-import foliocontrol.android.foliocontrolandroid.domain.dataModels.Property
+import foliocontrol.android.foliocontrolandroid.domain.Partnership
+import foliocontrol.android.foliocontrolandroid.domain.Property
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive

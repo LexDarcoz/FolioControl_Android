@@ -3,8 +3,8 @@ package foliocontrol.android.foliocontrolandroid.data.repository
 import android.content.Context
 import foliocontrol.android.foliocontrolandroid.data.remote.UserLoginRequest
 import foliocontrol.android.foliocontrolandroid.data.remote.getUserPartnerships
-import foliocontrol.android.foliocontrolandroid.domain.dataModels.LoginState
-import foliocontrol.android.foliocontrolandroid.domain.dataModels.Partnership
+import foliocontrol.android.foliocontrolandroid.domain.LoginCredentials
+import foliocontrol.android.foliocontrolandroid.domain.Partnership
 
 class AuthServiceImpl : AuthService {
     override fun configureAuth(context: Context) {
@@ -12,10 +12,10 @@ class AuthServiceImpl : AuthService {
     }
 
     override suspend fun login(
-        loginState: LoginState,
+        loginCredentials: LoginCredentials,
         updateTokenState: (String) -> Unit
     ): Boolean {
-        return if (UserLoginRequest(loginState, updateTokenState)) {
+        return if (UserLoginRequest(loginCredentials, updateTokenState)) {
             println("User succesfully logged in")
             true
         } else {

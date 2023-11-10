@@ -20,8 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,10 +28,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import foliocontrol.android.foliocontrolandroid.domain.viewModels.AuthViewModel
-import foliocontrol.android.foliocontrolandroid.domain.viewModels.LoginUiState
-import foliocontrol.android.foliocontrolandroid.domain.viewModels.PropertyViewModel
-import foliocontrol.android.foliocontrolandroid.ui.components.LoadingScreen
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 @Composable
 fun AuthScreen(
@@ -41,21 +39,21 @@ fun AuthScreen(
     propertyViewModel: PropertyViewModel,
     navigateTo: (Any?) -> Unit = {}
 ) {
-// Main auth for every screen an viewmodel is needed
+// Main auth
+// For every screen a view-model is needed
     when (authViewModel.loginUiState) {
-        is LoginUiState.LoggedOut -> {
+        is UiState.LoggedOut -> {
             LoginScreen(
-                errorName = (authViewModel.loginUiState as LoginUiState.LoggedOut).message,
-                authViewModel
+                errorName = (authViewModel.loginUiState as UiState.LoggedOut).message, authViewModel
 
             )
         }
 
-        is LoginUiState.Success -> {
-            HomeScreen(authViewModel, propertyViewModel, navigateTo)
+        is UiState.Success -> {
+            HomeScreen(propertyViewModel, navigateTo)
         }
 
-        is LoginUiState.Loading -> {
+        is UiState.Loading -> {
             LoadingScreen()
         }
 
@@ -67,16 +65,18 @@ fun AuthScreen(
 
 @Composable
 fun LoginScreen(
-    errorName: String,
-    authViewModel: AuthViewModel
+    errorName: String, authViewModel: AuthViewModel
 
 ) {
     Box(
-        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.8f),
-        contentAlignment = Alignment.Center
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.8f), contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(16.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
         ) {
             Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                 Text(
@@ -89,11 +89,12 @@ fun LoginScreen(
             }
 
             Column(
-                modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                OutlinedTextField(
-                    value = authViewModel.loginCredentials.email,
+                OutlinedTextField(value = authViewModel.loginCredentials.email,
                     onValueChange = { authViewModel.updateLoginState(email = it) },
                     label = { Text("Email") },
                     singleLine = true,
@@ -102,13 +103,11 @@ fun LoginScreen(
                     ),
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.Email, contentDescription = null)
-                    }
-                )
+                    })
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                OutlinedTextField(
-                    value = authViewModel.loginCredentials.password,
+                OutlinedTextField(value = authViewModel.loginCredentials.password,
                     onValueChange = { authViewModel.updateLoginState(password = it) },
                     label = { Text("Password") },
                     visualTransformation = PasswordVisualTransformation(),
@@ -117,8 +116,7 @@ fun LoginScreen(
                     ),
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.Lock, contentDescription = null)
-                    }
-                )
+                    })
 
                 Text(
                     text = errorName,
@@ -131,13 +129,13 @@ fun LoginScreen(
                 Button(
                     onClick = {
                         authViewModel.login()
-                    },
-                    modifier = Modifier.height(64.dp).width(200.dp).padding(top = 16.dp)
+                    }, modifier = Modifier
+                        .height(64.dp)
+                        .width(200.dp)
+                        .padding(top = 16.dp)
                 ) {
                     Text(
-                        "Login",
-                        color = Color.White,
-                        style = MaterialTheme.typography.titleMedium
+                        "Login", color = Color.White, style = MaterialTheme.typography.titleMedium
 
                     )
                 }

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
@@ -22,7 +21,6 @@ import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -36,7 +34,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.zIndex
-import foliocontrol.android.foliocontrolandroid.domain.viewModels.PropertyViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
+
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 val tabItems = listOf(
     TabItem("Details", Icons.Outlined.Home, Icons.Filled.Home),
@@ -50,13 +52,36 @@ data class TabItem(
     val title: String, val unselectedIcon: ImageVector, val selectedIcon: ImageVector
 )
 
+
+@Composable
+fun PropertyOverviewScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}) {
+    when (propertyViewModel.uiState) {
+        is UiState.LoggedOut -> {
+            navigateTo("home")
+        }
+
+        is UiState.Success -> {
+            Overview(propertyViewModel, navigateTo)
+        }
+
+        is UiState.Loading -> {
+            LoadingScreen()
+        }
+
+        else -> {
+            ErrorScreen(errorMessage = (propertyViewModel.uiState as UiState.Error).message,
+                onRetry = { propertyViewModel.getData() })
+        }
+    }
+}
+
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PropertyOverviewScreen(
+fun Overview(
     propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}
 
 ) {
-
     val pagerState = rememberPagerState {
         tabItems.size
     }

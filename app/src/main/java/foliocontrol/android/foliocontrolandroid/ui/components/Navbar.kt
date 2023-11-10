@@ -16,8 +16,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavHostController
-import foliocontrol.android.foliocontrolandroid.domain.viewModels.AuthViewModel
-import foliocontrol.android.foliocontrolandroid.domain.viewModels.LoginUiState
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,7 +54,7 @@ fun Navbar(
 
         actions = {
             when (authViewModel.loginUiState) {
-                is LoginUiState.Success -> {
+                is UiState.Success -> {
                     IconButton(onClick = {
                         authViewModel.logOut()
                         navController.navigate("Home")

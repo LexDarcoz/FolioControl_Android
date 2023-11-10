@@ -27,8 +27,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import foliocontrol.android.foliocontrol_android.R
-import foliocontrol.android.foliocontrolandroid.domain.dataModels.Property
-import foliocontrol.android.foliocontrolandroid.domain.viewModels.PropertyViewModel
+import foliocontrol.android.foliocontrolandroid.domain.Property
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 @Composable
 fun PropertyCard(

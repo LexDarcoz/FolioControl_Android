@@ -1,4 +1,4 @@
-package foliocontrol.android.foliocontrolandroid.domain.viewModels
+package foliocontrol.android.foliocontrolandroid.ui.viewModels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,12 +8,21 @@ import androidx.lifecycle.viewModelScope
 import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.data.repository.PropertyServiceImpl
-import foliocontrol.android.foliocontrolandroid.domain.dataModels.Partnership
-import foliocontrol.android.foliocontrolandroid.domain.dataModels.Property
+import foliocontrol.android.foliocontrolandroid.domain.Partnership
+import foliocontrol.android.foliocontrolandroid.domain.Property
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import java.io.IOException
 import kotlinx.coroutines.launch
 
+
 class PropertyViewModel : ViewModel() {
+
+    var uiState: UiState by mutableStateOf(
+        UiState.LoggedOut("You are not logged in")
+    )
+        private set
+
+
     private val authService = AuthServiceImpl()
     private val propertyService = PropertyServiceImpl()
 
@@ -28,6 +37,7 @@ class PropertyViewModel : ViewModel() {
         private set
 
     fun getData() {
+        uiState = UiState.Loading
         try {
             getPartnershipListForLoggedInUser()
             if (partnershipList.isNotEmpty() && currentPartnership.partnershipID == 0) {
@@ -36,9 +46,17 @@ class PropertyViewModel : ViewModel() {
             getPropertyListForPartnership()
         } catch (e: IOException) {
             println("Error: ${e.message}")
+            uiState = e.message?.let { UiState.Error(it) }!!
+
         } finally {
             println("Finally")
         }
+        if (partnershipList.isNotEmpty()) {
+            uiState = UiState.Success("Succesfully retrieved data")
+        } else {
+            uiState = UiState.Error("No data was found")
+        }
+
     }
 
     fun selectProperty(property: Property) {
@@ -49,8 +67,7 @@ class PropertyViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 propertyListState = propertyService.getProperties(
-                    getEncryptedPreference("token"),
-                    currentPartnership
+                    getEncryptedPreference("token"), currentPartnership
                 )
             } catch (e: Exception) {
                 println("Error: ${e.message}")
@@ -117,8 +134,7 @@ class PropertyViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 propertyService.savePropertyByPropertyID(
-                    getEncryptedPreference("token"),
-                    propertyState
+                    getEncryptedPreference("token"), propertyState
                 )
             } catch (e: Exception) {
                 println("Error: ${e.message}")

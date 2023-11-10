@@ -1,15 +1,15 @@
 package foliocontrol.android.foliocontrolandroid.data.repository
 
 import android.content.Context
-import foliocontrol.android.foliocontrolandroid.domain.dataModels.LoginState
-import foliocontrol.android.foliocontrolandroid.domain.dataModels.Partnership
+import foliocontrol.android.foliocontrolandroid.domain.LoginCredentials
+import foliocontrol.android.foliocontrolandroid.domain.Partnership
 
 interface AuthService {
 
     fun configureAuth(context: Context)
 
     suspend fun login(
-        loginState: LoginState,
+        loginCredentials: LoginCredentials,
         updateTokenState: (String) -> Unit
     ): Boolean
 
