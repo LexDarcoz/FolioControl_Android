@@ -42,10 +42,7 @@ interface PropertyAPI {
 private val propertyApi = createRetrofit(PropertyAPI::class.java)
 
 suspend fun fetchProperties(token: String, partnershipID: Int): List<Property>? {
-    try {
         var properties = propertyApi.getProperties(token, partnershipID)
-        Log.i("TEST", "fetchProperties: $properties")
-//        return properties
         return properties.map {
             Property(
                 it.jsonObject["propertyID"]?.jsonPrimitive?.int ?: 0,
@@ -60,24 +57,20 @@ suspend fun fetchProperties(token: String, partnershipID: Int): List<Property>? 
                 it.jsonObject["propertyDescription"]?.jsonPrimitive?.content ?: "",
                 it.jsonObject["partnershipID"]?.jsonPrimitive?.int ?: 0
             )
+
         }
-    } catch (e: Exception) {
-        return emptyList()
-    }
 }
+
 
 suspend fun getUserPartnerships(
     token: String
 ): List<Partnership> {
-    try {
+
         val response: JsonArray = propertyApi.getUserPartnerships(token = token)
         return parseResponse(response)
-    } catch (e: Exception) {
-        // Handle exceptions here if the network request fails
-        Log.e("TESTING", "getUserPartnerships failed", e)
-    }
 
-    return emptyList()
+
+
 }
 
 fun parseResponse(response: JsonArray): List<Partnership> {

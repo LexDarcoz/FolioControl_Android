@@ -29,7 +29,6 @@ class AuthServiceImpl : AuthService {
     }
 
     override suspend fun getPartnershipsForLoggedInUser(token: String): List<Partnership> {
-        // TODO
         return getUserPartnerships(token)
     }
 }
