@@ -16,6 +16,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
@@ -36,6 +37,13 @@ interface PropertyAPI {
     suspend fun savePropertyByPropertyID(
         @Header("Authorization") token: String,
         @Path("propertyID") propertyID: Int,
+        @Body property: JsonObject
+    )
+
+    @Headers("Accept: application/json")
+    @POST("api/property/create")
+    suspend fun createProperty(
+        @Header("Authorization") token: String,
         @Body property: JsonObject
     )
 
@@ -125,12 +133,34 @@ suspend fun savePropertyByID(token: String, property: Property) {
             put("zipCode", JsonPrimitive(property.zipCode))
             put("country", JsonPrimitive(property.country))
             put("propertyDescription", JsonPrimitive(property.propertyDescription))
-            put("partnershipID", JsonPrimitive(property.FK_partnershipID))
+            put("FK_partnershipID", JsonPrimitive(property.FK_partnershipID))
         }
 
         propertyApi.savePropertyByPropertyID(token, property.propertyID, body)
     } catch (e: Exception) {
         Log.e("TESTING", "savePropertyByPropertyID failed", e)
+    }
+}
+
+suspend fun createProperty(token: String, property: Property) {
+    Log.i("TEST", "createProperty: $property}")
+
+    try {
+        var body = buildJsonObject {
+            put("propertyName", JsonPrimitive(property.propertyName))
+            put("propertyType", JsonPrimitive(property.propertyType))
+            put("propertyImg", JsonPrimitive(property.propertyImg))
+            put("street", JsonPrimitive(property.street))
+            put("streetNumber", JsonPrimitive(property.streetNumber))
+            put("city", JsonPrimitive(property.city))
+            put("zipCode", JsonPrimitive(property.zipCode))
+            put("country", JsonPrimitive(property.country))
+            put("propertyDescription", JsonPrimitive(property.propertyDescription))
+            put("FK_partnershipID", JsonPrimitive(property.FK_partnershipID))
+        }
+        propertyApi.createProperty(token, body)
+    } catch (e: Exception) {
+        Log.e("TESTING", "createProperty failed", e)
     }
 }
 

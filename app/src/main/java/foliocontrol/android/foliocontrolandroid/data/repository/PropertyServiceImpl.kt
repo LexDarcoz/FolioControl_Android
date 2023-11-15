@@ -1,5 +1,6 @@
 package foliocontrol.android.foliocontrolandroid.data.repository
 
+import foliocontrol.android.foliocontrolandroid.data.remote.createProperty
 import foliocontrol.android.foliocontrolandroid.data.remote.deletePropertyById
 import foliocontrol.android.foliocontrolandroid.data.remote.fetchProperties
 import foliocontrol.android.foliocontrolandroid.data.remote.savePropertyByID
@@ -13,6 +14,10 @@ class PropertyServiceImpl : PropertyService {
 
     override suspend fun savePropertyByPropertyID(token: String, property: Property) {
         savePropertyByID(token, property)
+    }
+
+    override suspend fun addProperty(token: String, property: Property) {
+        createProperty(token, property)
     }
 
     override suspend fun deletePropertyByPropertyID(token: String, propertyID: Int) {
