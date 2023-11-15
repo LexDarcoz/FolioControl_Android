@@ -138,7 +138,20 @@ class PropertyViewModel : ViewModel() {
         }
     }
 
-    fun handlePropertyDelete() {
+    fun handlePropertyDelete(propertyId: Int) {
+        viewModelScope.launch {
+            try {
+                propertyService.deletePropertyByPropertyID(
+                    getEncryptedPreference("token"),
+                    propertyId
+                )
+                getData()
+            } catch (e: Exception) {
+                println("Error: ${e.message}")
+            } finally {
+                println("Finally")
+            }
+        }
     }
 
     fun handlePropertyAdd() {

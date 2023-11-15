@@ -12,6 +12,7 @@ import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
@@ -22,8 +23,13 @@ interface PropertyAPI {
     @Headers("Accept: application/json")
     @GET("api/property/partnership/{partnershipID}")
     suspend fun getProperties(
-        @Header("Authorization") token: String, @Path("partnershipID") partnershipID: Int
+        @Header("Authorization") token: String,
+        @Path("partnershipID") partnershipID: Int
     ): JsonArray
+
+    @Headers("Accept: application/json")
+    @GET("api/user/getPartnerships")
+    suspend fun getUserPartnerships(@Header("Authorization") token: String): JsonArray
 
     @Headers("Accept: application/json")
     @PUT("api/property/{propertyID}")
@@ -31,46 +37,42 @@ interface PropertyAPI {
         @Header("Authorization") token: String,
         @Path("propertyID") propertyID: Int,
         @Body property: JsonObject
-
     )
 
     @Headers("Accept: application/json")
-    @GET("api/user/getPartnerships")
-    suspend fun getUserPartnerships(@Header("Authorization") token: String): JsonArray
+    @DELETE("api/property/{propertyID}")
+    suspend fun deletePropertyById(
+        @Header("Authorization") token: String,
+        @Path("propertyID") propertyID: Int
+    )
 }
 
 private val propertyApi = createRetrofit(PropertyAPI::class.java)
 
 suspend fun fetchProperties(token: String, partnershipID: Int): List<Property>? {
-        var properties = propertyApi.getProperties(token, partnershipID)
-        return properties.map {
-            Property(
-                it.jsonObject["propertyID"]?.jsonPrimitive?.int ?: 0,
-                it.jsonObject["propertyName"]?.jsonPrimitive?.content ?: "",
-                it.jsonObject["propertyType"]?.jsonPrimitive?.content ?: "",
-                it.jsonObject["propertyImg"]?.jsonPrimitive?.content ?: "",
-                it.jsonObject["street"]?.jsonPrimitive?.content ?: "",
-                it.jsonObject["streetNumber"]?.jsonPrimitive?.content ?: "",
-                it.jsonObject["city"]?.jsonPrimitive?.content ?: "",
-                it.jsonObject["zipCode"]?.jsonPrimitive?.content ?: "",
-                it.jsonObject["country"]?.jsonPrimitive?.content ?: "",
-                it.jsonObject["propertyDescription"]?.jsonPrimitive?.content ?: "",
-                it.jsonObject["partnershipID"]?.jsonPrimitive?.int ?: 0
-            )
-
-        }
+    var properties = propertyApi.getProperties(token, partnershipID)
+    return properties.map {
+        Property(
+            it.jsonObject["propertyID"]?.jsonPrimitive?.int ?: 0,
+            it.jsonObject["propertyName"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["propertyType"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["propertyImg"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["street"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["streetNumber"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["city"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["zipCode"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["country"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["propertyDescription"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["partnershipID"]?.jsonPrimitive?.int ?: 0
+        )
+    }
 }
-
 
 suspend fun getUserPartnerships(
     token: String
 ): List<Partnership> {
-
-        val response: JsonArray = propertyApi.getUserPartnerships(token = token)
-        return parseResponse(response)
-
-
-
+    val response: JsonArray = propertyApi.getUserPartnerships(token = token)
+    return parseResponse(response)
 }
 
 fun parseResponse(response: JsonArray): List<Partnership> {
@@ -128,7 +130,14 @@ suspend fun savePropertyByID(token: String, property: Property) {
 
         propertyApi.savePropertyByPropertyID(token, property.propertyID, body)
     } catch (e: Exception) {
-        // Handle exceptions here if the network request fails
         Log.e("TESTING", "savePropertyByPropertyID failed", e)
+    }
+}
+
+suspend fun deletePropertyById(token: String, propertyID: Int) {
+    try {
+        propertyApi.deletePropertyById(token, propertyID)
+    } catch (e: Exception) {
+        Log.e("TESTING", "deletePropertyById failed", e)
     }
 }
