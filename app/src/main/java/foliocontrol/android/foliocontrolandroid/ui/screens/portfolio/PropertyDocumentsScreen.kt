@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 @Composable
 fun PropertyDocumentsScreen() {
     Column {
-
         Box(
             modifier = Modifier.fillMaxSize()
 
@@ -19,7 +18,10 @@ fun PropertyDocumentsScreen() {
             Column(
                 modifier = Modifier.fillMaxSize()
             ) {
-                Text(text = "Property Documents screen", style = MaterialTheme.typography.displayLarge)
+                Text(
+                    text = "Property Documents screen",
+                    style = MaterialTheme.typography.displayLarge
+                )
             }
         }
     }
