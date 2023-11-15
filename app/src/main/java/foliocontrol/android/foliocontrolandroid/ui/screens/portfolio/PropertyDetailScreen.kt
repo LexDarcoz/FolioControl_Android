@@ -100,9 +100,7 @@ fun PropertyDetailScreen(
 
 @Composable
 fun PropertyField(label: String, value: String, onValueChange: (String) -> Unit) {
-    Column(
-        modifier = Modifier.padding(vertical = 8.dp)
-    ) {
+    Column {
         Text(text = label, style = MaterialTheme.typography.bodyLarge)
         OutlinedTextField(
             value = value,
@@ -116,7 +114,7 @@ fun PropertyField(label: String, value: String, onValueChange: (String) -> Unit)
             textStyle = MaterialTheme.typography.bodySmall,
             singleLine = true,
             modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.secondary)
-                .padding(8.dp)
+                .height(50.dp)
         )
     }
 }

@@ -34,6 +34,9 @@ class PropertyViewModel : ViewModel() {
     var propertyState by mutableStateOf(Property())
         private set
 
+    var addPropertyState by mutableStateOf(Property())
+        private set
+
     fun getData() {
         viewModelScope.launch {
             uiState = UiState.Loading
@@ -58,10 +61,6 @@ class PropertyViewModel : ViewModel() {
 
     fun selectProperty(property: Property) {
         propertyState = property
-    }
-
-    fun retryGetData() {
-        getData()
     }
 
     suspend fun getPropertyListForPartnership() {
@@ -138,9 +137,69 @@ class PropertyViewModel : ViewModel() {
         }
     }
 
-    fun handlePropertyDelete() {
+    fun handlePropertyDelete(propertyId: Int) {
+        viewModelScope.launch {
+            try {
+                propertyService.deletePropertyByPropertyID(
+                    getEncryptedPreference("token"),
+                    propertyId
+                )
+                getData()
+            } catch (e: Exception) {
+                println("Error: ${e.message}")
+            } finally {
+                println("Finally")
+            }
+        }
+    }
+
+    fun handlePropertyAddEdit(
+        propertyName: String? = null,
+        propertyType: String? = null,
+        street: String? = null,
+        streetNumber: String? = null,
+        city: String? = null,
+        zipCode: String? = null,
+        country: String? = null
+    ) {
+        propertyName?.let {
+            addPropertyState = addPropertyState.copy(propertyName = it)
+        }
+        propertyType?.let {
+            addPropertyState = addPropertyState.copy(propertyType = it)
+        }
+        street?.let {
+            addPropertyState = addPropertyState.copy(street = it)
+        }
+        streetNumber?.let {
+            addPropertyState = addPropertyState.copy(streetNumber = it)
+        }
+        city?.let {
+            addPropertyState = addPropertyState.copy(city = it)
+        }
+        zipCode?.let {
+            addPropertyState = addPropertyState.copy(zipCode = it)
+        }
+        country?.let {
+            addPropertyState = addPropertyState.copy(country = it)
+        }
+        addPropertyState =
+            addPropertyState.copy(FK_partnershipID = currentPartnership.partnershipID)
     }
 
     fun handlePropertyAdd() {
+        viewModelScope.launch {
+            try {
+                propertyService.addProperty(
+                    getEncryptedPreference("token"),
+                    addPropertyState
+                )
+                getData()
+            } catch (e: Exception) {
+                println("Error: ${e.message}")
+            } finally {
+                println("Finally")
+            }
+        }
     }
 }

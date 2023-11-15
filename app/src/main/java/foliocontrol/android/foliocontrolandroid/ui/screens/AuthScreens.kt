@@ -44,7 +44,8 @@ fun AuthScreen(
     when (authViewModel.loginUiState) {
         is UiState.LoggedOut -> {
             LoginScreen(
-                errorName = (authViewModel.loginUiState as UiState.LoggedOut).message, authViewModel
+                errorName = (authViewModel.loginUiState as UiState.LoggedOut).message,
+                authViewModel
 
             )
         }
@@ -65,13 +66,15 @@ fun AuthScreen(
 
 @Composable
 fun LoginScreen(
-    errorName: String, authViewModel: AuthViewModel
+    errorName: String,
+    authViewModel: AuthViewModel
 
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.8f), contentAlignment = Alignment.Center
+            .fillMaxHeight(0.8f),
+        contentAlignment = Alignment.Center
     ) {
         Column(
             modifier = Modifier
@@ -94,7 +97,8 @@ fun LoginScreen(
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                OutlinedTextField(value = authViewModel.loginCredentials.email,
+                OutlinedTextField(
+                    value = authViewModel.loginCredentials.email,
                     onValueChange = { authViewModel.updateLoginState(email = it) },
                     label = { Text("Email") },
                     singleLine = true,
@@ -103,11 +107,13 @@ fun LoginScreen(
                     ),
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.Email, contentDescription = null)
-                    })
+                    }
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                OutlinedTextField(value = authViewModel.loginCredentials.password,
+                OutlinedTextField(
+                    value = authViewModel.loginCredentials.password,
                     onValueChange = { authViewModel.updateLoginState(password = it) },
                     label = { Text("Password") },
                     visualTransformation = PasswordVisualTransformation(),
@@ -116,7 +122,8 @@ fun LoginScreen(
                     ),
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.Lock, contentDescription = null)
-                    })
+                    }
+                )
 
                 Text(
                     text = errorName,
@@ -129,13 +136,15 @@ fun LoginScreen(
                 Button(
                     onClick = {
                         authViewModel.login()
-                    }, modifier = Modifier
+                    },
+                    modifier = Modifier
                         .height(64.dp)
                         .width(200.dp)
                         .padding(top = 16.dp)
                 ) {
                     Text(
-                        "Login", color = Color.White, style = MaterialTheme.typography.titleMedium
+                        "Login",
+                        style = MaterialTheme.typography.titleMedium
 
                     )
                 }

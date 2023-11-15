@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -19,6 +20,8 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import foliocontrol.android.foliocontrol_android.R
 import foliocontrol.android.foliocontrolandroid.domain.Property
+import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.DeleteDialog
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 @Composable
@@ -35,7 +39,23 @@ fun PropertyCard(
     propertyViewModel: PropertyViewModel,
     property: Property,
     navigateTo: (Any?) -> Unit = {}
+
 ) {
+    val openDeleteDialog = remember { mutableStateOf(false) }
+    when {
+        openDeleteDialog.value -> {
+            DeleteDialog(
+                onDismissRequest = { openDeleteDialog.value = false },
+                onConfirmation = {
+                    openDeleteDialog.value = false
+                    propertyViewModel.handlePropertyDelete(property.propertyID)
+                },
+                dialogTitle = "Delete Property",
+                dialogText = "Are you sure you want to delete ${property.propertyName}.",
+                icon = Icons.Default.Warning
+            )
+        }
+    }
     val propertyTypesIcons: Map<String, ImageVector> = mapOf(
         "Type1" to Icons.Default.Home,
         "Type2" to Icons.Default.Home,
@@ -73,7 +93,7 @@ fun PropertyCard(
                 modifier = Modifier.size(40.dp).align(Alignment.BottomStart).padding(8.dp)
             )
             IconButton(
-                onClick = { /*TODO*/ },
+                onClick = { openDeleteDialog.value = true },
                 modifier = Modifier.align(Alignment.TopEnd),
                 colors = IconButtonDefaults.iconButtonColors(
                     contentColor = MaterialTheme.colorScheme.onPrimary,
