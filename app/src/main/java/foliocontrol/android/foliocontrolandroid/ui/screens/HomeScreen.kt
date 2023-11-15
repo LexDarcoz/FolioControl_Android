@@ -39,7 +39,6 @@ fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit 
 
     DisposableEffect(propertyViewModel.partnershipList) {
         propertyViewModel.getData()
-        Log.i("TEST", "HomeScreen: ${propertyViewModel.uiState}")
         onDispose { }
     }
 
@@ -86,34 +85,14 @@ fun Home(
     }) { values ->
 
         LazyColumn(contentPadding = values) {
-            if (propertyViewModel.propertyListState.isEmpty()) {
-                item {
-                    AddPropertyCard(navigateTo = navigateTo)
-                }
-            } else {
-                items(propertyViewModel.propertyListState) { property ->
-                    PropertyCard(
-                        propertyViewModel = propertyViewModel,
-                        property = property,
-                        navigateTo = navigateTo
-                    )
-                }
+            items(propertyViewModel.propertyListState) { property ->
+                PropertyCard(
+                    propertyViewModel = propertyViewModel,
+                    property = property,
+                    navigateTo = navigateTo
+                )
             }
-        }
-    }
-}
 
-@Composable
-fun AddPropertyCard(
-    navigateTo: (Any?) -> Unit = {}
-) {
-    Box(
-        modifier = Modifier
-            .height(150.dp)
-            .fillMaxWidth() // Use fillMaxWidth() instead of fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface) // Optional: Add a background color
-            .padding(16.dp)
-    ) {
-        Text(text = "No data found", textAlign = TextAlign.Center)
+        }
     }
 }

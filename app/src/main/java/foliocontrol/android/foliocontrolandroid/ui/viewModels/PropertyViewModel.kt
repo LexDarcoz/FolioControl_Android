@@ -14,7 +14,6 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import java.io.IOException
 import kotlinx.coroutines.launch
 
-
 class PropertyViewModel : ViewModel() {
 
     var uiState: UiState by mutableStateOf(
@@ -22,75 +21,69 @@ class PropertyViewModel : ViewModel() {
     )
         private set
 
-
     private val authService = AuthServiceImpl()
     private val propertyService = PropertyServiceImpl()
 
-    var partnershipList by mutableStateOf(listOf<Partnership>())
+    var partnershipList by mutableStateOf(emptyList<Partnership>())
         private set
     var currentPartnership by mutableStateOf(Partnership())
         private set
-    var propertyListState by mutableStateOf(listOf<Property>())
+    var propertyListState by mutableStateOf(emptyList<Property>())
         private set
 
     var propertyState by mutableStateOf(Property())
         private set
 
     fun getData() {
-        uiState = UiState.Loading
-        try {
-            getPartnershipListForLoggedInUser()
-            if (partnershipList.isNotEmpty() && currentPartnership.partnershipID == 0) {
-                defaultPartnership()
+        viewModelScope.launch {
+            uiState = UiState.Loading
+            try {
+                getPartnershipListForLoggedInUser()
+                if (partnershipList.isNotEmpty() && currentPartnership.partnershipID == 0) {
+                    defaultPartnership()
+                }
+                getPropertyListForPartnership()
+                if (propertyListState.isNotEmpty()) {
+                    uiState = UiState.Success("Succesfully retrieved data")
+                } else {
+                    uiState = UiState.Error("No data found")
+                }
+            } catch (e: IOException) {
+                uiState = UiState.Error("Failed to connect to server: ${e.message}")
+            } catch (e: Exception) {
+                uiState = UiState.Error("Something went very wrong: ${e.message}")
             }
-            getPropertyListForPartnership()
-        } catch (e: IOException) {
-            println("Error: ${e.message}")
-            uiState = e.message?.let { UiState.Error(it) }!!
-
-        } finally {
-            println("Finally")
         }
-        if (partnershipList.isNotEmpty()) {
-            uiState = UiState.Success("Succesfully retrieved data")
-        } else {
-            uiState = UiState.Error("No data was found")
-        }
-
     }
 
     fun selectProperty(property: Property) {
         propertyState = property
     }
 
-    fun getPropertyListForPartnership() {
-        viewModelScope.launch {
-            try {
-                propertyListState = propertyService.getProperties(
-                    getEncryptedPreference("token"), currentPartnership
-                )
-            } catch (e: Exception) {
-                println("Error: ${e.message}")
-            } finally {
-                println("Finally")
-            }
+    fun retryGetData() {
+        getData()
+    }
+
+    suspend fun getPropertyListForPartnership() {
+        try {
+            propertyListState = propertyService.getProperties(
+                getEncryptedPreference("token"),
+                currentPartnership
+            )
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+        } finally {
+            println("Finally")
         }
     }
 
-    fun getPartnershipListForLoggedInUser() {
-        viewModelScope.launch {
-            try {
-                partnershipList =
-                    authService.getPartnershipsForLoggedInUser(getEncryptedPreference("token"))
-            } catch (e: Exception) {
-                println("Error: ${e.message}")
-            } finally {
-                println("Finally")
-            }
-        }
+    suspend fun getPartnershipListForLoggedInUser() {
+        partnershipList =
+            authService.getPartnershipsForLoggedInUser(getEncryptedPreference("token"))
     }
 
     fun switchPartnership(partnership: Partnership) {
+        propertyListState = emptyList()
         currentPartnership = partnership
     }
 
@@ -134,7 +127,8 @@ class PropertyViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 propertyService.savePropertyByPropertyID(
-                    getEncryptedPreference("token"), propertyState
+                    getEncryptedPreference("token"),
+                    propertyState
                 )
             } catch (e: Exception) {
                 println("Error: ${e.message}")
