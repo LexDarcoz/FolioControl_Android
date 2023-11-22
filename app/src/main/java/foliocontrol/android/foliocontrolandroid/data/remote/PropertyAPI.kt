@@ -133,7 +133,6 @@ suspend fun savePropertyByID(token: String, property: Property) {
             put("zipCode", JsonPrimitive(property.zipCode))
             put("country", JsonPrimitive(property.country))
             put("propertyDescription", JsonPrimitive(property.propertyDescription))
-            put("FK_partnershipID", JsonPrimitive(property.FK_partnershipID))
         }
 
         propertyApi.savePropertyByPropertyID(token, property.propertyID, body)
