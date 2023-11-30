@@ -59,6 +59,8 @@ private val propertyApi = createRetrofit(PropertyAPI::class.java)
 
 suspend fun fetchProperties(token: String, partnershipID: Int): List<Property>? {
     var properties = propertyApi.getProperties(token, partnershipID)
+
+
     return properties.map {
         Property(
             it.jsonObject["propertyID"]?.jsonPrimitive?.int ?: 0,

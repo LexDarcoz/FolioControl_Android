@@ -12,7 +12,12 @@ data class User(
     var name: String = "",
     var firstName: String = "",
     var lastName: String = "",
-    var email: String = ""
+    var street: String = "",
+    var streetNumber: String = "",
+    var zipCode: String = "",
+    var city: String = "",
+    var country: String = "",
+    var email: String = "",
 )
 
 @Serializable

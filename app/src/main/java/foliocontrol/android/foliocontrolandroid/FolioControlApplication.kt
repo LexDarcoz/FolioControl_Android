@@ -26,6 +26,7 @@ import foliocontrol.android.foliocontrolandroid.screens.AuthScreen
 import foliocontrol.android.foliocontrolandroid.screens.SearchScreen
 import foliocontrol.android.foliocontrolandroid.screens.SettingScreen
 import foliocontrol.android.foliocontrolandroid.ui.screens.portfolio.PropertyOverviewScreen
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -34,6 +35,7 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 fun FolioControlApplication(
     authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory),
     propertyViewModel: PropertyViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    accountViewModel : AccountViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController()
 
 ) {
@@ -65,7 +67,8 @@ fun FolioControlApplication(
             AppNavigator(
                 navController = navController,
                 authViewModel = authViewModel,
-                propertyViewModel = propertyViewModel
+                propertyViewModel = propertyViewModel,
+                accountViewModel = accountViewModel,
             )
         }
     }
@@ -75,7 +78,8 @@ fun FolioControlApplication(
 fun AppNavigator(
     navController: NavHostController,
     authViewModel: AuthViewModel,
-    propertyViewModel: PropertyViewModel
+    propertyViewModel: PropertyViewModel,
+    accountViewModel: AccountViewModel
 ) {
     authViewModel.navigateTo = {
         navController.navigate(it)
@@ -91,7 +95,7 @@ fun AppNavigator(
             }
         }
         // Main
-        composable("Account") { AccountScreen() }
+        composable("Account") { AccountScreen(accountViewModel) }
         composable("Settings") { SettingScreen(/*...*/) }
         composable("Search") { SearchScreen(/*...*/) }
         // Portfolio

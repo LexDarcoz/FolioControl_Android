@@ -20,12 +20,12 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import foliocontrol.android.foliocontrol_android.R
 import foliocontrol.android.foliocontrolandroid.data.remote.common.Constants
+import foliocontrol.android.foliocontrolandroid.ui.components.FolioTextField
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 @Composable
 fun PropertyDetailScreen(
-    propertyViewModel: PropertyViewModel,
-    navigateTo: (Any?) -> Unit = {}
+    propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}
 ) {
     val imageUrl = Constants.PROPERTYPHOTOS_URL;
     Box(
@@ -37,21 +37,23 @@ fun PropertyDetailScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-
-            Log.i("TEST", "PropertyDetailScreenTESTING: ${propertyViewModel.propertyState.propertyImg == "null"}")
-            if (propertyViewModel.propertyState.propertyImg =="null"){
+            if (propertyViewModel.propertyState.propertyImg == "null") {
                 AsyncImage(
                     model = "${imageUrl}/default.avif",
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.3f)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.3f)
                 )
-            }else{
-              AsyncImage(
+            } else {
+                AsyncImage(
                     model = "${imageUrl}/${propertyViewModel.propertyState.propertyImg}",
                     contentDescription = "${propertyViewModel.propertyState.propertyName} image",
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.3f)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.3f)
                 )
             }
 
@@ -76,31 +78,31 @@ fun PropertyDetailScreen(
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
-                    PropertyField("Name", propertyViewModel.propertyState.propertyName) {
+                    FolioTextField("Name", propertyViewModel.propertyState.propertyName) {
                         propertyViewModel.handlePropertyEdit(
                             propertyName = it
                         )
                     }
-                    PropertyField("Type", propertyViewModel.propertyState.propertyType) {
+                    FolioTextField("Type", propertyViewModel.propertyState.propertyType) {
                         propertyViewModel.handlePropertyEdit(
                             propertyType = it
                         )
                     }
-                    PropertyField("Street", propertyViewModel.propertyState.street) {
+                    FolioTextField("Street", propertyViewModel.propertyState.street) {
                         propertyViewModel.handlePropertyEdit(street = it)
                     }
-                    PropertyField("Street Number", propertyViewModel.propertyState.streetNumber) {
+                    FolioTextField("Street Number", propertyViewModel.propertyState.streetNumber) {
                         propertyViewModel.handlePropertyEdit(streetNumber = it)
                     }
-                    PropertyField("Zip Code", propertyViewModel.propertyState.zipCode) {
+                    FolioTextField("Zip Code", propertyViewModel.propertyState.zipCode) {
                         propertyViewModel.handlePropertyEdit(
                             zipCode = it
                         )
                     }
-                    PropertyField("City", propertyViewModel.propertyState.city) {
+                    FolioTextField("City", propertyViewModel.propertyState.city) {
                         propertyViewModel.handlePropertyEdit(city = it)
                     }
-                    PropertyField("Country", propertyViewModel.propertyState.country) {
+                    FolioTextField("Country", propertyViewModel.propertyState.country) {
                         propertyViewModel.handlePropertyEdit(
                             country = it
                         )
@@ -110,8 +112,7 @@ fun PropertyDetailScreen(
                         onClick = {
                             propertyViewModel.handlePropertySave()
                             navigateTo("Home")
-                        },
-                        modifier = Modifier
+                        }, modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 16.dp)
                     ) {
@@ -123,25 +124,4 @@ fun PropertyDetailScreen(
     }
 }
 
-@Composable
-fun PropertyField(label: String, value: String, onValueChange: (String) -> Unit) {
-    Column {
-        Text(text = label, style = MaterialTheme.typography.bodyLarge)
-        OutlinedTextField(
-            value = value,
-            onValueChange = onValueChange,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = androidx.compose.ui.text.input.ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(onDone = {
-                // Handle done action
-            }),
-            textStyle = MaterialTheme.typography.bodySmall,
-            singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.secondary)
-                .height(50.dp)
-        )
-    }
-}
+
