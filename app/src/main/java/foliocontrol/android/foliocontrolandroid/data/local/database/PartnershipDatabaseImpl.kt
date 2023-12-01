@@ -11,6 +11,4 @@ class PartnershipDatabaseImpl(private val partnershipDao: PartnershipDao) : Part
     override suspend fun getPartnershipsByLoggedInUser(token: String): List<PartnershipRoomEntity> {
         TODO("Not yet implemented")
     }
-
-
 }

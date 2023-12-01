@@ -31,3 +31,18 @@ data class PropertyRoomEntity(
     @ColumnInfo(name = "FK_partnership_id")
     val FK_partnershipID: Int = 0
 )
+
+fun PropertyRoomEntity.asDomainModel() =
+    Property(
+        propertyID = propertyID,
+        propertyName = propertyName,
+        propertyType = propertyType,
+        propertyImg = propertyImg,
+        street = street,
+        streetNumber = streetNumber,
+        city = city,
+        zipCode = zipCode,
+        country = country,
+        propertyDescription = propertyDescription,
+        FK_partnershipID = FK_partnershipID
+    )

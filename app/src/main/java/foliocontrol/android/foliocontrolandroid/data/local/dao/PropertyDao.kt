@@ -17,5 +17,5 @@ interface PropertyDao {
     suspend fun insertAll(properties: List<PropertyRoomEntity>)
 
     @Query("SELECT * FROM property_table")
-    suspend fun getAllProperties(): Flow<List<PropertyRoomEntity>>
+    fun getAllProperties(): Flow<List<PropertyRoomEntity>>
 }

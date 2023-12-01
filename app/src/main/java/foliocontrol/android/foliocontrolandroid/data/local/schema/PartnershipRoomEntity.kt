@@ -3,6 +3,7 @@ package foliocontrol.android.foliocontrolandroid.data.local.schema
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import foliocontrol.android.foliocontrolandroid.domain.Partnership
 
 @Entity(tableName = "partnership_table")
 data class PartnershipRoomEntity(
@@ -28,3 +29,17 @@ data class PartnershipRoomEntity(
     @ColumnInfo(name = "country")
     val country: String = ""
 )
+
+fun PartnershipRoomEntity.asDomainModel() =
+    Partnership(
+        partnershipID = partnershipID,
+        name = name,
+        logoImg = logoImg,
+        countryCode = countryCode,
+        vatNumber = vatNumber,
+        street = street,
+        streetNumber = streetNumber,
+        zipCode = zipCode,
+        city = city,
+        country = country
+    )

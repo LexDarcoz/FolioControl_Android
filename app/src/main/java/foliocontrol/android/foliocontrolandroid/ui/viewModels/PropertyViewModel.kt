@@ -7,12 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import foliocontrol.android.foliocontrolandroid.data.local.database.PropertyDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreference
+import foliocontrol.android.foliocontrolandroid.data.local.schema.asDomainModel
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.data.repository.PropertyServiceImpl
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.Property
+import foliocontrol.android.foliocontrolandroid.domain.asPropertyRoomEntity
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import java.io.IOException
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class PropertyViewModel(private val propertyRepo: PropertyDatabase) : ViewModel() {
@@ -53,7 +56,16 @@ class PropertyViewModel(private val propertyRepo: PropertyDatabase) : ViewModel(
                     uiState = UiState.Error("No data found")
                 }
             } catch (e: IOException) {
-                uiState = UiState.Error("Failed to connect to server: ${e.message}")
+                // uiState = UiState.Error("Failed to connect to server: ${e.message}")
+                val propertyList =
+                    propertyRepo.getPropertiesByActivePartnership(currentPartnership).first()
+                        .map { it.asDomainModel() }
+                if (propertyList.isNotEmpty()) {
+                    propertyListState = propertyList
+                    uiState = UiState.Success("Succesfully retrieved data")
+                } else {
+                    uiState = UiState.Error("No data found")
+                }
             } catch (e: Exception) {
                 uiState = UiState.Error("Something went very wrong: ${e.message}")
             }
@@ -65,22 +77,16 @@ class PropertyViewModel(private val propertyRepo: PropertyDatabase) : ViewModel(
     }
 
     suspend fun getPropertyListForPartnership() {
-        val propertyList =
-            propertyRepo.getPropertiesByActivePartnership(currentPartnership.partnershipID)
-
-        if (propertyList.isNotEmpty()) {
-            propertyListState = propertyList
-        } else {
-            try {
-                propertyListState = propertyService.getProperties(
-                    getEncryptedPreference("token"),
-                    currentPartnership
-                )
-            } catch (e: Exception) {
-                println("Error: ${e.message}")
-            } finally {
-                println("Finally")
-            }
+        try {
+            propertyListState = propertyService.getProperties(
+                getEncryptedPreference("token"),
+                currentPartnership
+            )
+            propertyRepo.insertAll(propertyListState.map { it.asPropertyRoomEntity() })
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+        } finally {
+            println("Finally")
         }
     }
 

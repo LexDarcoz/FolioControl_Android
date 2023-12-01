@@ -1,8 +1,11 @@
 package foliocontrol.android.foliocontrolandroid.data.local.database
 
+import foliocontrol.android.foliocontrolandroid.data.local.schema.PropertyRoomEntity
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
-import foliocontrol.android.foliocontrolandroid.domain.Property
+import kotlinx.coroutines.flow.Flow
 
 interface PropertyDatabase {
-    suspend fun getPropertiesByActivePartnership(partnership: Partnership): List<Property>
+    fun getPropertiesByActivePartnership(partnership: Partnership): Flow<List<PropertyRoomEntity>>
+
+    suspend fun insertAll(properties: List<PropertyRoomEntity>)
 }
