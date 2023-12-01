@@ -1,5 +1,7 @@
 package foliocontrol.android.foliocontrolandroid
 
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
@@ -11,7 +13,12 @@ object AppViewModelProvider {
         initializer {
             AuthViewModel()
         }
-        initializer { PropertyViewModel() }
+        initializer {
+            PropertyViewModel(propertyRepo = foliocontrolApplication().container.propertyDatabase)
+        }
         initializer { AccountViewModel() }
     }
 }
+
+fun CreationExtras.foliocontrolApplication(): FolioControlApp =
+    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as FolioControlApp)

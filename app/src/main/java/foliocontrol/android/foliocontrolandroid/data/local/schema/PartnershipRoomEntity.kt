@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "partnership_table")
 data class PartnershipRoomEntity(
     @ColumnInfo(name = "partnership_id")
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val partnershipID: Int = 0,
     @ColumnInfo(name = "name")
     val name: String = "",

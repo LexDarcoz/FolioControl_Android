@@ -1,25 +1,22 @@
-package foliocontrol.android.foliocontrolandroid.data.local;
+package foliocontrol.android.foliocontrolandroid.data.local
 
 import android.content.Context
 import android.util.Log
-import androidx.room.Database;
+import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters;
-import androidx.sqlite.db.SupportSQLiteDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.dao.PartnershipDao
 import foliocontrol.android.foliocontrolandroid.data.local.dao.PropertyDao
 import foliocontrol.android.foliocontrolandroid.data.local.schema.PartnershipRoomEntity
 import foliocontrol.android.foliocontrolandroid.data.local.schema.PropertyRoomEntity
+import kotlin.jvm.Volatile
 import kotlinx.coroutines.CoroutineScope
-
-import kotlin.jvm.Volatile;
 
 @Database(
     entities = [PartnershipRoomEntity::class, PropertyRoomEntity::class],
     // change this to version+1 when you change the schema
-    version = 0,
-    exportSchema = false,
+    version = 1,
+    exportSchema = false
 )
 abstract class FolioRoomDatabase : RoomDatabase() {
     abstract fun partnershipDao(): PartnershipDao
@@ -35,7 +32,7 @@ abstract class FolioRoomDatabase : RoomDatabase() {
                 Room.databaseBuilder(
                     context,
                     FolioRoomDatabase::class.java,
-                    "Folio_database",
+                    "Folio_database"
                 ).addCallback(object : Callback() {
                 }).fallbackToDestructiveMigration().build().also { Instance = it }
             }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import foliocontrol.android.foliocontrolandroid.data.local.database.PropertyDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.data.repository.PropertyServiceImpl
@@ -14,7 +15,7 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import java.io.IOException
 import kotlinx.coroutines.launch
 
-class PropertyViewModel : ViewModel() {
+class PropertyViewModel(private val propertyRepo: PropertyDatabase) : ViewModel() {
 
     var uiState: UiState by mutableStateOf(
         UiState.LoggedOut("You are not logged in")
@@ -64,15 +65,22 @@ class PropertyViewModel : ViewModel() {
     }
 
     suspend fun getPropertyListForPartnership() {
-        try {
-            propertyListState = propertyService.getProperties(
-                getEncryptedPreference("token"),
-                currentPartnership
-            )
-        } catch (e: Exception) {
-            println("Error: ${e.message}")
-        } finally {
-            println("Finally")
+        val propertyList =
+            propertyRepo.getPropertiesByActivePartnership(currentPartnership.partnershipID)
+
+        if (propertyList.isNotEmpty()) {
+            propertyListState = propertyList
+        } else {
+            try {
+                propertyListState = propertyService.getProperties(
+                    getEncryptedPreference("token"),
+                    currentPartnership
+                )
+            } catch (e: Exception) {
+                println("Error: ${e.message}")
+            } finally {
+                println("Finally")
+            }
         }
     }
 

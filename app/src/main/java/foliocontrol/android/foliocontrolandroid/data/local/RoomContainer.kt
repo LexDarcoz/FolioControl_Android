@@ -7,12 +7,13 @@ import foliocontrol.android.foliocontrolandroid.data.local.database.PropertyData
 import foliocontrol.android.foliocontrolandroid.data.local.database.PropertyDatabaseImpl
 import kotlinx.coroutines.CoroutineScope
 
-interface RoomContainer{
+interface RoomContainer {
     val partnershipDatabase: PartnershipDatabase
     val propertyDatabase: PropertyDatabase
-
 }
-class RoomContainerImpl(private val context: Context, private val scope : CoroutineScope): RoomContainer{
+
+class RoomContainerImpl(private val context: Context, private val scope: CoroutineScope) :
+    RoomContainer { // ktlint-disable max-line-length
     override val partnershipDatabase: PartnershipDatabase by lazy {
         PartnershipDatabaseImpl(FolioRoomDatabase.getDatabase(context, scope).partnershipDao())
     }

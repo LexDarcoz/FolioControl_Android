@@ -1,6 +1,5 @@
 package foliocontrol.android.foliocontrolandroid.data.repository
 
-import android.content.Context
 import foliocontrol.android.foliocontrolandroid.data.remote.UserLoginRequest
 import foliocontrol.android.foliocontrolandroid.data.remote.getUser
 import foliocontrol.android.foliocontrolandroid.data.remote.getUserPartnerships
@@ -10,7 +9,6 @@ import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.User
 
 class AuthServiceImpl : AuthService {
-
     override suspend fun login(
         loginCredentials: LoginCredentials,
         updateTokenState: (String) -> Unit
@@ -23,6 +21,7 @@ class AuthServiceImpl : AuthService {
             false
         }
     }
+
     override suspend fun getPartnershipsForLoggedInUser(token: String): List<Partnership> {
         return getUserPartnerships(token)
     }
@@ -31,7 +30,7 @@ class AuthServiceImpl : AuthService {
         return getUser(token)
     }
 
-    override suspend fun saveUserByToken(token: String, user: User){
+    override suspend fun saveUserByToken(token: String, user: User) {
         return saveUser(token, user)
     }
 }

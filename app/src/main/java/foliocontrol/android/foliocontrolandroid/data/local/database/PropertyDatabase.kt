@@ -1,9 +1,8 @@
 package foliocontrol.android.foliocontrolandroid.data.local.database
 
-import foliocontrol.android.foliocontrolandroid.data.local.schema.PropertyRoomEntity
+import foliocontrol.android.foliocontrolandroid.domain.Partnership
+import foliocontrol.android.foliocontrolandroid.domain.Property
 
 interface PropertyDatabase {
-    suspend fun getPropertyByPropertyNumber(propertyNumber: String): PropertyRoomEntity
-    suspend fun getPropertiesByActivePartnership(partnershipID: String): List<PropertyRoomEntity>
-
+    suspend fun getPropertiesByActivePartnership(partnership: Partnership): List<Property>
 }
