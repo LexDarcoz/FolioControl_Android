@@ -5,21 +5,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import foliocontrol.android.foliocontrolandroid.data.local.database.AccountDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.domain.User
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
-import kotlinx.coroutines.launch
 import java.io.IOException
+import kotlinx.coroutines.launch
 
-class AccountViewModel : ViewModel() {
+class AccountViewModel(private val accountRepo: AccountDatabase) : ViewModel() {
 
     private val authService = AuthServiceImpl()
     var user: User by mutableStateOf(User())
         private set
+
     var uiState: UiState by mutableStateOf(UiState.LoggedOut("You are not logged in"))
         private set
-
 
     fun getData() {
         viewModelScope.launch {
@@ -27,26 +28,24 @@ class AccountViewModel : ViewModel() {
             try {
                 user = authService.getUserWithToken(getToken())
             } catch (e: IOException) {
-                uiState = UiState.Error("Failed to connect to server: ${e.message}")
+                uiState = UiState.Offline("Failed to connect to server: ${e.message}")
             } catch (e: Exception) {
                 uiState = UiState.Error("Something went very wrong: ${e.message}")
             }
-            uiState = UiState.Success("Loaded data succesfully")
+            uiState = UiState.Success("Loaded data successfully")
         }
-
     }
 
     fun getToken(): String {
         return getEncryptedPreference("token")
     }
 
-
     fun handleUserEdit(
         name: String? = null,
         firstName: String? = null,
         lastName: String? = null,
         email: String? = null,
-        street:String? = null,
+        street: String? = null,
         streetNumber: String? = null,
         city: String? = null,
         zipCode: String? = null,
@@ -80,6 +79,7 @@ class AccountViewModel : ViewModel() {
             user = user.copy(country = it)
         }
     }
+
     fun handleUserSave() {
         viewModelScope.launch {
             try {
@@ -94,5 +94,4 @@ class AccountViewModel : ViewModel() {
             }
         }
     }
-
 }

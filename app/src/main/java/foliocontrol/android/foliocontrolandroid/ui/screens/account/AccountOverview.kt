@@ -30,9 +30,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.zIndex
 import foliocontrol.android.foliocontrolandroid.ui.screens.account.AccountDetailScreen
 import foliocontrol.android.foliocontrolandroid.ui.screens.account.AccountPartnershipScreen
-import foliocontrol.android.foliocontrolandroid.ui.screens.portfolio.PropertyDocumentsScreen
-import foliocontrol.android.foliocontrolandroid.ui.screens.portfolio.PropertyPhotosScreen
-import foliocontrol.android.foliocontrolandroid.ui.screens.portfolio.PropertyPremisesScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
@@ -40,19 +37,21 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 val tabItems = listOf(
     TabItem("Details", Icons.Outlined.Home, Icons.Filled.Home),
-    TabItem("Partnerships", Icons.Outlined.List, Icons.Filled.List),
+    TabItem("Partnerships", Icons.Outlined.List, Icons.Filled.List)
 )
 
-
 data class TabItem(
-    val title: String, val unselectedIcon: ImageVector, val selectedIcon: ImageVector
+    val title: String,
+    val unselectedIcon: ImageVector,
+    val selectedIcon: ImageVector
 )
 
 @Composable
 fun AccountScreen(accountViewModel: AccountViewModel, navigateTo: (Any?) -> Unit = {}) {
-
     DisposableEffect(accountViewModel) {
-        accountViewModel.getData()
+        if (accountViewModel.user.name.isEmpty()) {
+            accountViewModel.getData()
+        }
         onDispose { }
     }
     when (accountViewModel.uiState) {
@@ -69,20 +68,19 @@ fun AccountScreen(accountViewModel: AccountViewModel, navigateTo: (Any?) -> Unit
         }
 
         else -> {
-            ErrorScreen(errorMessage = (accountViewModel.uiState as UiState.Error).message,
-                onRetry = { accountViewModel.getData() })
+            ErrorScreen(
+                errorMessage = (accountViewModel.uiState as UiState.Error).message,
+                onRetry = { accountViewModel.getData() }
+            )
         }
     }
-
-
-
-
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AccountOverview(
-    accountViewModel: AccountViewModel, navigateTo: (Any?) -> Unit = {}
+    accountViewModel: AccountViewModel,
+    navigateTo: (Any?) -> Unit = {}
 ) {
     val pagerState = rememberPagerState {
         tabItems.size
@@ -98,27 +96,22 @@ fun AccountOverview(
         selectedTabIndex = pagerState.currentPage
     }
     Column {
-
-
         TabRow(selectedTabIndex = selectedTabIndex) {
             tabItems.forEachIndexed { index, item ->
                 Tab(selected = selectedTabIndex == index, onClick = {
                     selectedTabIndex = index
                 }, text = {
                     Text(text = item.title, color = MaterialTheme.colorScheme.secondary)
-
                 }, icon = {
-                    (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)?.let {
+                    (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)?.let { // ktlint-disable max-line-length
                         Icon(
                             tint = it,
-                            imageVector = if (selectedTabIndex == index) item.selectedIcon else item.unselectedIcon,
+                            imageVector = if (selectedTabIndex == index) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length
                             contentDescription = item.title
                         )
                     }
                 })
             }
-
-
         }
         HorizontalPager(
             state = pagerState,
@@ -127,13 +120,10 @@ fun AccountOverview(
                 .zIndex(1f)
         ) { index ->
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                if (index == 0) AccountDetailScreen(accountViewModel, navigateTo)
-                else if (index == 1) AccountPartnershipScreen(accountViewModel, navigateTo)
+                if (index == 0) {
+                    AccountDetailScreen(accountViewModel, navigateTo)
+                } else if (index == 1) AccountPartnershipScreen(accountViewModel, navigateTo)
             }
-
         }
-
-
     }
-
 }

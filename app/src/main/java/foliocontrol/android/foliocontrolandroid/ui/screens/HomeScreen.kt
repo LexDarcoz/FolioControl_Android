@@ -22,7 +22,9 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 @Composable
 fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}) {
     DisposableEffect(propertyViewModel.partnershipList) {
-        propertyViewModel.getData()
+        if (propertyViewModel.propertyListState.isEmpty()) {
+            propertyViewModel.getData()
+        }
         onDispose { }
     }
 

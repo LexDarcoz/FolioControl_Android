@@ -26,7 +26,6 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
 fun AccountDetailScreen(accountViewModel: AccountViewModel, navigateTo: (Any?) -> Unit = {}) {
     Box(
         modifier = Modifier.fillMaxSize()
-
     ) {
         Column(
             modifier = Modifier
@@ -53,7 +52,7 @@ fun AccountDetailScreen(accountViewModel: AccountViewModel, navigateTo: (Any?) -
                             name  = it
                         )
                     }
-                    FolioTextField("LastName", accountViewModel.user.lastName) {
+                    FolioTextField("Last Name", accountViewModel.user.lastName) {
                         accountViewModel.handleUserEdit(
                             lastName = it
                         )

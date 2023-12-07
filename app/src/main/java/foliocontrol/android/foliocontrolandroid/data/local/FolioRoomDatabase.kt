@@ -7,13 +7,15 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.dao.PartnershipDao
 import foliocontrol.android.foliocontrolandroid.data.local.dao.PropertyDao
+import foliocontrol.android.foliocontrolandroid.data.local.dao.UserDao
 import foliocontrol.android.foliocontrolandroid.data.local.schema.PartnershipRoomEntity
 import foliocontrol.android.foliocontrolandroid.data.local.schema.PropertyRoomEntity
+import foliocontrol.android.foliocontrolandroid.data.local.schema.UserRoomEntity
 import kotlin.jvm.Volatile
 import kotlinx.coroutines.CoroutineScope
 
 @Database(
-    entities = [PartnershipRoomEntity::class, PropertyRoomEntity::class],
+    entities = [PartnershipRoomEntity::class, PropertyRoomEntity::class, UserRoomEntity::class],
     // change this to version+1 when you change the schema
     version = 1,
     exportSchema = false
@@ -21,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 abstract class FolioRoomDatabase : RoomDatabase() {
     abstract fun partnershipDao(): PartnershipDao
     abstract fun propertyDao(): PropertyDao
+    abstract fun userDao(): UserDao
 
     companion object {
         @Volatile
