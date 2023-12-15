@@ -1,6 +1,8 @@
 package foliocontrol.android.foliocontrolandroid.data.local
 
 import android.content.Context
+import foliocontrol.android.foliocontrolandroid.data.local.database.AccountDatabase
+import foliocontrol.android.foliocontrolandroid.data.local.database.AccountDatabaseImpl
 import foliocontrol.android.foliocontrolandroid.data.local.database.PartnershipDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.database.PartnershipDatabaseImpl
 import foliocontrol.android.foliocontrolandroid.data.local.database.PropertyDatabase
@@ -10,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 interface RoomContainer {
     val partnershipDatabase: PartnershipDatabase
     val propertyDatabase: PropertyDatabase
+    val accountDatabase: AccountDatabase
 }
 
 class RoomContainerImpl(private val context: Context, private val scope: CoroutineScope) :
@@ -19,5 +22,8 @@ class RoomContainerImpl(private val context: Context, private val scope: Corouti
     }
     override val propertyDatabase: PropertyDatabase by lazy {
         PropertyDatabaseImpl(FolioRoomDatabase.getDatabase(context, scope).propertyDao())
+    }
+    override val accountDatabase: AccountDatabase by lazy {
+        AccountDatabaseImpl(FolioRoomDatabase.getDatabase(context, scope).userDao())
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import foliocontrol.android.foliocontrolandroid.data.local.database.AccountDatabase
+import foliocontrol.android.foliocontrolandroid.data.local.database.PropertyDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.domain.User
@@ -13,7 +14,7 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import java.io.IOException
 import kotlinx.coroutines.launch
 
-class AccountViewModel(private val accountRepo: AccountDatabase) : ViewModel() {
+class AccountViewModel(private val propertyRepo: PropertyDatabase,private val accountRepo: AccountDatabase) : ViewModel() {
 
     private val authService = AuthServiceImpl()
     var user: User by mutableStateOf(User())
