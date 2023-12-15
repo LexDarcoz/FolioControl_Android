@@ -1,5 +1,6 @@
 package foliocontrol.android.foliocontrolandroid.domain
 
+import foliocontrol.android.foliocontrolandroid.data.local.schema.PropertyRoomEntity
 import kotlinx.serialization.Serializable
 
 data class LoginCredentials(
@@ -12,6 +13,11 @@ data class User(
     var name: String = "",
     var firstName: String = "",
     var lastName: String = "",
+    var street: String = "",
+    var streetNumber: String = "",
+    var zipCode: String = "",
+    var city: String = "",
+    var country: String = "",
     var email: String = ""
 )
 
@@ -28,7 +34,20 @@ data class Property(
     val country: String = "",
     val propertyDescription: String = "",
     val FK_partnershipID: Int = 0
+)
 
+fun Property.asPropertyRoomEntity() = PropertyRoomEntity(
+    propertyID = propertyID,
+    propertyName = propertyName,
+    propertyType = propertyType,
+    propertyImg = propertyImg,
+    street = street,
+    streetNumber = streetNumber,
+    city = city,
+    zipCode = zipCode,
+    country = country,
+    propertyDescription = propertyDescription,
+    FK_partnershipID = FK_partnershipID
 )
 
 data class Partnership(

@@ -5,10 +5,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
@@ -22,7 +24,9 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 @Composable
 fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}) {
     DisposableEffect(propertyViewModel.partnershipList) {
-        propertyViewModel.getData()
+        if (propertyViewModel.propertyListState.isEmpty()) {
+            propertyViewModel.getData()
+        }
         onDispose { }
     }
 
@@ -35,23 +39,24 @@ fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit 
             Home(propertyViewModel, navigateTo)
         }
 
+        is UiState.Offline -> {
+            Home(propertyViewModel, navigateTo, offline = true)
+        }
+
         is UiState.Loading -> {
             LoadingScreen()
         }
 
         else -> {
-            ErrorScreen(
-                errorMessage = (propertyViewModel.uiState as UiState.Error).message,
-                onRetry = { propertyViewModel.getData() }
-            )
+            ErrorScreen(errorMessage = (propertyViewModel.uiState as UiState.Error).message,
+                onRetry = { propertyViewModel.getData() })
         }
     }
 }
 
 @Composable
 fun Home(
-    propertyViewModel: PropertyViewModel,
-    navigateTo: (Any?) -> Unit = {}
+    propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}, offline: Boolean = false
 ) {
     val openAddPropertyDialog = remember { mutableStateOf(false) }
     when {
@@ -62,9 +67,9 @@ fun Home(
                     propertyViewModel.handlePropertyAdd()
                     openAddPropertyDialog.value = false
                 },
-                propertyViewModel = propertyViewModel
+                propertyViewModel = propertyViewModel,
 
-            )
+                )
         }
     }
 
@@ -75,6 +80,13 @@ fun Home(
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.secondary
             )
+        }
+        if (offline) {
+            BottomAppBar {
+
+                Text(text = "Offline", color = MaterialTheme.colorScheme.secondary)
+
+            }
         }
     }) { values ->
 

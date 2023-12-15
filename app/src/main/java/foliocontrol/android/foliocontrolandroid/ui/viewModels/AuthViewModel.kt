@@ -18,7 +18,6 @@ class AuthViewModel : ViewModel() {
     lateinit var navigateTo: (String) -> Unit
     private val authService = AuthServiceImpl()
 
-
     var loginUiState: UiState by mutableStateOf(
         UiState.LoggedOut("You are not logged in")
     )
@@ -27,7 +26,6 @@ class AuthViewModel : ViewModel() {
         private set
     var userToken by mutableStateOf("")
         private set
-
 
     init {
         try {

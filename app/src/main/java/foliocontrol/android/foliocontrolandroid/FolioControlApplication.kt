@@ -1,6 +1,5 @@
 package foliocontrol.android.foliocontrolandroid
 
-import PropertyDetailScreen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,21 +10,24 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import foliocontrol.android.foliocontrolandroid.components.BottomNavigation
 import foliocontrol.android.foliocontrolandroid.components.Navbar
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.AuthViewModel
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.screens.AccountScreen
 import foliocontrol.android.foliocontrolandroid.screens.AuthScreen
 import foliocontrol.android.foliocontrolandroid.screens.SearchScreen
 import foliocontrol.android.foliocontrolandroid.screens.SettingScreen
 import foliocontrol.android.foliocontrolandroid.ui.screens.portfolio.PropertyOverviewScreen
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.AuthViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -34,18 +36,23 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 fun FolioControlApplication(
     authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory),
     propertyViewModel: PropertyViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    accountViewModel: AccountViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController()
 
 ) {
+    val backStackEntry by navController.currentBackStackEntryAsState()
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    Scaffold(modifier = Modifier.fillMaxWidth(),
+    Scaffold(
+        modifier = Modifier.fillMaxWidth(),
         contentColor = MaterialTheme.colorScheme.primary,
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             when (authViewModel.loginUiState) {
                 is UiState.Success -> {
                     BottomNavigation(
-                        authViewModel = authViewModel, propertyViewModel = propertyViewModel
+                        authViewModel = authViewModel,
+                        propertyViewModel = propertyViewModel
                     )
                 }
 
@@ -55,7 +62,9 @@ fun FolioControlApplication(
         },
         topBar = {
             Navbar(
-                scrollBehavior, authViewModel = authViewModel, navController = navController
+                scrollBehavior,
+                authViewModel = authViewModel,
+                navController = navController
 //                navController.previousBackStackEntry != null
             )
         }
@@ -65,7 +74,8 @@ fun FolioControlApplication(
             AppNavigator(
                 navController = navController,
                 authViewModel = authViewModel,
-                propertyViewModel = propertyViewModel
+                propertyViewModel = propertyViewModel,
+                accountViewModel = accountViewModel
             )
         }
     }
@@ -75,7 +85,8 @@ fun FolioControlApplication(
 fun AppNavigator(
     navController: NavHostController,
     authViewModel: AuthViewModel,
-    propertyViewModel: PropertyViewModel
+    propertyViewModel: PropertyViewModel,
+    accountViewModel: AccountViewModel
 ) {
     authViewModel.navigateTo = {
         navController.navigate(it)
@@ -91,7 +102,7 @@ fun AppNavigator(
             }
         }
         // Main
-        composable("Account") { AccountScreen() }
+        composable("Account") { AccountScreen(accountViewModel) }
         composable("Settings") { SettingScreen(/*...*/) }
         composable("Search") { SearchScreen(/*...*/) }
         // Portfolio

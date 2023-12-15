@@ -1,16 +1,14 @@
 package foliocontrol.android.foliocontrolandroid.data.repository
 
-import android.content.Context
 import foliocontrol.android.foliocontrolandroid.data.remote.UserLoginRequest
+import foliocontrol.android.foliocontrolandroid.data.remote.getUser
 import foliocontrol.android.foliocontrolandroid.data.remote.getUserPartnerships
+import foliocontrol.android.foliocontrolandroid.data.remote.saveUser
 import foliocontrol.android.foliocontrolandroid.domain.LoginCredentials
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
+import foliocontrol.android.foliocontrolandroid.domain.User
 
 class AuthServiceImpl : AuthService {
-    override fun configureAuth(context: Context) {
-        TODO("Not yet imple  mented")
-    }
-
     override suspend fun login(
         loginCredentials: LoginCredentials,
         updateTokenState: (String) -> Unit
@@ -24,11 +22,15 @@ class AuthServiceImpl : AuthService {
         }
     }
 
-    override fun logOut(onComplete: () -> Unit) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun getPartnershipsForLoggedInUser(token: String): List<Partnership> {
         return getUserPartnerships(token)
+    }
+
+    override suspend fun getUserWithToken(token: String): User {
+        return getUser(token)
+    }
+
+    override suspend fun saveUserByToken(token: String, user: User) {
+        return saveUser(token, user)
     }
 }
