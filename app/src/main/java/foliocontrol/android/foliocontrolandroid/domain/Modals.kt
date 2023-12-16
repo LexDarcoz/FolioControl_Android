@@ -23,6 +23,8 @@ data class User(
     var email: String = ""
 )
 
+
+
 @Serializable
 data class Property(
     val propertyID: Int = 0,
@@ -36,6 +38,30 @@ data class Property(
     val country: String = "",
     val propertyDescription: String = "",
     val FK_partnershipID: Int = 0
+)
+data class Premise(
+    val premiseID: Int = 0,
+    val premiseName: String = "",
+    val premiseType: String = "",
+    val premiseImg: String = "",
+    val street: String = "",
+    val streetNumber: String = "",
+    val city: String = "",
+    val zipCode: String = "",
+    val country: String = "",
+    val premiseDescription: String = "",
+    val FK_propertyID: Int = 0
+)
+data class Photo(
+    val photoID: Int = 0,
+    val photoImg: String = "",
+    val FK_propertyID: Int = 0
+)
+
+data class Document(
+    val documentID: Int = 0,
+    val documentName: String = "",
+    val FK_propertyID: Int = 0
 )
 
 fun Property.asPropertyRoomEntity() = PropertyRoomEntity(

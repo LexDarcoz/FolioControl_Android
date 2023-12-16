@@ -11,7 +11,10 @@ import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreferenc
 import foliocontrol.android.foliocontrolandroid.data.local.schema.asDomainModel
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.data.repository.PropertyServiceImpl
+import foliocontrol.android.foliocontrolandroid.domain.Document
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
+import foliocontrol.android.foliocontrolandroid.domain.Photo
+import foliocontrol.android.foliocontrolandroid.domain.Premise
 import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.domain.asPartnershipRoomEntity
 import foliocontrol.android.foliocontrolandroid.domain.asPropertyRoomEntity
@@ -34,6 +37,13 @@ class PropertyViewModel(
     private val propertyService = PropertyServiceImpl()
     var currentPartnership by mutableStateOf(Partnership())
         private set
+    var photos by mutableStateOf(emptyList<Photo>())
+        private set
+    var documents by mutableStateOf(emptyList<Document>())
+        private set
+    var premises by mutableStateOf(emptyList<Premise>())
+        private set
+
     var partnershipListState by mutableStateOf(emptyList<Partnership>())
         private set
     var propertyListState by mutableStateOf(emptyList<Property>())
