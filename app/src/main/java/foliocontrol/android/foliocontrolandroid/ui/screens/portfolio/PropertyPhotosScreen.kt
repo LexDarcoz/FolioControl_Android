@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun PropertyPhotosScreen() {
+fun PropertyPhotosScreen(offline : Boolean = false) {
     Box(
         modifier = Modifier.fillMaxSize()
 

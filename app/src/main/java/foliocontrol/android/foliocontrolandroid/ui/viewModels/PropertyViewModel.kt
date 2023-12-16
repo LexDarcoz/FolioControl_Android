@@ -56,6 +56,8 @@ class PropertyViewModel(
                 getPropertyListForPartnership()
                 if (propertyListState.isNotEmpty()) {
                     uiState = UiState.Success("Succesfully retrieved data")
+                }else{
+                    uiState = UiState.Error("No data found")
                 }
             } catch (e: IOException) {
                 val partnershipList =
@@ -92,7 +94,7 @@ class PropertyViewModel(
                 currentPartnership
             )
             if (propertyListState.isNotEmpty()){
-                propertyRepo.dropTable()
+                propertyRepo.dropTable(currentPartnership.partnershipID)
             }
             propertyRepo.insertAll(propertyListState.map { it.asPropertyRoomEntity() })
         } catch (e: Exception) {

@@ -38,7 +38,7 @@ class AccountViewModel(private val propertyRepo: PropertyDatabase,private val ac
             } catch (e: Exception) {
                 uiState = UiState.Error("Something went very wrong: ${e.message}")
             }
-            uiState = UiState.Success("Loaded data successfully")
+
         }
     }
 
@@ -50,8 +50,10 @@ class AccountViewModel(private val propertyRepo: PropertyDatabase,private val ac
             var data = authService.getUserWithToken(getToken())
             user = data
             accountRepo.insertUser(user.asUserRoomEntity())
+            uiState = UiState.Success("Loaded data successfully")
         }catch (e: IOException) {
             user = accountRepo.getUser().first().asDomainModel()
+            uiState = UiState.Offline("Failed to connect to server: ${e.message}")
         }
 
     }

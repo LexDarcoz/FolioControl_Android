@@ -67,33 +67,41 @@ fun AddPropertyDialog(
                             ),
                             modifier = Modifier.padding(bottom = 16.dp)
                         )
-                        FolioTextField("Name", propertyViewModel.addPropertyState.propertyName) {
+                        FolioTextField(
+                            true, "Name", propertyViewModel.addPropertyState.propertyName
+                        ) {
                             propertyViewModel.handlePropertyAddEdit(
                                 propertyName = it
                             )
                         }
-                        FolioTextField("Type", propertyViewModel.addPropertyState.propertyType) {
+                        FolioTextField(
+                            true, "Type", propertyViewModel.addPropertyState.propertyType
+                        ) {
                             propertyViewModel.handlePropertyAddEdit(
                                 propertyType = it
                             )
                         }
-                        FolioTextField("Street", propertyViewModel.addPropertyState.street) {
+                        FolioTextField(true, "Street", propertyViewModel.addPropertyState.street) {
                             propertyViewModel.handlePropertyAddEdit(street = it)
                         }
                         FolioTextField(
-                            "Street Number", propertyViewModel.addPropertyState.streetNumber
+                            true, "Street Number", propertyViewModel.addPropertyState.streetNumber
                         ) {
                             propertyViewModel.handlePropertyAddEdit(streetNumber = it)
                         }
-                        FolioTextField("Zip Code", propertyViewModel.addPropertyState.zipCode) {
+                        FolioTextField(
+                            true, "Zip Code", propertyViewModel.addPropertyState.zipCode
+                        ) {
                             propertyViewModel.handlePropertyAddEdit(
                                 zipCode = it
                             )
                         }
-                        FolioTextField("City", propertyViewModel.addPropertyState.city) {
+                        FolioTextField(true, "City", propertyViewModel.addPropertyState.city) {
                             propertyViewModel.handlePropertyAddEdit(city = it)
                         }
-                        FolioTextField("Country", propertyViewModel.addPropertyState.country) {
+                        FolioTextField(
+                            true, "Country", propertyViewModel.addPropertyState.country
+                        ) {
                             propertyViewModel.handlePropertyAddEdit(
                                 country = it
                             )

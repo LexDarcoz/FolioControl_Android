@@ -12,6 +12,6 @@ interface PropertyDatabase {
 
 
     suspend fun insertAll(properties: List<PropertyRoomEntity>)
-    suspend fun dropTable()
+    suspend fun dropTable(partnershipID : Int)
 
 }

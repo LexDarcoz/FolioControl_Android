@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import foliocontrol.android.foliocontrolandroid.ui.components.InfoDialog
 import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.AddPropertyDialog
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
@@ -36,7 +37,7 @@ fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit 
             propertyViewModel.getData()
         }
         Log.i("TEST", "Home: ${propertyViewModel.uiState}")
-        onDispose { }
+        onDispose {}
     }
 
     when (propertyViewModel.uiState) {
@@ -71,6 +72,7 @@ fun Home(
     val openAddPropertyDialog = remember { mutableStateOf(false) }
     val isLoading = propertyViewModel.uiState == UiState.Loading
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
+    val infoDialog = remember { mutableStateOf(offline) }
     when {
         openAddPropertyDialog.value -> {
             AddPropertyDialog(onDismissRequest = { openAddPropertyDialog.value = false },
@@ -104,9 +106,7 @@ fun Home(
         }
 
 
-
         Scaffold(
-
             floatingActionButton = {
                 if (!offline) {
                     FloatingActionButton(onClick = { openAddPropertyDialog.value = true }) {
@@ -132,6 +132,15 @@ fun Home(
 
                     )
                 }
+            }
+            if (infoDialog.value) {
+
+                InfoDialog(title = "Whoops!",
+                    desc = "No Internet Connection found.\n" + "Check your connection or try again.",
+                    onDismiss = {
+                        infoDialog.value = false
+                    })
+
             }
         }
     }

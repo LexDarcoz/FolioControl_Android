@@ -25,7 +25,7 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 @Composable
 fun PropertyDetailScreen(
-    propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}
+    propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}, offline: Boolean = false
 ) {
     val imageUrl = Constants.PROPERTYPHOTOS_URL;
     Box(
@@ -78,45 +78,54 @@ fun PropertyDetailScreen(
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
-                    FolioTextField("Name", propertyViewModel.propertyState.propertyName) {
+                    FolioTextField(!offline, "Name", propertyViewModel.propertyState.propertyName) {
                         propertyViewModel.handlePropertyEdit(
                             propertyName = it
                         )
                     }
-                    FolioTextField("Type", propertyViewModel.propertyState.propertyType) {
+                    FolioTextField(!offline, "Type", propertyViewModel.propertyState.propertyType) {
                         propertyViewModel.handlePropertyEdit(
                             propertyType = it
                         )
                     }
-                    FolioTextField("Street", propertyViewModel.propertyState.street) {
+                    FolioTextField(!offline, "Street", propertyViewModel.propertyState.street) {
                         propertyViewModel.handlePropertyEdit(street = it)
                     }
-                    FolioTextField("Street Number", propertyViewModel.propertyState.streetNumber) {
+                    FolioTextField(
+                        !offline, "Street Number", propertyViewModel.propertyState.streetNumber
+                    ) {
                         propertyViewModel.handlePropertyEdit(streetNumber = it)
                     }
-                    FolioTextField("Zip Code", propertyViewModel.propertyState.zipCode) {
+                    FolioTextField(
+                        !offline, "Zip Code", propertyViewModel.propertyState.zipCode,
+                    ) {
                         propertyViewModel.handlePropertyEdit(
                             zipCode = it
                         )
                     }
-                    FolioTextField("City", propertyViewModel.propertyState.city) {
+                    FolioTextField(!offline, "City", propertyViewModel.propertyState.city) {
                         propertyViewModel.handlePropertyEdit(city = it)
                     }
-                    FolioTextField("Country", propertyViewModel.propertyState.country) {
+                    FolioTextField(!offline, "Country", propertyViewModel.propertyState.country) {
                         propertyViewModel.handlePropertyEdit(
                             country = it
                         )
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     Button(
-                        onClick = {
+                        enabled = !offline, onClick = {
                             propertyViewModel.handlePropertySave()
                             navigateTo("Home")
                         }, modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 16.dp)
                     ) {
-                        Text(text = "Save")
+                        if (offline) {
+                            Text(text = "Offline preview")
+                        } else {
+                            Text(text = "Save")
+                        }
+
                     }
                 }
             }

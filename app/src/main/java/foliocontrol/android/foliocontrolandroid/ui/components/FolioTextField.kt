@@ -16,10 +16,13 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun FolioTextField(label: String, value: String, onValueChange: (String) -> Unit) {
+fun FolioTextField(
+    enabled: Boolean = true, label: String, value: String, onValueChange: (String) -> Unit,
+) {
     Column {
         Text(text = label, style = MaterialTheme.typography.bodyLarge)
         OutlinedTextField(
+            enabled = enabled,
             value = value,
             onValueChange = onValueChange,
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -35,4 +38,5 @@ fun FolioTextField(label: String, value: String, onValueChange: (String) -> Unit
                 .background(MaterialTheme.colorScheme.secondary)
                 .height(50.dp)
         )
-    }}
+    }
+}

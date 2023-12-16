@@ -15,8 +15,8 @@ class PropertyDatabaseImpl(private val propertyDao: PropertyDao) : PropertyDatab
     override fun getAllProperties(): Flow<List<PropertyRoomEntity>> {
         return propertyDao.getAllProperties()
     }
-    override suspend fun dropTable() {
-        propertyDao.dropTable()
+    override suspend fun dropTable(partnershipID : Int) {
+        propertyDao.dropTable(partnershipID)
     }
 
 

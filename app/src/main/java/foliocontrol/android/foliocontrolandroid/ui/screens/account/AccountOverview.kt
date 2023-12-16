@@ -1,5 +1,6 @@
 package foliocontrol.android.foliocontrolandroid.screens
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.ui.zIndex
 import foliocontrol.android.foliocontrolandroid.ui.screens.account.AccountDetailScreen
 import foliocontrol.android.foliocontrolandroid.ui.screens.account.AccountPartnershipScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
@@ -41,17 +43,18 @@ val tabItems = listOf(
 )
 
 data class TabItem(
-    val title: String,
-    val unselectedIcon: ImageVector,
-    val selectedIcon: ImageVector
+    val title: String, val unselectedIcon: ImageVector, val selectedIcon: ImageVector
 )
 
 @Composable
-fun AccountScreen(accountViewModel: AccountViewModel, navigateTo: (Any?) -> Unit = {}) {
+fun AccountScreen(
+    accountViewModel: AccountViewModel,
+    propertyViewModel: PropertyViewModel,
+    navigateTo: (Any?) -> Unit = {}
+) {
     DisposableEffect(accountViewModel) {
-        if (accountViewModel.user.name.isEmpty()) {
-            accountViewModel.getData()
-        }
+        accountViewModel.getData()
+        Log.i("TEST", "AccountScreen: ${accountViewModel.uiState}")
         onDispose { }
     }
     when (accountViewModel.uiState) {
@@ -60,7 +63,11 @@ fun AccountScreen(accountViewModel: AccountViewModel, navigateTo: (Any?) -> Unit
         }
 
         is UiState.Success -> {
-            AccountOverview(accountViewModel, navigateTo)
+            AccountOverview(accountViewModel, propertyViewModel, offline = false, navigateTo)
+        }
+
+        is UiState.Offline -> {
+            AccountOverview(accountViewModel, propertyViewModel, offline = true, navigateTo)
         }
 
         is UiState.Loading -> {
@@ -68,10 +75,8 @@ fun AccountScreen(accountViewModel: AccountViewModel, navigateTo: (Any?) -> Unit
         }
 
         else -> {
-            ErrorScreen(
-                errorMessage = (accountViewModel.uiState as UiState.Error).message,
-                onRetry = { accountViewModel.getData() }
-            )
+            ErrorScreen(errorMessage = (accountViewModel.uiState as UiState.Error).message,
+                onRetry = { accountViewModel.getData() })
         }
     }
 }
@@ -80,6 +85,8 @@ fun AccountScreen(accountViewModel: AccountViewModel, navigateTo: (Any?) -> Unit
 @Composable
 fun AccountOverview(
     accountViewModel: AccountViewModel,
+    propertyViewModel: PropertyViewModel,
+    offline: Boolean = false,
     navigateTo: (Any?) -> Unit = {}
 ) {
     val pagerState = rememberPagerState {
@@ -121,8 +128,10 @@ fun AccountOverview(
         ) { index ->
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 if (index == 0) {
-                    AccountDetailScreen(accountViewModel, navigateTo)
-                } else if (index == 1) AccountPartnershipScreen(accountViewModel, navigateTo)
+                    AccountDetailScreen(accountViewModel, offline, navigateTo)
+                } else if (index == 1) AccountPartnershipScreen(
+                    accountViewModel, propertyViewModel, navigateTo
+                )
             }
         }
     }

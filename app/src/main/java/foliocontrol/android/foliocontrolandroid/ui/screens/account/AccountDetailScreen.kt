@@ -21,9 +21,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import foliocontrol.android.foliocontrolandroid.ui.components.FolioTextField
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 @Composable
-fun AccountDetailScreen(accountViewModel: AccountViewModel, navigateTo: (Any?) -> Unit = {}) {
+fun AccountDetailScreen(accountViewModel: AccountViewModel, offline:Boolean,navigateTo: (Any?) -> Unit = {}) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -47,51 +48,55 @@ fun AccountDetailScreen(accountViewModel: AccountViewModel, navigateTo: (Any?) -
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
-                    FolioTextField("Name", accountViewModel.user.name) {
+                    FolioTextField(!offline, "Name", accountViewModel.user.name) {
                         accountViewModel.handleUserEdit(
-                            name  = it
+                            name = it
                         )
                     }
-                    FolioTextField("Last Name", accountViewModel.user.lastName) {
+                    FolioTextField(!offline, "Last Name", accountViewModel.user.lastName) {
                         accountViewModel.handleUserEdit(
                             lastName = it
                         )
                     }
-                    FolioTextField("Email", accountViewModel.user.email) {
+                    FolioTextField(!offline, "Email", accountViewModel.user.email) {
                         accountViewModel.handleUserEdit(email = it)
                     }
-                    FolioTextField("Street", accountViewModel.user.street) {
+                    FolioTextField(!offline, "Street", accountViewModel.user.street) {
                         accountViewModel.handleUserEdit(street = it)
                     }
-                    FolioTextField("Street Number", accountViewModel.user.streetNumber) {
+                    FolioTextField(!offline, "Street Number", accountViewModel.user.streetNumber) {
                         accountViewModel.handleUserEdit(streetNumber = it)
                     }
-                    FolioTextField("Zip Code", accountViewModel.user.zipCode) {
+                    FolioTextField(!offline, "Zip Code", accountViewModel.user.zipCode) {
                         accountViewModel.handleUserEdit(
                             zipCode = it
                         )
                     }
-                    FolioTextField("City", accountViewModel.user.city) {
+                    FolioTextField(!offline, "City", accountViewModel.user.city) {
                         accountViewModel.handleUserEdit(city = it)
                     }
-                    FolioTextField("Country", accountViewModel.user.country) {
+                    FolioTextField(!offline, "Country", accountViewModel.user.country) {
                         accountViewModel.handleUserEdit(
                             country = it
                         )
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     Button(
-                        onClick = {
+                        enabled = !offline, onClick = {
                             accountViewModel.handleUserSave()
                             navigateTo("Home")
-                        },
-                        modifier = Modifier
+                        }, modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 16.dp)
                     ) {
-                        Text(text = "Save")
+                        if (offline) {
+                            Text(text = "Offline preview")
+                        } else {
+                            Text(text = "Save")
+                        }
                     }
                 }
             }
         }
-}}
+    }
+}

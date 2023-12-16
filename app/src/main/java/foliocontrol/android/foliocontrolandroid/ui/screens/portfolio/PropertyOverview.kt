@@ -1,6 +1,8 @@
 package foliocontrol.android.foliocontrolandroid.ui.screens.portfolio
 
 import PropertyDetailScreen
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +23,9 @@ import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -29,16 +34,20 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.zIndex
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
 
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
+import kotlinx.coroutines.launch
 
 val tabItems = listOf(
     TabItem("Details", Icons.Outlined.Home, Icons.Filled.Home),
@@ -65,8 +74,7 @@ fun PropertyOverviewScreen(propertyViewModel: PropertyViewModel, navigateTo: (An
         }
 
         is UiState.Offline -> {
-            ErrorScreen(errorMessage = (propertyViewModel.uiState as UiState.Offline).message,
-                onRetry = { propertyViewModel.getData() })
+            Overview(propertyViewModel, navigateTo, offline = true)
         }
 
         is UiState.Loading -> {
@@ -81,12 +89,16 @@ fun PropertyOverviewScreen(propertyViewModel: PropertyViewModel, navigateTo: (An
 }
 
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Overview(
-    propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}
+    propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}, offline: Boolean = false
 
 ) {
+
+    val isLoading = propertyViewModel.uiState == UiState.Loading
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
     val pagerState = rememberPagerState {
         tabItems.size
     }
@@ -100,45 +112,50 @@ fun Overview(
     LaunchedEffect(pagerState.currentPage) {
         selectedTabIndex = pagerState.currentPage
     }
-    Column {
-        TabRow(selectedTabIndex = selectedTabIndex) {
-            tabItems.forEachIndexed { index, item ->
-                Tab(selected = selectedTabIndex == index, onClick = {
-                    selectedTabIndex = index
-                }, text = {
-                    Text(text = item.title, color = MaterialTheme.colorScheme.secondary)
 
-                }, icon = {
-                    (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)?.let {
-                        Icon(
-                            tint = it,
-                            imageVector = if (selectedTabIndex == index) item.selectedIcon else item.unselectedIcon,
-                            contentDescription = item.title
-                        )
-                    }
-                })
+    SwipeRefresh(state = swipeRefreshState, onRefresh = { propertyViewModel.getData() }) {
+
+        Column {
+            TabRow(selectedTabIndex = selectedTabIndex) {
+                tabItems.forEachIndexed { index, item ->
+                    Tab(selected = selectedTabIndex == index, onClick = {
+                        selectedTabIndex = index
+                    }, text = {
+                        Text(text = item.title, color = MaterialTheme.colorScheme.secondary)
+
+                    }, icon = {
+                        (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)?.let {
+                            Icon(
+                                tint = it,
+                                imageVector = if (selectedTabIndex == index) item.selectedIcon else item.unselectedIcon,
+                                contentDescription = item.title
+                            )
+                        }
+                    })
+                }
+
+
+            }
+            HorizontalPager(
+                state = pagerState,
+                Modifier
+                    .fillMaxWidth()
+                    .zIndex(1f)
+            ) { index ->
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+
+
+                    if (index == 0) PropertyDetailScreen(propertyViewModel, navigateTo, offline)
+                    else if (index == 1) PropertyPremisesScreen(offline)
+                    else if (index == 2) PropertyPhotosScreen(offline)
+                    else PropertyDocumentsScreen(offline)
+                }
+
             }
 
 
         }
-        HorizontalPager(
-            state = pagerState,
-            Modifier
-                .fillMaxWidth()
-                .zIndex(1f)
-        ) { index ->
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                if (index == 0) PropertyDetailScreen(propertyViewModel, navigateTo)
-                else if (index == 1) PropertyPremisesScreen()
-                else if (index == 2) PropertyPhotosScreen()
-                else PropertyDocumentsScreen()
-            }
-
-        }
-
-
     }
-
 }
 
 

@@ -24,6 +24,6 @@ interface PropertyDao {
     @Query("SELECT * FROM property_table where FK_partnership_id = :partnershipId")
     fun getAllPropertiesFromCurrentPartnership(partnershipId : Int): Flow<List<PropertyRoomEntity>>
 
-    @Query("DELETE FROM property_table")
-    suspend fun dropTable()
+    @Query("DELETE FROM property_table where FK_partnership_id = :partnershipID")
+    suspend fun dropTable(partnershipID : Int)
 }
