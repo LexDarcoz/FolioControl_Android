@@ -6,4 +6,6 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
 @Composable
 fun AccountPartnershipScreen(accountViewModel: AccountViewModel, navigateTo: (Any?) -> Unit = {}) {
 
+
+
 }

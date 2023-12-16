@@ -2,7 +2,6 @@ package foliocontrol.android.foliocontrolandroid.components
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.layout.offset
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
@@ -31,7 +30,7 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthViewModel) {
-    var partnershipList = propertyViewModel.partnershipList
+    var partnershipList = propertyViewModel.partnershipListState
     var currentPartnership = propertyViewModel.currentPartnership
 
     Log.i("NAVBAR", "PARTNERSHIPLIST: $partnershipList ")

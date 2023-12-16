@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -21,109 +22,129 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import foliocontrol.android.foliocontrolandroid.ui.components.FolioTextField
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 @Composable
 fun AddPropertyDialog(
-    onDismissRequest: () -> Unit, onConfirmation: () -> Unit, propertyViewModel: PropertyViewModel
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+    propertyViewModel: PropertyViewModel,
+    offline: Boolean = false
 ) {
+
     Dialog(
 
         onDismissRequest = { onDismissRequest() }, properties = DialogProperties(
             dismissOnBackPress = true, dismissOnClickOutside = true, usePlatformDefaultWidth = false
         )
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-        ) {
-            Surface(
-                color = MaterialTheme.colorScheme.onPrimary,
-                contentColor = MaterialTheme.colorScheme.primary,
-                shape = MaterialTheme.shapes.large,
+
+
+        if (!offline) {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.medium)
-                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
-                Column(
+                Surface(
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    contentColor = MaterialTheme.colorScheme.primary,
+                    shape = MaterialTheme.shapes.large,
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxWidth()
+                        .clip(MaterialTheme.shapes.medium)
                         .padding(16.dp)
                 ) {
-                    Text(
-                        text = "Add Property", style = MaterialTheme.typography.titleMedium.copy(
-                            fontWeight = FontWeight.Bold
-                        ), modifier = Modifier.padding(bottom = 16.dp)
-                    )
-                    FolioTextField("Name", propertyViewModel.addPropertyState.propertyName) {
-                        propertyViewModel.handlePropertyAddEdit(
-                            propertyName = it
-                        )
-                    }
-                    FolioTextField("Type", propertyViewModel.addPropertyState.propertyType) {
-                        propertyViewModel.handlePropertyAddEdit(
-                            propertyType = it
-                        )
-                    }
-                    FolioTextField("Street", propertyViewModel.addPropertyState.street) {
-                        propertyViewModel.handlePropertyAddEdit(street = it)
-                    }
-                    FolioTextField(
-                        "Street Number", propertyViewModel.addPropertyState.streetNumber
-                    ) {
-                        propertyViewModel.handlePropertyAddEdit(streetNumber = it)
-                    }
-                    FolioTextField("Zip Code", propertyViewModel.addPropertyState.zipCode) {
-                        propertyViewModel.handlePropertyAddEdit(
-                            zipCode = it
-                        )
-                    }
-                    FolioTextField("City", propertyViewModel.addPropertyState.city) {
-                        propertyViewModel.handlePropertyAddEdit(city = it)
-                    }
-                    FolioTextField("Country", propertyViewModel.addPropertyState.country) {
-                        propertyViewModel.handlePropertyAddEdit(
-                            country = it
-                        )
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                    Row(
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp)
+                            .fillMaxSize()
+                            .padding(16.dp)
                     ) {
-                        Button(
-                            onClick = { onDismissRequest() },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(48.dp)
-                                .weight(1f)
-                                .padding(end = 8.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Close, contentDescription = "Close"
+                        Text(
+                            text = "Add Property",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                fontWeight = FontWeight.Bold
+                            ),
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+                        FolioTextField("Name", propertyViewModel.addPropertyState.propertyName) {
+                            propertyViewModel.handlePropertyAddEdit(
+                                propertyName = it
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = "Dismiss")
                         }
-                        Button(
-                            onClick = {
-                                onConfirmation()
-                            },
+                        FolioTextField("Type", propertyViewModel.addPropertyState.propertyType) {
+                            propertyViewModel.handlePropertyAddEdit(
+                                propertyType = it
+                            )
+                        }
+                        FolioTextField("Street", propertyViewModel.addPropertyState.street) {
+                            propertyViewModel.handlePropertyAddEdit(street = it)
+                        }
+                        FolioTextField(
+                            "Street Number", propertyViewModel.addPropertyState.streetNumber
+                        ) {
+                            propertyViewModel.handlePropertyAddEdit(streetNumber = it)
+                        }
+                        FolioTextField("Zip Code", propertyViewModel.addPropertyState.zipCode) {
+                            propertyViewModel.handlePropertyAddEdit(
+                                zipCode = it
+                            )
+                        }
+                        FolioTextField("City", propertyViewModel.addPropertyState.city) {
+                            propertyViewModel.handlePropertyAddEdit(city = it)
+                        }
+                        FolioTextField("Country", propertyViewModel.addPropertyState.country) {
+                            propertyViewModel.handlePropertyAddEdit(
+                                country = it
+                            )
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(48.dp)
-                                .weight(1f)
-                                .padding(start = 8.dp)
+                                .padding(top = 16.dp)
                         ) {
-                            Icon(imageVector = Icons.Default.Check, contentDescription = "Save")
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(text = "Save")
+                            Button(
+                                onClick = { onDismissRequest() },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(48.dp)
+                                    .weight(1f)
+                                    .padding(end = 8.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Close, contentDescription = "Close"
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(text = "Dismiss")
+                            }
+                            Button(
+                                onClick = {
+                                    onConfirmation()
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(48.dp)
+                                    .weight(1f)
+                                    .padding(start = 8.dp)
+                            ) {
+                                Icon(imageVector = Icons.Default.Check, contentDescription = "Save")
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(text = "Save")
+                            }
                         }
                     }
                 }
             }
+        } else {
+            //You must be online to add a property to your portfolio, make such screen
+            Card {
+                Text(text = "You must be online to add a property to your portfolio")
+                Button(onClick = { propertyViewModel.getData() }) {
+                    Text(text = "Retry Getting Data")
+                }
+            }
+
         }
     }
 }

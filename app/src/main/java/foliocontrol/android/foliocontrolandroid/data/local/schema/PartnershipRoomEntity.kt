@@ -28,6 +28,7 @@ data class PartnershipRoomEntity(
     val city: String = "",
     @ColumnInfo(name = "country")
     val country: String = ""
+
 )
 
 fun PartnershipRoomEntity.asDomainModel() =

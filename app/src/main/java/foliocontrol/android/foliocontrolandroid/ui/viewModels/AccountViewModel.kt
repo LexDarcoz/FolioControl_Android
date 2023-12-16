@@ -1,5 +1,6 @@
 package foliocontrol.android.foliocontrolandroid.ui.viewModels
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,9 +9,12 @@ import androidx.lifecycle.viewModelScope
 import foliocontrol.android.foliocontrolandroid.data.local.database.AccountDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.database.PropertyDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreference
+import foliocontrol.android.foliocontrolandroid.data.local.schema.asDomainModel
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.domain.User
+import foliocontrol.android.foliocontrolandroid.domain.asUserRoomEntity
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
+import kotlinx.coroutines.flow.first
 import java.io.IOException
 import kotlinx.coroutines.launch
 
@@ -27,9 +31,10 @@ class AccountViewModel(private val propertyRepo: PropertyDatabase,private val ac
         viewModelScope.launch {
             uiState = UiState.Loading
             try {
-                user = authService.getUserWithToken(getToken())
+                getUserData()
             } catch (e: IOException) {
                 uiState = UiState.Offline("Failed to connect to server: ${e.message}")
+
             } catch (e: Exception) {
                 uiState = UiState.Error("Something went very wrong: ${e.message}")
             }
@@ -39,6 +44,16 @@ class AccountViewModel(private val propertyRepo: PropertyDatabase,private val ac
 
     fun getToken(): String {
         return getEncryptedPreference("token")
+    }
+    suspend fun getUserData() {
+        try {
+            var data = authService.getUserWithToken(getToken())
+            user = data
+            accountRepo.insertUser(user.asUserRoomEntity())
+        }catch (e: IOException) {
+            user = accountRepo.getUser().first().asDomainModel()
+        }
+
     }
 
     fun handleUserEdit(

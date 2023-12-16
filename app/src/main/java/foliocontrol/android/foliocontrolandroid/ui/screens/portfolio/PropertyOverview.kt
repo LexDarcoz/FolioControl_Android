@@ -64,6 +64,11 @@ fun PropertyOverviewScreen(propertyViewModel: PropertyViewModel, navigateTo: (An
             Overview(propertyViewModel, navigateTo)
         }
 
+        is UiState.Offline -> {
+            ErrorScreen(errorMessage = (propertyViewModel.uiState as UiState.Offline).message,
+                onRetry = { propertyViewModel.getData() })
+        }
+
         is UiState.Loading -> {
             LoadingScreen()
         }
@@ -96,8 +101,6 @@ fun Overview(
         selectedTabIndex = pagerState.currentPage
     }
     Column {
-
-
         TabRow(selectedTabIndex = selectedTabIndex) {
             tabItems.forEachIndexed { index, item ->
                 Tab(selected = selectedTabIndex == index, onClick = {

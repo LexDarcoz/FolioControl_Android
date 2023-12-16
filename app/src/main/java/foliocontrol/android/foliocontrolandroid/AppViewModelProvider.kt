@@ -14,7 +14,7 @@ object AppViewModelProvider {
             AuthViewModel()
         }
         initializer {
-            PropertyViewModel(propertyRepo = foliocontrolApplication().container.propertyDatabase)
+            PropertyViewModel(propertyRepo = foliocontrolApplication().container.propertyDatabase, partnershipRepo = foliocontrolApplication().container.partnershipDatabase)
         }
         initializer {
             AccountViewModel(propertyRepo = foliocontrolApplication().container.propertyDatabase, accountRepo = foliocontrolApplication().container.accountDatabase)

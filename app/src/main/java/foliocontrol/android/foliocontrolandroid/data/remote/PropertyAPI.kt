@@ -73,7 +73,7 @@ suspend fun fetchProperties(token: String, partnershipID: Int): List<Property>? 
             it.jsonObject["zipCode"]?.jsonPrimitive?.content ?: "",
             it.jsonObject["country"]?.jsonPrimitive?.content ?: "",
             it.jsonObject["propertyDescription"]?.jsonPrimitive?.content ?: "",
-            it.jsonObject["partnershipID"]?.jsonPrimitive?.int ?: 0
+            it.jsonObject["FK_partnershipID"]?.jsonPrimitive?.int ?: 0
         )
     }
 }

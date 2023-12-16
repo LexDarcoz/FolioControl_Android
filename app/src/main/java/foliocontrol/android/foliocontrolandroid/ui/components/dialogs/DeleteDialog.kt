@@ -13,6 +13,8 @@ fun DeleteDialog(
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
     dialogTitle: String,
+    confirmText : String,
+    dismissText : String,
     dialogText: String,
     icon: ImageVector
 ) {
@@ -39,7 +41,7 @@ fun DeleteDialog(
                     onConfirmation()
                 }
             ) {
-                Text("Confirm", color = MaterialTheme.colorScheme.secondary)
+                Text(confirmText, color = MaterialTheme.colorScheme.secondary)
             }
         },
         dismissButton = {
@@ -48,7 +50,7 @@ fun DeleteDialog(
                     onDismissRequest()
                 }
             ) {
-                Text("Dismiss", color = MaterialTheme.colorScheme.secondary)
+                Text(dismissText, color = MaterialTheme.colorScheme.secondary)
             }
         }
     )

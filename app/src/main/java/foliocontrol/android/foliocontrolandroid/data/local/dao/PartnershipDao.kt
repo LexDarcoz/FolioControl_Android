@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.Flow
 interface PartnershipDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(partnership: PartnershipRoomEntity)
+    suspend fun insertAllPartnerships(partnership: List<PartnershipRoomEntity>)
 
-    @Query("SELECT * FROM partnership_table WHERE partnership_id LIKE :partnershipId")
-    fun getPartnershipByPartnershipID(partnershipId: String): Flow<PartnershipRoomEntity>
+    @Query("SELECT * FROM partnership_table")
+    fun getPartnerships(): Flow<List<PartnershipRoomEntity>>
 }

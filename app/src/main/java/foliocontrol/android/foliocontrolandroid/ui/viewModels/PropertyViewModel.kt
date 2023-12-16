@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import foliocontrol.android.foliocontrolandroid.data.local.database.PartnershipDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.database.PropertyDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.local.schema.asDomainModel
@@ -12,13 +13,17 @@ import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.data.repository.PropertyServiceImpl
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.Property
+import foliocontrol.android.foliocontrolandroid.domain.asPartnershipRoomEntity
 import foliocontrol.android.foliocontrolandroid.domain.asPropertyRoomEntity
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import java.io.IOException
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class PropertyViewModel(private val propertyRepo: PropertyDatabase) : ViewModel() {
+class PropertyViewModel(
+    private val propertyRepo: PropertyDatabase,
+    private val partnershipRepo: PartnershipDatabase
+) : ViewModel() {
 
     var uiState: UiState by mutableStateOf(
         UiState.LoggedOut("You are not logged in")
@@ -27,10 +32,9 @@ class PropertyViewModel(private val propertyRepo: PropertyDatabase) : ViewModel(
 
     private val authService = AuthServiceImpl()
     private val propertyService = PropertyServiceImpl()
-
-    var partnershipList by mutableStateOf(emptyList<Partnership>())
-        private set
     var currentPartnership by mutableStateOf(Partnership())
+        private set
+    var partnershipListState by mutableStateOf(emptyList<Partnership>())
         private set
     var propertyListState by mutableStateOf(emptyList<Property>())
         private set
@@ -46,26 +50,31 @@ class PropertyViewModel(private val propertyRepo: PropertyDatabase) : ViewModel(
             uiState = UiState.Loading
             try {
                 getPartnershipListForLoggedInUser()
-                if (partnershipList.isNotEmpty() && currentPartnership.partnershipID == 0) {
+                if (partnershipListState.isNotEmpty() && currentPartnership.partnershipID == 0) {
                     defaultPartnership()
                 }
                 getPropertyListForPartnership()
                 if (propertyListState.isNotEmpty()) {
                     uiState = UiState.Success("Succesfully retrieved data")
-                } else {
-                    uiState = UiState.Error("No data found")
                 }
             } catch (e: IOException) {
-                // uiState = UiState.Error("Failed to connect to server: ${e.message}")
+                val partnershipList =
+                    partnershipRepo.getPartnerships().first().map { it.asDomainModel() }
+                if (partnershipList.isNotEmpty() && currentPartnership.partnershipID == 0) {
+                    partnershipListState = partnershipList
+                    defaultPartnership()
+                }
                 val propertyList =
                     propertyRepo.getPropertiesByActivePartnership(currentPartnership).first()
                         .map { it.asDomainModel() }
                 if (propertyList.isNotEmpty()) {
                     propertyListState = propertyList
-                    uiState = UiState.Success("Succesfully retrieved data")
+                    uiState = UiState.Offline("No network detected, previewing offline data")
                 } else {
                     uiState = UiState.Error("No data found")
                 }
+
+
             } catch (e: Exception) {
                 uiState = UiState.Error("Something went very wrong: ${e.message}")
             }
@@ -82,6 +91,9 @@ class PropertyViewModel(private val propertyRepo: PropertyDatabase) : ViewModel(
                 getEncryptedPreference("token"),
                 currentPartnership
             )
+            if (propertyListState.isNotEmpty()){
+                propertyRepo.dropTable()
+            }
             propertyRepo.insertAll(propertyListState.map { it.asPropertyRoomEntity() })
         } catch (e: Exception) {
             println("Error: ${e.message}")
@@ -91,8 +103,11 @@ class PropertyViewModel(private val propertyRepo: PropertyDatabase) : ViewModel(
     }
 
     suspend fun getPartnershipListForLoggedInUser() {
-        partnershipList =
+        partnershipListState =
             authService.getPartnershipsForLoggedInUser(getEncryptedPreference("token"))
+        partnershipRepo.insertAllPartnerships(partnershipListState.map { it.asPartnershipRoomEntity() })
+
+
     }
 
     fun switchPartnership(partnership: Partnership) {
@@ -101,7 +116,7 @@ class PropertyViewModel(private val propertyRepo: PropertyDatabase) : ViewModel(
     }
 
     fun defaultPartnership() {
-        currentPartnership = partnershipList[0]
+        currentPartnership = partnershipListState[0]
     }
 
     fun handlePropertyEdit(
@@ -156,8 +171,9 @@ class PropertyViewModel(private val propertyRepo: PropertyDatabase) : ViewModel(
             try {
                 propertyService.deletePropertyByPropertyID(
                     getEncryptedPreference("token"),
-                    propertyId
-                )
+                    propertyId,
+
+                    )
                 getData()
             } catch (e: Exception) {
                 println("Error: ${e.message}")

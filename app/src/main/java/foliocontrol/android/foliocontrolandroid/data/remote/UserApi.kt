@@ -58,7 +58,6 @@ suspend fun UserLoginRequest(
 suspend fun getUser(token: String): User {
     var user: User? = null
     var result: JsonObject? = null
-    try {
         val call: JsonObject = userApi.getUser(token = token)
         result = call.jsonObject
         Log.i("TEST", "getUser: $result")
@@ -83,10 +82,7 @@ suspend fun getUser(token: String): User {
 
             email = result["email"]?.jsonPrimitive?.content ?: "",
         )
-    } catch (e: Exception) {
-        Log.e("TESTING", "UserLoginRequest: ", e)
-    }
-    return user!!
+    return user
 }
 
 

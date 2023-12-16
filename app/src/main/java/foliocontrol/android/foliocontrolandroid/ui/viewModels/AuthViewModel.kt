@@ -54,10 +54,6 @@ class AuthViewModel : ViewModel() {
         userToken = ""
     }
 
-    fun verify(Token: Token) {
-        // TODO
-    }
-
     fun updateLoginState(
         email: String? = null,
         password: String? = null

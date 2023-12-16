@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -35,6 +36,7 @@ import foliocontrol.android.foliocontrolandroid.data.remote.common.Constants
 import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.DeleteDialog
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 @Composable
 fun PropertyCard(
@@ -45,16 +47,36 @@ fun PropertyCard(
     val openDeleteDialog = remember { mutableStateOf(false) }
     when {
         openDeleteDialog.value -> {
+            if (propertyViewModel.uiState is UiState.Success) {
+
+
             DeleteDialog(
                 onDismissRequest = { openDeleteDialog.value = false },
                 onConfirmation = {
                     openDeleteDialog.value = false
                     propertyViewModel.handlePropertyDelete(property.propertyID)
                 },
+                confirmText = "Confirm",
+                dismissText = "Dismiss",
                 dialogTitle = "Delete Property",
                 dialogText = "Are you sure you want to delete ${property.propertyName}.",
                 icon = Icons.Default.Warning
             )
+            }
+            else{
+                DeleteDialog(
+                    onDismissRequest = { openDeleteDialog.value = false },
+                    onConfirmation = {
+                        openDeleteDialog.value = false
+                        propertyViewModel.getData()
+                    },
+                    confirmText = "Retry Connection",
+                    dismissText = "Dismiss",
+                    dialogTitle = "Network Error",
+                    dialogText = "You need to be online in order to delete properties.",
+                    icon = Icons.Default.Info
+                )
+            }
         }
     }
     val propertyTypesIcons: Map<String, ImageVector> = mapOf(
