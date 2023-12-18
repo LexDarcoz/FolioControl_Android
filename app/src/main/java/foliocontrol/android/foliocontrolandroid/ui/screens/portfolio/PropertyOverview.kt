@@ -64,11 +64,9 @@ data class TabItem(
 
 @Composable
 fun PropertyOverviewScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}) {
-
-    DisposableEffect(propertyViewModel.propertyState) {
+    DisposableEffect(propertyViewModel.propertyState.propertyID) {
         if (propertyViewModel.propertyPremises.isEmpty()) {
             propertyViewModel.getDataForActiveProperty()
-            Log.i("TEST", "PropertyPremisesScreen: ")
         }
         onDispose {}
     }
@@ -128,8 +126,12 @@ fun Overview(
     LaunchedEffect(selectedTabIndex) {
         pagerState.animateScrollToPage(selectedTabIndex)
     }
-    LaunchedEffect(pagerState.currentPage) {
-        selectedTabIndex = pagerState.currentPage
+    LaunchedEffect(pagerState.currentPage, pagerState.isScrollInProgress) {
+        if (!pagerState.isScrollInProgress) {
+            selectedTabIndex = pagerState.currentPage
+        }
+
+
     }
 
     SwipeRefresh(state = swipeRefreshState, onRefresh = { propertyViewModel.getData() }) {
