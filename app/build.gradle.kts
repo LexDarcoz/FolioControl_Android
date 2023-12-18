@@ -26,8 +26,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -82,6 +81,10 @@ dependencies {
     implementation("androidx.security:security-crypto:1.0.0-rc03")
     implementation("com.google.accompanist:accompanist-swiperefresh:0.27.0")
 
+    // images
+    implementation("io.coil-kt:coil-compose:1.3.2")
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -90,8 +93,6 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-
-
 
 
 }
