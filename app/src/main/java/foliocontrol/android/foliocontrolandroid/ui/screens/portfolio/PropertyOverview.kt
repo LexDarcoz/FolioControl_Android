@@ -30,6 +30,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,11 +50,11 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import kotlinx.coroutines.launch
 
-val tabItems = listOf(
+val tabItemsList = listOf(
     TabItem("Details", Icons.Outlined.Home, Icons.Filled.Home),
-    TabItem("Premises", Icons.Outlined.List, Icons.Filled.List),
     TabItem("Photos", Icons.Outlined.Phone, Icons.Filled.Phone),
     TabItem("Document", Icons.Outlined.Build, Icons.Filled.Build),
+    TabItem("Premises", Icons.Outlined.List, Icons.Filled.List),
 )
 
 
@@ -61,9 +62,18 @@ data class TabItem(
     val title: String, val unselectedIcon: ImageVector, val selectedIcon: ImageVector
 )
 
-
 @Composable
 fun PropertyOverviewScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}) {
+
+    DisposableEffect(propertyViewModel.propertyState) {
+        if (propertyViewModel.propertyPremises.isEmpty()) {
+            propertyViewModel.getDataForActiveProperty()
+            Log.i("TEST", "PropertyPremisesScreen: ")
+        }
+        onDispose {}
+    }
+
+
     when (propertyViewModel.uiState) {
         is UiState.LoggedOut -> {
             navigateTo("home")
@@ -86,6 +96,8 @@ fun PropertyOverviewScreen(propertyViewModel: PropertyViewModel, navigateTo: (An
                 onRetry = { propertyViewModel.getData() })
         }
     }
+
+
 }
 
 
@@ -96,6 +108,11 @@ fun Overview(
     propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}, offline: Boolean = false
 
 ) {
+    var tabItems = tabItemsList
+    if (propertyViewModel.propertyState.propertyType != "Apartment") {
+        tabItems = tabItems.subList(0, tabItems.size - 1)
+    }
+
 
     val isLoading = propertyViewModel.uiState == UiState.Loading
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
@@ -105,6 +122,8 @@ fun Overview(
     var selectedTabIndex by remember {
         mutableStateOf(0)
     }
+
+
 
     LaunchedEffect(selectedTabIndex) {
         pagerState.animateScrollToPage(selectedTabIndex)
@@ -146,9 +165,10 @@ fun Overview(
 
 
                     if (index == 0) PropertyDetailScreen(propertyViewModel, navigateTo, offline)
-                    else if (index == 1) PropertyPremisesScreen(offline)
-                    else if (index == 2) PropertyPhotosScreen(offline)
-                    else PropertyDocumentsScreen(offline)
+                    else if (index == 1) PropertyPhotosScreen(propertyViewModel, offline)
+                    else if (index == 2) PropertyDocumentsScreen(
+                        propertyViewModel, offline
+                    ) else PropertyPremisesScreen(propertyViewModel, offline)
                 }
 
             }

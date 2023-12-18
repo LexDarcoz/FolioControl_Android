@@ -33,10 +33,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}) {
     DisposableEffect(propertyViewModel.partnershipListState) {
-        if (propertyViewModel.propertyListState.isEmpty()) {
             propertyViewModel.getData()
-        }
-        Log.i("TEST", "Home: ${propertyViewModel.uiState}")
         onDispose {}
     }
 

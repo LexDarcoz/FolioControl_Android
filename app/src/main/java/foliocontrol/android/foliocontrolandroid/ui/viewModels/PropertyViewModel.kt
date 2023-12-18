@@ -1,5 +1,6 @@
 package foliocontrol.android.foliocontrolandroid.ui.viewModels
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -37,11 +38,11 @@ class PropertyViewModel(
     private val propertyService = PropertyServiceImpl()
     var currentPartnership by mutableStateOf(Partnership())
         private set
-    var photos by mutableStateOf(emptyList<Photo>())
+    var photo by mutableStateOf(Photo())
         private set
-    var documents by mutableStateOf(emptyList<Document>())
+    var propertyDocuments by mutableStateOf(emptyList<Document>())
         private set
-    var premises by mutableStateOf(emptyList<Premise>())
+    var propertyPremises by mutableStateOf(emptyList<Premise>())
         private set
 
     var partnershipListState by mutableStateOf(emptyList<Partnership>())
@@ -85,8 +86,6 @@ class PropertyViewModel(
                 } else {
                     uiState = UiState.Error("No data found")
                 }
-
-
             } catch (e: Exception) {
                 uiState = UiState.Error("Something went very wrong: ${e.message}")
             }
@@ -95,8 +94,9 @@ class PropertyViewModel(
 
     fun selectProperty(property: Property) {
         propertyState = property
+        propertyDocuments = emptyList()
+        propertyPremises = emptyList()
     }
-
     suspend fun getPropertyListForPartnership() {
         try {
             propertyListState = propertyService.getProperties(
@@ -113,7 +113,6 @@ class PropertyViewModel(
             println("Finally")
         }
     }
-
     suspend fun getPartnershipListForLoggedInUser() {
         partnershipListState =
             authService.getPartnershipsForLoggedInUser(getEncryptedPreference("token"))
@@ -130,6 +129,41 @@ class PropertyViewModel(
     fun defaultPartnership() {
         currentPartnership = partnershipListState[0]
     }
+     fun getDataForActiveProperty(){
+        viewModelScope.launch {
+            uiState = UiState.Loading
+            try {
+                getPremisesForProperty(propertyState)
+                getDocumentsForProperty(propertyState)
+                Log.i("TEST", "getDataForActiveProperty: ${propertyPremises}")
+                Log.i("TEST", "getDataForActiveProperty: ${propertyPremises.size}")
+                uiState = UiState.Success("Succesfully retrieved data")
+            } catch (e: IOException) {
+               //TODO: implement offline data
+                uiState = UiState.Offline("No network detected")
+
+            } catch (e: Exception) {
+                uiState = UiState.Error("Something went very wrong: ${e.message}")
+            }
+        }
+    }
+
+
+
+    suspend fun getPremisesForProperty(property: Property) {
+        propertyPremises = propertyService.getPremisesForProperty(
+            getEncryptedPreference("token"),
+            property
+        )
+    }
+    suspend fun getDocumentsForProperty(property: Property) {
+        propertyDocuments = propertyService.getDocumentsForProperty(
+            getEncryptedPreference("token"),
+            property
+        )
+    }
+
+
 
     fun handlePropertyEdit(
         propertyName: String? = null,

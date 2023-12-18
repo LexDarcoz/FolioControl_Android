@@ -41,15 +41,15 @@ data class Property(
 )
 data class Premise(
     val premiseID: Int = 0,
-    val premiseName: String = "",
-    val premiseType: String = "",
-    val premiseImg: String = "",
-    val street: String = "",
-    val streetNumber: String = "",
-    val city: String = "",
-    val zipCode: String = "",
-    val country: String = "",
-    val premiseDescription: String = "",
+    val premisesName: String = "",
+    val bus: String = "",
+    val rent: String = "",
+    val img: String = "",
+    val description: String = "",
+    val address: String = "",
+    val isActive: Int = 0,
+    val isRented: Int = 0,
+    val tenant: String = "",
     val FK_propertyID: Int = 0
 )
 data class Photo(

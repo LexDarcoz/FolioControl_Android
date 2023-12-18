@@ -7,9 +7,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 @Composable
-fun PropertyPhotosScreen(offline : Boolean = false) {
+fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean = false) {
     Box(
         modifier = Modifier.fillMaxSize()
 

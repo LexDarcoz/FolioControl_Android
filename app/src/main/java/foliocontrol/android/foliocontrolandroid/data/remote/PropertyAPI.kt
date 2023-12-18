@@ -2,7 +2,9 @@ package foliocontrol.android.foliocontrolandroid.data.remote
 
 import android.util.Log
 import foliocontrol.android.foliocontrolandroid.data.remote.common.createRetrofit
+import foliocontrol.android.foliocontrolandroid.domain.Document
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
+import foliocontrol.android.foliocontrolandroid.domain.Premise
 import foliocontrol.android.foliocontrolandroid.domain.Property
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
@@ -24,13 +26,24 @@ interface PropertyAPI {
     @Headers("Accept: application/json")
     @GET("api/property/partnership/{partnershipID}")
     suspend fun getProperties(
-        @Header("Authorization") token: String,
-        @Path("partnershipID") partnershipID: Int
+        @Header("Authorization") token: String, @Path("partnershipID") partnershipID: Int
     ): JsonArray
 
     @Headers("Accept: application/json")
     @GET("api/user/getPartnerships")
     suspend fun getUserPartnerships(@Header("Authorization") token: String): JsonArray
+
+    @Headers("Accept: application/json")
+    @GET("api/propertyDocument/{propertyID}")
+    suspend fun getDocumentsForProperty(
+        @Header("Authorization") token: String, @Path("propertyID") propertyID: Int
+    ): JsonArray
+
+    @Headers("Accept: application/json")
+    @GET("api/premises/property/{propertyID}")
+    suspend fun getPremisesForProperty(
+        @Header("Authorization") token: String, @Path("propertyID") propertyID: Int
+    ): JsonArray
 
     @Headers("Accept: application/json")
     @PUT("api/property/{propertyID}")
@@ -43,15 +56,13 @@ interface PropertyAPI {
     @Headers("Accept: application/json")
     @POST("api/property/create")
     suspend fun createProperty(
-        @Header("Authorization") token: String,
-        @Body property: JsonObject
+        @Header("Authorization") token: String, @Body property: JsonObject
     )
 
     @Headers("Accept: application/json")
     @DELETE("api/property/{propertyID}")
     suspend fun deletePropertyById(
-        @Header("Authorization") token: String,
-        @Path("propertyID") propertyID: Int
+        @Header("Authorization") token: String, @Path("propertyID") propertyID: Int
     )
 }
 
@@ -76,6 +87,44 @@ suspend fun fetchProperties(token: String, partnershipID: Int): List<Property>? 
             it.jsonObject["FK_partnershipID"]?.jsonPrimitive?.int ?: 0
         )
     }
+}
+
+suspend fun fetchPremises(token: String, propertyID: Int): List<Premise>? {
+    var premises = propertyApi.getPremisesForProperty(token, propertyID)
+
+    Log.i("TEST", "fetchPremisesss: $premises")
+    return premises.map {
+        Premise(
+            it.jsonObject["premisesID"]?.jsonPrimitive?.int ?: 0,
+            it.jsonObject["premisesName"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["bus"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["rent"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["img"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["description"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["address"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["isActive"]?.jsonPrimitive?.int ?: 0,
+            it.jsonObject["isRented"]?.jsonPrimitive?.int ?: 0,
+            it.jsonObject["tenant"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["FK_propertyID"]?.jsonPrimitive?.int ?: 0,
+        )
+    }
+
+
+}
+
+
+suspend fun fetchDocuments(token: String, propertyID: Int): List<Document>? {
+    var documents = propertyApi.getDocumentsForProperty(token, propertyID)
+
+    return documents.map {
+        Document(
+            it.jsonObject["documentID"]?.jsonPrimitive?.int ?: 0,
+            it.jsonObject["documentName"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["FK_propertyID"]?.jsonPrimitive?.int ?: 0,
+        )
+    }
+
+
 }
 
 suspend fun getUserPartnerships(
