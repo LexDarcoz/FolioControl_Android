@@ -2,10 +2,10 @@ package foliocontrol.android.foliocontrolandroid.data.remote
 
 import android.util.Log
 import foliocontrol.android.foliocontrolandroid.data.remote.common.createRetrofit
-import foliocontrol.android.foliocontrolandroid.domain.Document
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.Premise
 import foliocontrol.android.foliocontrolandroid.domain.Property
+import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -113,13 +113,16 @@ suspend fun fetchPremises(token: String, propertyID: Int): List<Premise>? {
 }
 
 
-suspend fun fetchDocuments(token: String, propertyID: Int): List<Document>? {
+suspend fun fetchDocuments(token: String, propertyID: Int): List<PropertyDocument>? {
     var documents = propertyApi.getDocumentsForProperty(token, propertyID)
 
     return documents.map {
-        Document(
+        PropertyDocument(
             it.jsonObject["documentID"]?.jsonPrimitive?.int ?: 0,
+            it.jsonObject["name"]?.jsonPrimitive?.content ?: "",
             it.jsonObject["documentName"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["documentType"]?.jsonPrimitive?.content ?: "",
+            it.jsonObject["expiryDate"]?.jsonPrimitive?.content ?: "",
             it.jsonObject["FK_propertyID"]?.jsonPrimitive?.int ?: 0,
         )
     }

@@ -170,7 +170,7 @@ fun Overview(
                     else if (index == 1) PropertyPhotosScreen(propertyViewModel, offline)
                     else if (index == 2) PropertyDocumentsScreen(
                         propertyViewModel, offline
-                    ) else PropertyPremisesScreen(propertyViewModel, offline)
+                    ) else PremisesListScreen(propertyViewModel, offline)
                 }
 
             }

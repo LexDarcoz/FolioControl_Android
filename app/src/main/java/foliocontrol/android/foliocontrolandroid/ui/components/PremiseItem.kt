@@ -19,6 +19,10 @@ fun PremiseItem(premise: Premise) {
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         elevation = CardDefaults.elevatedCardElevation(4.dp),
+        colors = CardDefaults.cardColors(
+            contentColor = MaterialTheme.colorScheme.primary,
+            containerColor = MaterialTheme.colorScheme.secondary
+        )
     ) {
         Column(
             modifier = Modifier
@@ -29,7 +33,7 @@ fun PremiseItem(premise: Premise) {
             Text(
                 text = premise.address,
                 style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.secondary
+                color = MaterialTheme.colorScheme.primary
             )
 
         }
