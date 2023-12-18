@@ -12,11 +12,11 @@ import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreferenc
 import foliocontrol.android.foliocontrolandroid.data.local.schema.asDomainModel
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.data.repository.PropertyServiceImpl
-import foliocontrol.android.foliocontrolandroid.domain.Document
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.Photo
 import foliocontrol.android.foliocontrolandroid.domain.Premise
 import foliocontrol.android.foliocontrolandroid.domain.Property
+import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
 import foliocontrol.android.foliocontrolandroid.domain.asPartnershipRoomEntity
 import foliocontrol.android.foliocontrolandroid.domain.asPropertyRoomEntity
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
@@ -25,8 +25,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class PropertyViewModel(
-    private val propertyRepo: PropertyDatabase,
-    private val partnershipRepo: PartnershipDatabase
+    private val propertyRepo: PropertyDatabase, private val partnershipRepo: PartnershipDatabase
 ) : ViewModel() {
 
     var uiState: UiState by mutableStateOf(
@@ -34,13 +33,14 @@ class PropertyViewModel(
     )
         private set
 
+
     private val authService = AuthServiceImpl()
     private val propertyService = PropertyServiceImpl()
     var currentPartnership by mutableStateOf(Partnership())
         private set
     var photo by mutableStateOf(Photo())
         private set
-    var propertyDocuments by mutableStateOf(emptyList<Document>())
+    var propertyDocuments by mutableStateOf(emptyList<PropertyDocument>())
         private set
     var propertyPremises by mutableStateOf(emptyList<Premise>())
         private set
@@ -52,7 +52,7 @@ class PropertyViewModel(
 
     var propertyState by mutableStateOf(Property())
         private set
-
+    var isDialogOpen by mutableStateOf(false)
     var addPropertyState by mutableStateOf(Property())
         private set
 
@@ -67,7 +67,7 @@ class PropertyViewModel(
                 getPropertyListForPartnership()
                 if (propertyListState.isNotEmpty()) {
                     uiState = UiState.Success("Succesfully retrieved data")
-                }else{
+                } else {
                     uiState = UiState.Error("No data found")
                 }
             } catch (e: IOException) {
@@ -97,13 +97,13 @@ class PropertyViewModel(
         propertyDocuments = emptyList()
         propertyPremises = emptyList()
     }
+
     suspend fun getPropertyListForPartnership() {
         try {
             propertyListState = propertyService.getProperties(
-                getEncryptedPreference("token"),
-                currentPartnership
+                getEncryptedPreference("token"), currentPartnership
             )
-            if (propertyListState.isNotEmpty()){
+            if (propertyListState.isNotEmpty()) {
                 propertyRepo.dropTable(currentPartnership.partnershipID)
             }
             propertyRepo.insertAll(propertyListState.map { it.asPropertyRoomEntity() })
@@ -113,6 +113,7 @@ class PropertyViewModel(
             println("Finally")
         }
     }
+
     suspend fun getPartnershipListForLoggedInUser() {
         partnershipListState =
             authService.getPartnershipsForLoggedInUser(getEncryptedPreference("token"))
@@ -129,17 +130,16 @@ class PropertyViewModel(
     fun defaultPartnership() {
         currentPartnership = partnershipListState[0]
     }
-     fun getDataForActiveProperty(){
+
+    fun getDataForActiveProperty() {
         viewModelScope.launch {
             uiState = UiState.Loading
             try {
                 getPremisesForProperty(propertyState)
                 getDocumentsForProperty(propertyState)
-                Log.i("TEST", "getDataForActiveProperty: ${propertyPremises}")
-                Log.i("TEST", "getDataForActiveProperty: ${propertyPremises.size}")
                 uiState = UiState.Success("Succesfully retrieved data")
             } catch (e: IOException) {
-               //TODO: implement offline data
+                //TODO: implement offline data
                 uiState = UiState.Offline("No network detected")
 
             } catch (e: Exception) {
@@ -149,20 +149,17 @@ class PropertyViewModel(
     }
 
 
-
     suspend fun getPremisesForProperty(property: Property) {
         propertyPremises = propertyService.getPremisesForProperty(
-            getEncryptedPreference("token"),
-            property
-        )
-    }
-    suspend fun getDocumentsForProperty(property: Property) {
-        propertyDocuments = propertyService.getDocumentsForProperty(
-            getEncryptedPreference("token"),
-            property
+            getEncryptedPreference("token"), property
         )
     }
 
+    suspend fun getDocumentsForProperty(property: Property) {
+        propertyDocuments = propertyService.getDocumentsForProperty(
+            getEncryptedPreference("token"), property
+        )
+    }
 
 
     fun handlePropertyEdit(
@@ -201,8 +198,7 @@ class PropertyViewModel(
         viewModelScope.launch {
             try {
                 propertyService.savePropertyByPropertyID(
-                    getEncryptedPreference("token"),
-                    propertyState
+                    getEncryptedPreference("token"), propertyState
                 )
             } catch (e: Exception) {
                 println("Error: ${e.message}")
@@ -267,8 +263,7 @@ class PropertyViewModel(
         viewModelScope.launch {
             try {
                 propertyService.addProperty(
-                    getEncryptedPreference("token"),
-                    addPropertyState
+                    getEncryptedPreference("token"), addPropertyState
                 )
                 getData()
             } catch (e: Exception) {

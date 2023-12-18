@@ -6,10 +6,10 @@ import foliocontrol.android.foliocontrolandroid.data.remote.fetchDocuments
 import foliocontrol.android.foliocontrolandroid.data.remote.fetchPremises
 import foliocontrol.android.foliocontrolandroid.data.remote.fetchProperties
 import foliocontrol.android.foliocontrolandroid.data.remote.savePropertyByID
-import foliocontrol.android.foliocontrolandroid.domain.Document
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.Premise
 import foliocontrol.android.foliocontrolandroid.domain.Property
+import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
 
 class PropertyServiceImpl : PropertyService {
     override suspend fun getProperties(token: String, partnership: Partnership): List<Property> {
@@ -21,9 +21,8 @@ class PropertyServiceImpl : PropertyService {
     }
 
     override suspend fun getDocumentsForProperty(
-        token: String,
-        property: Property
-    ): List<Document> {
+        token: String, property: Property
+    ): List<PropertyDocument> {
         return fetchDocuments(token, property.propertyID)!!
     }
 

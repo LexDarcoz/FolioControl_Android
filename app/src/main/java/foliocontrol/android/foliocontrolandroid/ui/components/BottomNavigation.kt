@@ -32,8 +32,6 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthViewModel) {
     var partnershipList = propertyViewModel.partnershipListState
     var currentPartnership = propertyViewModel.currentPartnership
-
-    Log.i("NAVBAR", "PARTNERSHIPLIST: $partnershipList ")
     data class BottomNavigationItem(
         val title: String,
         val selectedIcon: ImageVector,
