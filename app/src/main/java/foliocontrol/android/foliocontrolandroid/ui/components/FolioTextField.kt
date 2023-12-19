@@ -9,8 +9,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 
@@ -20,7 +22,7 @@ fun FolioTextField(
     enabled: Boolean = true, label: String, value: String, onValueChange: (String) -> Unit,
 ) {
     Column {
-        Text(text = label, style = MaterialTheme.typography.bodyLarge)
+        Text(text = label, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary)
         OutlinedTextField(
             enabled = enabled,
             value = value,
@@ -28,15 +30,19 @@ fun FolioTextField(
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
             ),
+
             keyboardActions = KeyboardActions(onDone = {
                 // Handle done action
             }),
-            textStyle = MaterialTheme.typography.bodySmall,
+            textStyle = MaterialTheme.typography.bodySmall.copy(
+                color = MaterialTheme.colorScheme.primary
+            ),
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.secondary)
-                .height(50.dp)
+                .height(50.dp),
+
         )
     }
 }

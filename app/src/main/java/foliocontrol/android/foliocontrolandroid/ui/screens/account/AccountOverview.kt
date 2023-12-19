@@ -103,14 +103,17 @@ fun AccountOverview(
         selectedTabIndex = pagerState.currentPage
     }
     Column {
-        TabRow(selectedTabIndex = selectedTabIndex) {
+        TabRow(
+            selectedTabIndex = selectedTabIndex,
+            containerColor = MaterialTheme.colorScheme.onPrimary
+        ) {
             tabItems.forEachIndexed { index, item ->
                 Tab(selected = selectedTabIndex == index, onClick = {
                     selectedTabIndex = index
                 }, text = {
-                    Text(text = item.title, color = MaterialTheme.colorScheme.secondary)
+                    Text(text = item.title, color = MaterialTheme.colorScheme.primary)
                 }, icon = {
-                    (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)?.let { // ktlint-disable max-line-length
+                    (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary)?.let { // ktlint-disable max-line-length
                         Icon(
                             tint = it,
                             imageVector = if (selectedTabIndex == index) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length

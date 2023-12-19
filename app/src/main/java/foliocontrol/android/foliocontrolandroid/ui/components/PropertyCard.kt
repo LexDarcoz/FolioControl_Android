@@ -50,20 +50,19 @@ fun PropertyCard(
             if (propertyViewModel.uiState is UiState.Success) {
 
 
-            DeleteDialog(
-                onDismissRequest = { openDeleteDialog.value = false },
-                onConfirmation = {
-                    openDeleteDialog.value = false
-                    propertyViewModel.handlePropertyDelete(property.propertyID)
-                },
-                confirmText = "Confirm",
-                dismissText = "Dismiss",
-                dialogTitle = "Delete Property",
-                dialogText = "Are you sure you want to delete ${property.propertyName}.",
-                icon = Icons.Default.Warning
-            )
-            }
-            else{
+                DeleteDialog(
+                    onDismissRequest = { openDeleteDialog.value = false },
+                    onConfirmation = {
+                        openDeleteDialog.value = false
+                        propertyViewModel.handlePropertyDelete(property.propertyID)
+                    },
+                    confirmText = "Confirm",
+                    dismissText = "Dismiss",
+                    dialogTitle = "Delete Property",
+                    dialogText = "Are you sure you want to delete ${property.propertyName}.",
+                    icon = Icons.Default.Warning
+                )
+            } else {
                 DeleteDialog(
                     onDismissRequest = { openDeleteDialog.value = false },
                     onConfirmation = {
@@ -87,13 +86,17 @@ fun PropertyCard(
         // Add more property types and corresponding icons as needed
     )
     Card(
-        modifier = Modifier.padding(8.dp), elevation = CardDefaults.cardElevation(
+        modifier = Modifier.padding(8.dp),
+        elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
-        ), shape = MaterialTheme.shapes.small, colors = CardDefaults.cardColors(
+        ),
+        shape = MaterialTheme.shapes.small,
+        colors = CardDefaults.cardColors(
             contentColor = MaterialTheme.colorScheme.primary,
             containerColor = MaterialTheme.colorScheme.secondary
-        )
-    ) {
+        ),
+
+        ) {
         Box(
             modifier = Modifier
                 .height(150.dp)
@@ -121,7 +124,7 @@ fun PropertyCard(
             Icon(
                 imageVector = propertyTypesIcons[property.propertyType] ?: Icons.Default.Home,
                 contentDescription = null,
-                tint = Color.White,
+                tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier
                     .size(40.dp)
                     .align(Alignment.BottomStart)
@@ -138,7 +141,7 @@ fun PropertyCard(
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = null,
-                    tint = Color.White,
+                    tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier
                         .size(40.dp)
                         .padding(8.dp)

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,8 +28,7 @@ import foliocontrol.android.foliocontrol_android.R
 
 @Composable
 fun ErrorScreen(
-    errorMessage: String,
-    onRetry: () -> Unit
+    errorMessage: String, onRetry: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -40,13 +40,15 @@ fun ErrorScreen(
         Image(
             painter = rememberAsyncImagePainter(model = R.drawable.errorimg),
             contentDescription = null,
-            Modifier.fillMaxWidth().fillMaxHeight(0.4f),
+            Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.4f),
         )
 
         Text(
             text = errorMessage,
             fontSize = 20.sp,
-            color = Color.Black,
+            color = MaterialTheme.colorScheme.secondary,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 16.dp),
             fontWeight = FontWeight.Bold
@@ -60,7 +62,7 @@ fun ErrorScreen(
                 .fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = Color.White
+                contentColor = MaterialTheme.colorScheme.secondary
             ),
             shape = RoundedCornerShape(8.dp)
         ) {

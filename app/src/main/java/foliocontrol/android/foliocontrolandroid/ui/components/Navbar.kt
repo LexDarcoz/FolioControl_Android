@@ -37,14 +37,14 @@ fun Navbar(
                 "FolioControl",
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.secondary
+                color = MaterialTheme.colorScheme.onPrimary
             )
         },
         navigationIcon = {
 //        if (canNavigateBack) {
             IconButton(onClick = { navController.navigateUp() }) {
                 Icon(
-                    tint = MaterialTheme.colorScheme.secondary,
+                    tint = MaterialTheme.colorScheme.onPrimary,
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "Back"
                 )
@@ -62,7 +62,7 @@ fun Navbar(
                         Icon(
                             imageVector = Icons.Filled.ExitToApp,
                             contentDescription = "Localized description",
-                            tint = MaterialTheme.colorScheme.secondary
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }

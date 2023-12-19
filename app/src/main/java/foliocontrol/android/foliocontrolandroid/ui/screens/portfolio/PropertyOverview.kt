@@ -137,15 +137,15 @@ fun Overview(
     SwipeRefresh(state = swipeRefreshState, onRefresh = { propertyViewModel.getData() }) {
 
         Column {
-            TabRow(selectedTabIndex = selectedTabIndex) {
+            TabRow(selectedTabIndex = selectedTabIndex , containerColor = MaterialTheme.colorScheme.onPrimary) {
                 tabItems.forEachIndexed { index, item ->
                     Tab(selected = selectedTabIndex == index, onClick = {
                         selectedTabIndex = index
                     }, text = {
-                        Text(text = item.title, color = MaterialTheme.colorScheme.secondary)
+                        Text(text = item.title, color = MaterialTheme.colorScheme.primary)
 
                     }, icon = {
-                        (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary)?.let {
+                        (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary)?.let {
                             Icon(
                                 tint = it,
                                 imageVector = if (selectedTabIndex == index) item.selectedIcon else item.unselectedIcon,

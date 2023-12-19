@@ -19,6 +19,7 @@ fun PremiseItem(premise: Premise) {
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         elevation = CardDefaults.elevatedCardElevation(4.dp),
+        shape = MaterialTheme.shapes.small,
         colors = CardDefaults.cardColors(
             contentColor = MaterialTheme.colorScheme.primary,
             containerColor = MaterialTheme.colorScheme.secondary

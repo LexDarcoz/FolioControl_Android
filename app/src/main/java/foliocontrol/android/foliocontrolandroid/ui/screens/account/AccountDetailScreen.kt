@@ -36,7 +36,7 @@ fun AccountDetailScreen(accountViewModel: AccountViewModel, offline:Boolean,navi
             Surface(
                 color = MaterialTheme.colorScheme.secondary,
                 contentColor = MaterialTheme.colorScheme.primary,
-                shape = MaterialTheme.shapes.medium,
+                shape = MaterialTheme.shapes.small,
                 shadowElevation = 4.dp,
                 modifier = Modifier
                     .fillMaxWidth()

@@ -32,6 +32,7 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthViewModel) {
     var partnershipList = propertyViewModel.partnershipListState
     var currentPartnership = propertyViewModel.currentPartnership
+
     data class BottomNavigationItem(
         val title: String,
         val selectedIcon: ImageVector,
@@ -44,23 +45,17 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
         mutableStateOf(0)
     }
 
-    val items = listOf(
-        BottomNavigationItem(
-            title = "Home",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home,
-            onClick = { }
-        ),
+    val items = listOf(BottomNavigationItem(title = "Home",
+        selectedIcon = Icons.Filled.Home,
+        unselectedIcon = Icons.Outlined.Home,
+        onClick = { }),
 
-        BottomNavigationItem(
-            title = "Account",
+        BottomNavigationItem(title = "Account",
             selectedIcon = Icons.Filled.AccountCircle,
             unselectedIcon = Icons.Outlined.AccountCircle,
             onClick = { }
 
-        ),
-        BottomNavigationItem(
-            title = currentPartnership.name,
+        ), BottomNavigationItem(title = currentPartnership.name,
             selectedIcon = Icons.Filled.Menu,
             unselectedIcon = Icons.Outlined.Menu,
             onClick = { }
@@ -68,35 +63,29 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
         )
 
     )
-    Log.i("TESTING", "currentpartnership:${currentPartnership.name}  ")
+
     val isPartnershipsSelected =
         selectedIcon == items.indexOfFirst { it.title == currentPartnership.name }
 
     NavigationBar(
-        contentColor = MaterialTheme.colorScheme.secondary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
         containerColor = MaterialTheme.colorScheme.primary
     ) {
         items.forEachIndexed { index, item ->
-            NavigationBarItem(
-                selected = selectedIcon == index,
-                onClick = {
-                    selectedIcon = index
-                    if (item.title != currentPartnership.name) {
-                        authViewModel.navigateTo(item.title)
-                    }
-                },
-                label = {
-                    Text(text = item.title, color = MaterialTheme.colorScheme.secondary)
-                },
-                alwaysShowLabel = item.title == currentPartnership.name,
-                icon = {
-                    Icon(
-                        imageVector = if (selectedIcon == index) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length
-                        contentDescription = item.title,
-                        tint = MaterialTheme.colorScheme.secondary
-
-                    )
+            NavigationBarItem(selected = selectedIcon == index, onClick = {
+                selectedIcon = index
+                if (item.title != currentPartnership.name) {
+                    authViewModel.navigateTo(item.title)
                 }
+            }, label = {
+                Text(text = item.title, color = MaterialTheme.colorScheme.onPrimary)
+            }, alwaysShowLabel = item.title == currentPartnership.name, icon = {
+                Icon(
+                    imageVector = if (selectedIcon == index) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length
+                    contentDescription = item.title, tint = MaterialTheme.colorScheme.onPrimary
+
+                )
+            }
 
             )
         }
@@ -104,35 +93,31 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
             DropdownMenu(
 //                modifier = Modifier // Set the desired offset here
 // //                    .fillMaxWidth(),
-                expanded = true,
-                onDismissRequest = {
+                expanded = true, onDismissRequest = {
                     // Dismiss the dropdown when clicked outside
                     selectedIcon = -1
-                },
-                offset = DpOffset(x = 256.dp, y = (-50).dp)
+                }, offset = DpOffset(x = 256.dp, y = (-50).dp)
             ) {
                 partnershipList.forEach { partnership ->
-                    DropdownMenuItem(
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Home,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.secondary
-                            )
-                        },
+                    DropdownMenuItem(leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.secondary
+                        )
+                    },
 
                         text = {
                             Text(
                                 text = partnership.name,
-                                style = MaterialTheme.typography.titleMedium
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.secondary,
                             )
-                        },
-                        onClick = {
+                        }, onClick = {
                             propertyViewModel.switchPartnership(partnership)
                             authViewModel.navigateTo("Home")
                             selectedIcon = 0
-                        }
-                    )
+                        })
                 }
             }
         }
