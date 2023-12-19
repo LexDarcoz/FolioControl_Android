@@ -1,14 +1,13 @@
 package foliocontrol.android.foliocontrolandroid.components
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Apartment
+import androidx.compose.material.icons.filled.Domain
 import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.Apartment
+import androidx.compose.material.icons.outlined.Domain
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -45,19 +44,25 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
         mutableStateOf(0)
     }
 
-    val items = listOf(BottomNavigationItem(title = "Home",
-        selectedIcon = Icons.Filled.Home,
-        unselectedIcon = Icons.Outlined.Home,
-        onClick = { }),
+    val items = listOf(
+        BottomNavigationItem(
+            title = "Home",
+            selectedIcon = Icons.Filled.Domain,
+            unselectedIcon = Icons.Outlined.Domain,
+            onClick = { }
+        ),
 
-        BottomNavigationItem(title = "Account",
+        BottomNavigationItem(
+            title = "Account",
             selectedIcon = Icons.Filled.AccountCircle,
             unselectedIcon = Icons.Outlined.AccountCircle,
             onClick = { }
 
-        ), BottomNavigationItem(title = currentPartnership.name,
-            selectedIcon = Icons.Filled.Menu,
-            unselectedIcon = Icons.Outlined.Menu,
+        ),
+        BottomNavigationItem(
+            title = currentPartnership.name,
+            selectedIcon = Icons.Filled.Apartment,
+            unselectedIcon = Icons.Outlined.Apartment,
             onClick = { }
 
         )
@@ -72,20 +77,26 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
         containerColor = MaterialTheme.colorScheme.primary
     ) {
         items.forEachIndexed { index, item ->
-            NavigationBarItem(selected = selectedIcon == index, onClick = {
-                selectedIcon = index
-                if (item.title != currentPartnership.name) {
-                    authViewModel.navigateTo(item.title)
-                }
-            }, label = {
-                Text(text = item.title, color = MaterialTheme.colorScheme.onPrimary)
-            }, alwaysShowLabel = item.title == currentPartnership.name, icon = {
-                Icon(
-                    imageVector = if (selectedIcon == index) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length
-                    contentDescription = item.title, tint = MaterialTheme.colorScheme.onPrimary
+            NavigationBarItem(
+                selected = selectedIcon == index,
+                onClick = {
+                    selectedIcon = index
+                    if (item.title != currentPartnership.name) {
+                        authViewModel.navigateTo(item.title)
+                    }
+                },
+                label = {
+                    Text(text = item.title, color = MaterialTheme.colorScheme.onPrimary)
+                },
+                alwaysShowLabel = item.title == currentPartnership.name,
+                icon = {
+                    Icon(
+                        imageVector = if (selectedIcon == index) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length
+                        contentDescription = item.title,
+                        tint = MaterialTheme.colorScheme.onPrimary
 
-                )
-            }
+                    )
+                }
 
             )
         }
@@ -93,31 +104,36 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
             DropdownMenu(
 //                modifier = Modifier // Set the desired offset here
 // //                    .fillMaxWidth(),
-                expanded = true, onDismissRequest = {
+                expanded = true,
+                onDismissRequest = {
                     // Dismiss the dropdown when clicked outside
                     selectedIcon = -1
-                }, offset = DpOffset(x = 256.dp, y = (-50).dp)
+                },
+                offset = DpOffset(x = 256.dp, y = (-50).dp)
             ) {
                 partnershipList.forEach { partnership ->
-                    DropdownMenuItem(leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Home,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.secondary
-                        )
-                    },
+                    DropdownMenuItem(
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Apartment,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary
+                            )
+                        },
 
                         text = {
                             Text(
                                 text = partnership.name,
                                 style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.secondary,
+                                color = MaterialTheme.colorScheme.secondary
                             )
-                        }, onClick = {
+                        },
+                        onClick = {
                             propertyViewModel.switchPartnership(partnership)
                             authViewModel.navigateTo("Home")
                             selectedIcon = 0
-                        })
+                        }
+                    )
                 }
             }
         }

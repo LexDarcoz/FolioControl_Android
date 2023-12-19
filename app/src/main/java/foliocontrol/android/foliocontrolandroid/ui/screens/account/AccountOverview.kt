@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.List
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Apartment
+import androidx.compose.material.icons.outlined.AccountBox
+import androidx.compose.material.icons.outlined.Apartment
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
@@ -38,12 +38,18 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScre
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 val tabItems = listOf(
-    TabItem("Details", Icons.Outlined.Home, Icons.Filled.Home),
-    TabItem("Partnerships", Icons.Outlined.List, Icons.Filled.List)
+    TabItem("Details", Icons.Outlined.AccountBox, Icons.Filled.AccountBox),
+    TabItem(
+        "Partnerships",
+        Icons.Outlined.Apartment,
+        Icons.Filled.Apartment
+    )
 )
 
 data class TabItem(
-    val title: String, val unselectedIcon: ImageVector, val selectedIcon: ImageVector
+    val title: String,
+    val unselectedIcon: ImageVector,
+    val selectedIcon: ImageVector
 )
 
 @Composable
@@ -75,8 +81,10 @@ fun AccountScreen(
         }
 
         else -> {
-            ErrorScreen(errorMessage = (accountViewModel.uiState as UiState.Error).message,
-                onRetry = { accountViewModel.getData() })
+            ErrorScreen(
+                errorMessage = (accountViewModel.uiState as UiState.Error).message,
+                onRetry = { accountViewModel.getData() }
+            )
         }
     }
 }
@@ -125,16 +133,18 @@ fun AccountOverview(
         }
         HorizontalPager(
             state = pagerState,
-            Modifier
-                .fillMaxWidth()
-                .zIndex(1f)
+            Modifier.fillMaxWidth().zIndex(1f)
         ) { index ->
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 if (index == 0) {
                     AccountDetailScreen(accountViewModel, offline, navigateTo)
-                } else if (index == 1) AccountPartnershipScreen(
-                    accountViewModel, propertyViewModel, navigateTo
-                )
+                } else if (index == 1) {
+                    AccountPartnershipScreen(
+                        accountViewModel,
+                        propertyViewModel,
+                        navigateTo
+                    )
+                }
             }
         }
     }

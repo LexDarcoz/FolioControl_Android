@@ -35,7 +35,7 @@ fun FolioTextField(
                 // Handle done action
             }),
             textStyle = MaterialTheme.typography.bodySmall.copy(
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.onSurface
             ),
             singleLine = true,
             modifier = Modifier
