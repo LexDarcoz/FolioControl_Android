@@ -20,7 +20,7 @@ val md_theme_light_onError = Color(0xFFFFFFFF) // White
 val md_theme_light_onErrorContainer = Color(0xFF410002) // Your original color
 val md_theme_light_background = Color(0xFFFFFFFF) // White
 val md_theme_light_onBackground = Color(0xFF000000) // Black
-val md_theme_light_surface = Color(0xFF78380C) // Light Orange
+val md_theme_light_surface = Color(0xFFF7F7F7) // Light Orange
 val md_theme_light_onSurface = Color(0xFF1A1A1A) // Black
 
 val md_theme_dark_primary = Color(0xFF1A1A1A)

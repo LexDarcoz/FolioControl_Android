@@ -13,7 +13,6 @@ import foliocontrol.android.foliocontrolandroid.data.local.schema.asDomainModel
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.data.repository.PropertyServiceImpl
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
-import foliocontrol.android.foliocontrolandroid.domain.Photo
 import foliocontrol.android.foliocontrolandroid.domain.Premise
 import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
@@ -25,7 +24,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class PropertyViewModel(
-    private val propertyRepo: PropertyDatabase, private val partnershipRepo: PartnershipDatabase
+    private val propertyRepo: PropertyDatabase,
+    private val partnershipRepo: PartnershipDatabase
 ) : ViewModel() {
 
     var uiState: UiState by mutableStateOf(
@@ -33,13 +33,11 @@ class PropertyViewModel(
     )
         private set
 
-
     private val authService = AuthServiceImpl()
     private val propertyService = PropertyServiceImpl()
     var currentPartnership by mutableStateOf(Partnership())
         private set
-    var photo by mutableStateOf(Photo())
-        private set
+
     var propertyDocuments by mutableStateOf(emptyList<PropertyDocument>())
         private set
     var propertyPremises by mutableStateOf(emptyList<Premise>())
@@ -50,9 +48,12 @@ class PropertyViewModel(
     var propertyListState by mutableStateOf(emptyList<Property>())
         private set
 
+    var filteredList by mutableStateOf(emptyList<Property>())
+        private set
     var propertyState by mutableStateOf(Property())
         private set
-    var isDialogOpen by mutableStateOf(false)
+    var isAddPropertyDialogOpen by mutableStateOf(false)
+    var isSearchBarEnabled by mutableStateOf(false)
     var addPropertyState by mutableStateOf(Property())
         private set
 
@@ -92,8 +93,16 @@ class PropertyViewModel(
         }
     }
 
+    fun filterProperties(query: String) {
+        filteredList = propertyListState.filter {
+            it.propertyName.contains(query, ignoreCase = true) ||
+                it.propertyType.contains(query, ignoreCase = true)
+        }
+    }
+
     fun selectProperty(property: Property) {
         propertyState = property
+        Log.i("TEST", "selectProperty: $property")
         propertyDocuments = emptyList()
         propertyPremises = emptyList()
     }
@@ -101,7 +110,8 @@ class PropertyViewModel(
     suspend fun getPropertyListForPartnership() {
         try {
             propertyListState = propertyService.getProperties(
-                getEncryptedPreference("token"), currentPartnership
+                getEncryptedPreference("token"),
+                currentPartnership
             )
             if (propertyListState.isNotEmpty()) {
                 propertyRepo.dropTable(currentPartnership.partnershipID)
@@ -117,9 +127,11 @@ class PropertyViewModel(
     suspend fun getPartnershipListForLoggedInUser() {
         partnershipListState =
             authService.getPartnershipsForLoggedInUser(getEncryptedPreference("token"))
-        partnershipRepo.insertAllPartnerships(partnershipListState.map { it.asPartnershipRoomEntity() })
-
-
+        partnershipRepo.insertAllPartnerships(
+            partnershipListState.map {
+                it.asPartnershipRoomEntity()
+            }
+        )
     }
 
     fun switchPartnership(partnership: Partnership) {
@@ -139,32 +151,32 @@ class PropertyViewModel(
                 getDocumentsForProperty(propertyState)
                 uiState = UiState.Success("Succesfully retrieved data")
             } catch (e: IOException) {
-                //TODO: implement offline data
+                // TODO: implement offline data
                 uiState = UiState.Offline("No network detected")
-
             } catch (e: Exception) {
                 uiState = UiState.Error("Something went very wrong: ${e.message}")
             }
         }
     }
 
-
     suspend fun getPremisesForProperty(property: Property) {
         propertyPremises = propertyService.getPremisesForProperty(
-            getEncryptedPreference("token"), property
+            getEncryptedPreference("token"),
+            property
         )
     }
 
     suspend fun getDocumentsForProperty(property: Property) {
         propertyDocuments = propertyService.getDocumentsForProperty(
-            getEncryptedPreference("token"), property
+            getEncryptedPreference("token"),
+            property
         )
     }
-
 
     fun handlePropertyEdit(
         propertyName: String? = null,
         propertyType: String? = null,
+        propertyImg: String? = null,
         street: String? = null,
         streetNumber: String? = null,
         city: String? = null,
@@ -176,6 +188,9 @@ class PropertyViewModel(
         }
         propertyType?.let {
             propertyState = propertyState.copy(propertyType = it)
+        }
+        propertyImg?.let {
+            propertyState = propertyState.copy(propertyImg = it)
         }
         street?.let {
             propertyState = propertyState.copy(street = it)
@@ -196,9 +211,11 @@ class PropertyViewModel(
 
     fun handlePropertySave() {
         viewModelScope.launch {
+            Log.i("TEST", "Update: $propertyState")
             try {
                 propertyService.savePropertyByPropertyID(
-                    getEncryptedPreference("token"), propertyState
+                    getEncryptedPreference("token"),
+                    propertyState
                 )
             } catch (e: Exception) {
                 println("Error: ${e.message}")
@@ -213,9 +230,9 @@ class PropertyViewModel(
             try {
                 propertyService.deletePropertyByPropertyID(
                     getEncryptedPreference("token"),
-                    propertyId,
+                    propertyId
 
-                    )
+                )
                 getData()
             } catch (e: Exception) {
                 println("Error: ${e.message}")
@@ -223,6 +240,15 @@ class PropertyViewModel(
                 println("Finally")
             }
         }
+    }
+
+    fun togglePropertyAddDialog() {
+        isAddPropertyDialogOpen = !isAddPropertyDialogOpen
+    }
+
+    fun toggleSearchBar() {
+        isSearchBarEnabled = !isSearchBarEnabled
+        filteredList = propertyListState
     }
 
     fun handlePropertyAddEdit(
@@ -263,7 +289,8 @@ class PropertyViewModel(
         viewModelScope.launch {
             try {
                 propertyService.addProperty(
-                    getEncryptedPreference("token"), addPropertyState
+                    getEncryptedPreference("token"),
+                    addPropertyState
                 )
                 getData()
             } catch (e: Exception) {

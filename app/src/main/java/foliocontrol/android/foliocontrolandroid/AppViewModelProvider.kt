@@ -14,10 +14,16 @@ object AppViewModelProvider {
             AuthViewModel()
         }
         initializer {
-            PropertyViewModel(propertyRepo = foliocontrolApplication().container.propertyDatabase, partnershipRepo = foliocontrolApplication().container.partnershipDatabase)
+            PropertyViewModel(
+                propertyRepo = foliocontrolApplication().container.propertyDatabase,
+                partnershipRepo = foliocontrolApplication().container.partnershipDatabase
+            )
         }
         initializer {
-            AccountViewModel(propertyRepo = foliocontrolApplication().container.propertyDatabase, accountRepo = foliocontrolApplication().container.accountDatabase)
+            AccountViewModel(
+                propertyRepo = foliocontrolApplication().container.propertyDatabase,
+                accountRepo = foliocontrolApplication().container.accountDatabase
+            )
         }
     }
 }

@@ -15,8 +15,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-
-
 import foliocontrol.android.foliocontrolandroid.data.remote.common.Constants
 import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.ImageDialog
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
@@ -24,7 +22,7 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 @Composable
 fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean = false) {
     val imageUrl = Constants.PROPERTYPHOTOS_URL
-    val defaultImage = "${imageUrl}/default.avif"
+    val defaultImage = "$imageUrl/default.avif"
     val propertyImg = propertyViewModel.propertyState.propertyImg.ifEmpty { "null" }
 
     val image = when (propertyImg) {
@@ -33,14 +31,10 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+        modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
         ) {
             Text(
                 text = "Property Photos Screen",
@@ -49,13 +43,9 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
             )
         }
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 32.dp)
-                .fillMaxHeight(0.6f)
-                .clickable {
-                    propertyViewModel.isDialogOpen = true
-                },
+            modifier = Modifier.fillMaxWidth().padding(top = 32.dp).fillMaxHeight(0.6f).clickable {
+                propertyViewModel.isAddPropertyDialogOpen = true
+            }
         ) {
             AsyncImage(
                 model = image,
@@ -66,16 +56,14 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
         }
     }
 
-
     when {
-        propertyViewModel.isDialogOpen -> {
+        propertyViewModel.isAddPropertyDialogOpen -> {
             ImageDialog(
                 onDismissRequest = {
-                    propertyViewModel.isDialogOpen = false
+                    propertyViewModel.isAddPropertyDialogOpen = false
                 },
-                imageUrl = image,
+                imageUrl = image
             )
         }
     }
-
 }

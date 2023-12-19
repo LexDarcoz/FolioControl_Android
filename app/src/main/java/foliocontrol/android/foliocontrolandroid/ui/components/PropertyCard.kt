@@ -8,9 +8,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Apartment
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Garage
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.House
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Store
+import androidx.compose.material.icons.filled.Villa
+import androidx.compose.material.icons.filled.Warehouse
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -40,16 +46,16 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 @Composable
 fun PropertyCard(
-    propertyViewModel: PropertyViewModel, property: Property, navigateTo: (Any?) -> Unit = {}
+    propertyViewModel: PropertyViewModel,
+    property: Property,
+    navigateTo: (Any?) -> Unit = {}
 
 ) {
-    val imageUrl = Constants.PROPERTYPHOTOS_URL;
+    val imageUrl = Constants.PROPERTYPHOTOS_URL
     val openDeleteDialog = remember { mutableStateOf(false) }
     when {
         openDeleteDialog.value -> {
             if (propertyViewModel.uiState is UiState.Success) {
-
-
                 DeleteDialog(
                     onDismissRequest = { openDeleteDialog.value = false },
                     onConfirmation = {
@@ -79,11 +85,16 @@ fun PropertyCard(
         }
     }
     val propertyTypesIcons: Map<String, ImageVector> = mapOf(
-        "Type1" to Icons.Default.Home,
-        "Type2" to Icons.Default.Home,
-        "Type3" to Icons.Default.Home,
-        "Type4" to Icons.Default.Home
-        // Add more property types and corresponding icons as needed
+        "Apartment" to Icons.Default.Apartment,
+        "House" to Icons.Default.House,
+        "Garage" to Icons.Default.Garage,
+        "Store" to Icons.Default.Store,
+        "Terraced House" to Icons.Default.Villa,
+        "Semi-detached" to Icons.Default.Home,
+        "Villa" to Icons.Default.Villa,
+        "Storage" to Icons.Default.Warehouse,
+        "Other" to Icons.Default.Info
+
     )
     Card(
         modifier = Modifier.padding(8.dp),
@@ -94,13 +105,11 @@ fun PropertyCard(
         colors = CardDefaults.cardColors(
             contentColor = MaterialTheme.colorScheme.primary,
             containerColor = MaterialTheme.colorScheme.secondary
-        ),
+        )
 
-        ) {
+    ) {
         Box(
-            modifier = Modifier
-                .height(150.dp)
-                .fillMaxSize()
+            modifier = Modifier.height(150.dp).fillMaxSize()
         ) {
             // Load property image here
             if (property.propertyImg == "null") {
@@ -112,23 +121,19 @@ fun PropertyCard(
                 )
             } else {
                 AsyncImage(
-                    model = "${imageUrl}/${property.propertyImg}",
+                    model = "$imageUrl/${property.propertyImg}",
                     contentDescription = "${property.propertyName} image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
             }
 
-
             // Rounded icon
             Icon(
                 imageVector = propertyTypesIcons[property.propertyType] ?: Icons.Default.Home,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier
-                    .size(40.dp)
-                    .align(Alignment.BottomStart)
-                    .padding(8.dp)
+                modifier = Modifier.size(40.dp).align(Alignment.BottomStart).padding(8.dp)
             )
             IconButton(
                 onClick = { openDeleteDialog.value = true },
@@ -142,9 +147,7 @@ fun PropertyCard(
                     imageVector = Icons.Default.Close,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier
-                        .size(40.dp)
-                        .padding(8.dp)
+                    modifier = Modifier.size(40.dp).padding(8.dp)
                 )
             }
         }
@@ -170,9 +173,8 @@ fun PropertyCard(
                     Log.i("TEST", "PropertyCard:selected property: $property")
                     propertyViewModel.selectProperty(property)
                     navigateTo("PropertyDetail")
-                }, modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp)
+                },
+                modifier = Modifier.fillMaxWidth().padding(top = 4.dp)
             ) {
                 Text(text = "View Property")
             }

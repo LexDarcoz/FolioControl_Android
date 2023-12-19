@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+
     <application
         android:name="foliocontrol.android.foliocontrolandroid.FolioControlApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/foliocontrollogo"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/foliocontrollogo"
-        android:supportsRtl="true"
         android:theme="@style/Theme.FolioControl_Android"
-        android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network_security_config"
-        tools:targetApi="31">
+        android:icon="@mipmap/ic_launcher_light"
+        android:roundIcon="@mipmap/ic_launcher_light"
+        android:supportsRtl="true"
+
+        android:usesCleartextTraffic="true"
+        tools:targetApi="34">
 
         <activity
             android:name="foliocontrol.android.foliocontrolandroid.MainActivity"
@@ -28,6 +33,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
     </application>
 
 </manifest>

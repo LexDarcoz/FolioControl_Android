@@ -1,4 +1,4 @@
-package foliocontrol.android.foliocontrolandroid.ui.components
+package foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

@@ -2,14 +2,12 @@ package foliocontrol.android.foliocontrolandroid.screens
 
 import PropertyCard
 import android.annotation.SuppressLint
-import android.util.Log
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.filled.DomainAdd
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -17,12 +15,17 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import foliocontrol.android.foliocontrolandroid.ui.components.InfoDialog
+import foliocontrol.android.foliocontrolandroid.ui.components.MultiFloatingButton
+import foliocontrol.android.foliocontrolandroid.ui.components.SearchBar
 import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.AddPropertyDialog
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
@@ -30,10 +33,24 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScre
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import kotlinx.coroutines.launch
 
+enum class MultiFloatingState {
+    Expanded, Collapsed
+}
+
+class MinFabItem(
+    val icon: ImageVector,
+    val label: String,
+    val identifier: String
+)
+
+enum class Identifier {
+    SearchFab, AddPropertyFab
+}
+
 @Composable
 fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}) {
     DisposableEffect(propertyViewModel.partnershipListState) {
-            propertyViewModel.getData()
+        propertyViewModel.getData()
         onDispose {}
     }
 
@@ -55,8 +72,10 @@ fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit 
         }
 
         else -> {
-            ErrorScreen(errorMessage = (propertyViewModel.uiState as UiState.Error).message,
-                onRetry = { propertyViewModel.getData() })
+            ErrorScreen(
+                errorMessage = (propertyViewModel.uiState as UiState.Error).message,
+                onRetry = { propertyViewModel.getData() }
+            )
         }
     }
 }
@@ -64,80 +83,117 @@ fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun Home(
-    propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}, offline: Boolean = false
+    propertyViewModel: PropertyViewModel,
+    navigateTo: (Any?) -> Unit = {},
+    offline: Boolean = false
 ) {
-    val openAddPropertyDialog = remember { mutableStateOf(false) }
+    var multiFloatingState by remember {
+        mutableStateOf(MultiFloatingState.Collapsed)
+    }
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
     val isLoading = propertyViewModel.uiState == UiState.Loading
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
     val infoDialog = remember { mutableStateOf(offline) }
+
+    // Everything for fab
+    val items = listOf(
+        MinFabItem(
+            icon = Icons.Filled.Search,
+            label = "Search",
+            identifier = Identifier.SearchFab.name
+        ),
+
+        MinFabItem(
+            icon = Icons.Filled.DomainAdd,
+            label = "Add Property",
+            identifier = Identifier.AddPropertyFab.name
+
+        )
+
+    )
+
     when {
-        openAddPropertyDialog.value -> {
-            AddPropertyDialog(onDismissRequest = { openAddPropertyDialog.value = false },
+        propertyViewModel.isAddPropertyDialogOpen -> {
+            AddPropertyDialog(
+                onDismissRequest = { propertyViewModel.togglePropertyAddDialog() },
                 onConfirmation = {
                     propertyViewModel.handlePropertyAdd()
-                    openAddPropertyDialog.value = false
+                    propertyViewModel.togglePropertyAddDialog()
                 },
                 propertyViewModel = propertyViewModel,
                 offline = offline
             )
         }
     }
-
     SwipeRefresh(state = swipeRefreshState, onRefresh = { propertyViewModel.getData() }) {
-        val scope = rememberCoroutineScope()
-        val snackbarHostState = remember { SnackbarHostState() }
-
         scope.launch {
             if (propertyViewModel.uiState is UiState.Offline) {
-                Log.i("TEST", "Home: ${propertyViewModel.uiState} -> Got through")
                 var result = snackbarHostState.showSnackbar(
                     message = (propertyViewModel.uiState as UiState.Offline).message,
                     actionLabel = "Retry",
-                    duration = SnackbarDuration.Indefinite,
+                    duration = SnackbarDuration.Indefinite
                 )
                 if (result == SnackbarResult.ActionPerformed) {
                     propertyViewModel.getData()
                 }
-
             }
         }
 
+        Scaffold(floatingActionButton = {
+            if (!offline) {
+                MultiFloatingButton(
+                    multiFloatingState = multiFloatingState,
+                    onMultiFabStateChange = {
+                        multiFloatingState = it
+                    },
+                    items = items,
+                    toggleAddPropertyDialog = {
+                        propertyViewModel.togglePropertyAddDialog()
+                    },
+                    toggleSearchBar = {
+                        propertyViewModel.toggleSearchBar()
+                    }
+                )
+            }
+        }, snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }) { values ->
+            Column {
+                if (propertyViewModel.isSearchBarEnabled) {
+                    SearchBar(propertyViewModel)
+                    LazyColumn(contentPadding = values) {
+                        items(propertyViewModel.filteredList) { property ->
+                            PropertyCard(
+                                propertyViewModel = propertyViewModel,
+                                property = property,
+                                navigateTo = navigateTo
 
-        Scaffold(
-            floatingActionButton = {
-                if (!offline) {
-                    FloatingActionButton(onClick = { openAddPropertyDialog.value = true }) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.secondary
-                        )
+                            )
+                        }
+                    }
+                } else {
+                    LazyColumn(contentPadding = values) {
+                        items(propertyViewModel.propertyListState) { property ->
+                            PropertyCard(
+                                propertyViewModel = propertyViewModel,
+                                property = property,
+                                navigateTo = navigateTo
+
+                            )
+                        }
                     }
                 }
-            },
-            snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState)
-            },
-        ) { values ->
-
-            LazyColumn(contentPadding = values) {
-                items(propertyViewModel.propertyListState) { property ->
-                    PropertyCard(
-                        propertyViewModel = propertyViewModel,
-                        property = property,
-                        navigateTo = navigateTo
-
-                    )
-                }
             }
-            if (infoDialog.value) {
 
-                InfoDialog(title = "Whoops!",
+            if (infoDialog.value) {
+                InfoDialog(
+                    title = "Whoops!",
                     desc = "No Internet Connection found.\n" + "Check your connection or try again.",
                     onDismiss = {
                         infoDialog.value = false
-                    })
-
+                    }
+                )
             }
         }
     }

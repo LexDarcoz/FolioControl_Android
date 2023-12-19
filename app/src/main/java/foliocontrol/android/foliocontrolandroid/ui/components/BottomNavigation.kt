@@ -1,6 +1,7 @@
 package foliocontrol.android.foliocontrolandroid.components
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Apartment
@@ -20,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -104,6 +106,7 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
             DropdownMenu(
 //                modifier = Modifier // Set the desired offset here
 // //                    .fillMaxWidth(),
+                modifier = Modifier.background(MaterialTheme.colorScheme.surface),
                 expanded = true,
                 onDismissRequest = {
                     // Dismiss the dropdown when clicked outside
@@ -112,28 +115,51 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
                 offset = DpOffset(x = 256.dp, y = (-50).dp)
             ) {
                 partnershipList.forEach { partnership ->
-                    DropdownMenuItem(
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Apartment,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.secondary
-                            )
-                        },
+                    if (partnership.name == currentPartnership.name) {
+                        DropdownMenuItem(
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Filled.Apartment,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            },
 
-                        text = {
-                            Text(
-                                text = partnership.name,
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.secondary
-                            )
-                        },
-                        onClick = {
-                            propertyViewModel.switchPartnership(partnership)
-                            authViewModel.navigateTo("Home")
-                            selectedIcon = 0
-                        }
-                    )
+                            text = {
+                                Text(
+                                    text = partnership.name,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            },
+                            onClick = {
+                                selectedIcon = 0
+                            }
+                        )
+                    } else {
+                        DropdownMenuItem(
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Outlined.Apartment,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            },
+
+                            text = {
+                                Text(
+                                    text = partnership.name,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            },
+                            onClick = {
+                                propertyViewModel.switchPartnership(partnership)
+                                authViewModel.navigateTo("Home")
+                                selectedIcon = 0
+                            }
+                        )
+                    }
                 }
             }
         }
