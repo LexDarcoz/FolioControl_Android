@@ -140,9 +140,7 @@ fun AccountOverview(
                     AccountDetailScreen(accountViewModel, offline, navigateTo)
                 } else if (index == 1) {
                     AccountPartnershipScreen(
-                        accountViewModel,
-                        propertyViewModel,
-                        navigateTo
+                        propertyViewModel
                     )
                 }
             }

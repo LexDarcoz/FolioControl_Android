@@ -113,7 +113,8 @@ fun MultiFloatingButton(
 
                                 Identifier.AddPropertyFab.name -> {
                                     toggleAddPropertyDialog()
-                                    toggleFab()                                }
+                                    toggleFab()
+                                }
                             }
                         },
                         alpha = alpha

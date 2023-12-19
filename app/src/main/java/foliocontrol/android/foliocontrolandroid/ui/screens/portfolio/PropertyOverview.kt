@@ -37,8 +37,8 @@ import androidx.compose.ui.zIndex
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.DialogLoader
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 val tabItemsList = listOf(
@@ -77,7 +77,7 @@ fun PropertyOverviewScreen(propertyViewModel: PropertyViewModel, navigateTo: (An
         }
 
         is UiState.Loading -> {
-            LoadingScreen()
+            Overview(propertyViewModel, navigateTo, loading = true)
         }
 
         else -> {
@@ -95,8 +95,8 @@ fun PropertyOverviewScreen(propertyViewModel: PropertyViewModel, navigateTo: (An
 fun Overview(
     propertyViewModel: PropertyViewModel,
     navigateTo: (Any?) -> Unit = {},
-    offline: Boolean = false
-
+    offline: Boolean = false,
+    loading: Boolean = false
 ) {
     var tabItems = tabItemsList
     if (propertyViewModel.propertyState.propertyType != "Apartment") {
@@ -120,7 +120,12 @@ fun Overview(
             selectedTabIndex = pagerState.currentPage
         }
     }
-
+    when {
+        loading -> {
+            // Loading
+            DialogLoader()
+        }
+    }
     SwipeRefresh(state = swipeRefreshState, onRefresh = { propertyViewModel.getData() }) {
         Column {
             TabRow(

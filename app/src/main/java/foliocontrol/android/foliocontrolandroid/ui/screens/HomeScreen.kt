@@ -28,8 +28,8 @@ import foliocontrol.android.foliocontrolandroid.ui.components.MultiFloatingButto
 import foliocontrol.android.foliocontrolandroid.ui.components.SearchBar
 import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.AddPropertyDialog
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.DialogLoader
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import kotlinx.coroutines.launch
 
@@ -68,7 +68,7 @@ fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit 
         }
 
         is UiState.Loading -> {
-            LoadingScreen()
+            Home(propertyViewModel, navigateTo, loading = true)
         }
 
         else -> {
@@ -85,7 +85,8 @@ fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit 
 fun Home(
     propertyViewModel: PropertyViewModel,
     navigateTo: (Any?) -> Unit = {},
-    offline: Boolean = false
+    offline: Boolean = false,
+    loading: Boolean = false
 ) {
     var multiFloatingState by remember {
         mutableStateOf(MultiFloatingState.Collapsed)
@@ -114,6 +115,11 @@ fun Home(
     )
 
     when {
+        loading -> {
+            // Loading
+            DialogLoader()
+        }
+
         propertyViewModel.isAddPropertyDialogOpen -> {
             AddPropertyDialog(
                 onDismissRequest = { propertyViewModel.togglePropertyAddDialog() },

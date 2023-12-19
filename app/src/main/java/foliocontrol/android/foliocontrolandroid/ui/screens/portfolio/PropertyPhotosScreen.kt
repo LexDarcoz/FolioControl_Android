@@ -37,7 +37,7 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
             modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
         ) {
             Text(
-                text = "Property Photos Screen",
+                text = "Photos Overview",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )

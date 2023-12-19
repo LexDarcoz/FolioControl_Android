@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.domain.Premise
 import foliocontrol.android.foliocontrolandroid.ui.components.OfflineScreen
-import foliocontrol.android.foliocontrolandroid.ui.components.PremiseItem
+import foliocontrol.android.foliocontrolandroid.ui.components.PremiseCard
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.EmptyListScreen
 
@@ -30,7 +30,7 @@ fun PremisesListScreen(propertyViewModel: PropertyViewModel, offline: Boolean = 
             modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
         ) {
             Text(
-                text = "Property Photos Screen",
+                text = "Premises Overview",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -60,7 +60,7 @@ fun PremisesList(propertyPremises: List<Premise>) {
 
     ) {
         items(propertyPremises) { premise ->
-            PremiseItem(premise)
+            PremiseCard(premise)
         }
     }
 }
