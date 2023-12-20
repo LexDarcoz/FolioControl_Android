@@ -1,5 +1,6 @@
 package foliocontrol.android.foliocontrolandroid.ui.components.dialogs
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apartment
 import androidx.compose.material.icons.filled.Check
@@ -37,6 +36,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -108,156 +109,173 @@ fun AddPropertyDialog(
             dismissOnClickOutside = true,
             usePlatformDefaultWidth = false
         )
+
     ) {
         var expanded by remember { mutableStateOf(false) }
-
-        if (!offline) {
-            Column(
-                modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState())
-            ) {
-                Surface(
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    contentColor = MaterialTheme.colorScheme.primary,
-                    shape = MaterialTheme.shapes.large,
-                    modifier = Modifier.fillMaxWidth().clip(MaterialTheme.shapes.medium)
-                        .padding(16.dp)
+        Box(
+            modifier = Modifier.fillMaxSize().background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black.copy(alpha = 0.75f),
+                        Color.Black.copy(alpha = 0.75f)
+                    )
+                )
+            ),
+            contentAlignment = Alignment.Center
+        ) {
+            if (!offline) {
+                Column(
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize().padding(16.dp)
+                    Surface(
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        contentColor = MaterialTheme.colorScheme.primary,
+                        shape = MaterialTheme.shapes.large,
+                        modifier = Modifier.fillMaxWidth().clip(MaterialTheme.shapes.medium)
+                            .padding(16.dp).height(500.dp)
                     ) {
-                        Row {
-                            Icon(
-                                imageVector = Icons.Filled.DomainAdd,
-                                contentDescription = "Adding Property"
-                            )
-                            Text(
-                                text = "Adding Property",
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    fontWeight = FontWeight.Bold
-                                ),
-                                modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)
-                            )
-                        }
-
-                        FolioTextField(
-                            true,
-                            "Name",
-                            propertyViewModel.addPropertyState.propertyName
+                        Column(
+                            modifier = Modifier.fillMaxSize().padding(16.dp)
                         ) {
-                            propertyViewModel.handlePropertyAddEdit(
-                                propertyName = it
-                            )
-                        }
-                        FolioDropdown(
-                            expanded = expanded,
-                            toggleExpanded = { expanded = !expanded },
-                            items = items,
-                            label = "Type",
-                            onItemSelect = { selectedItem ->
-                                propertyViewModel.handlePropertyAddEdit(propertyType = selectedItem)
-                            }
-                        )
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Box(modifier = Modifier.weight(1f)) {
-                                FolioTextField(
-                                    true,
-                                    "Street",
-                                    propertyViewModel.addPropertyState.street
-                                ) {
-                                    propertyViewModel.handlePropertyAddEdit(street = it)
-                                }
+                            Row {
+                                Icon(
+                                    imageVector = Icons.Filled.DomainAdd,
+                                    contentDescription = "Adding Property"
+                                )
+                                Text(
+                                    text = "Adding Property",
+                                    style = MaterialTheme.typography.titleMedium.copy(
+                                        fontWeight = FontWeight.Bold
+                                    ),
+                                    modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)
+                                )
                             }
 
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Box(modifier = Modifier.weight(1f)) {
-                                FolioTextField(
-                                    true,
-                                    "Street Number",
-                                    propertyViewModel.addPropertyState.streetNumber
-
-                                ) {
-                                    propertyViewModel.handlePropertyAddEdit(streetNumber = it)
-                                }
+                            FolioTextField(
+                                true,
+                                "Name",
+                                propertyViewModel.addPropertyState.propertyName
+                            ) {
+                                propertyViewModel.handlePropertyAddEdit(
+                                    propertyName = it
+                                )
                             }
-                        }
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Box(modifier = Modifier.weight(1f)) {
-                                FolioTextField(
-                                    true,
-                                    "Zip Code",
-                                    propertyViewModel.addPropertyState.zipCode
-                                ) {
+                            FolioDropdown(
+                                expanded = expanded,
+                                toggleExpanded = { expanded = !expanded },
+                                items = items,
+                                label = "Type",
+                                onItemSelect = { selectedItem ->
                                     propertyViewModel.handlePropertyAddEdit(
-                                        zipCode = it
+                                        propertyType = selectedItem
                                     )
                                 }
-                            }
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Box(modifier = Modifier.weight(1f)) {
-                                FolioTextField(
-                                    true,
-                                    "City",
-                                    propertyViewModel.addPropertyState.city
-                                ) {
-                                    propertyViewModel.handlePropertyAddEdit(city = it)
+                            )
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Box(modifier = Modifier.weight(1f)) {
+                                    FolioTextField(
+                                        true,
+                                        "Street",
+                                        propertyViewModel.addPropertyState.street
+                                    ) {
+                                        propertyViewModel.handlePropertyAddEdit(street = it)
+                                    }
+                                }
+
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Box(modifier = Modifier.weight(1f)) {
+                                    FolioTextField(
+                                        true,
+                                        "Street Number",
+                                        propertyViewModel.addPropertyState.streetNumber
+
+                                    ) {
+                                        propertyViewModel.handlePropertyAddEdit(streetNumber = it)
+                                    }
                                 }
                             }
-                        }
 
-                        FolioTextField(
-                            true,
-                            "Country",
-                            propertyViewModel.addPropertyState.country
-                        ) {
-                            propertyViewModel.handlePropertyAddEdit(
-                                country = it
-                            )
-                        }
-                        Spacer(modifier = Modifier.weight(1f))
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
-                        ) {
-                            Button(
-                                onClick = { onDismissRequest() },
-                                modifier = Modifier.fillMaxWidth().height(48.dp).weight(1f)
-                                    .padding(end = 8.dp)
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = "Close"
-                                )
+                                Box(modifier = Modifier.weight(1f)) {
+                                    FolioTextField(
+                                        true,
+                                        "Zip Code",
+                                        propertyViewModel.addPropertyState.zipCode
+                                    ) {
+                                        propertyViewModel.handlePropertyAddEdit(
+                                            zipCode = it
+                                        )
+                                    }
+                                }
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text(text = "Dismiss")
+                                Box(modifier = Modifier.weight(1f)) {
+                                    FolioTextField(
+                                        true,
+                                        "City",
+                                        propertyViewModel.addPropertyState.city
+                                    ) {
+                                        propertyViewModel.handlePropertyAddEdit(city = it)
+                                    }
+                                }
                             }
-                            Button(
-                                onClick = {
-                                    onConfirmation()
-                                },
-                                modifier = Modifier.fillMaxWidth().height(48.dp).weight(1f)
-                                    .padding(start = 8.dp)
+
+                            FolioTextField(
+                                true,
+                                "Country",
+                                propertyViewModel.addPropertyState.country
                             ) {
-                                Icon(imageVector = Icons.Default.Check, contentDescription = "Save")
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(text = "Save")
+                                propertyViewModel.handlePropertyAddEdit(
+                                    country = it
+                                )
+                            }
+                            Spacer(modifier = Modifier.weight(1f))
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
+                            ) {
+                                Button(
+                                    onClick = { onDismissRequest() },
+                                    modifier = Modifier.fillMaxWidth().height(48.dp).weight(1f)
+                                        .padding(end = 8.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Close"
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(text = "Dismiss")
+                                }
+                                Button(
+                                    onClick = {
+                                        onConfirmation()
+                                    },
+                                    modifier = Modifier.fillMaxWidth().height(48.dp).weight(1f)
+                                        .padding(start = 8.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Check,
+                                        contentDescription = "Save"
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(text = "Save")
+                                }
                             }
                         }
                     }
                 }
-            }
-        } else {
-            // You must be online to add a property to your portfolio, make such screen
-            Card {
-                Text(text = "You must be online to add a property to your portfolio")
-                Button(onClick = { propertyViewModel.getData() }) {
-                    Text(text = "Retry Getting Data")
+            } else {
+                // You must be online to add a property to your portfolio, make such screen
+                Card {
+                    Text(text = "You must be online to add a property to your portfolio")
+                    Button(onClick = { propertyViewModel.getData() }) {
+                        Text(text = "Retry Getting Data")
+                    }
                 }
             }
         }

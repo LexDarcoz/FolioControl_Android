@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import foliocontrol.android.foliocontrolandroid.data.document.AndroidDownloader
 import foliocontrol.android.foliocontrolandroid.data.local.database.PartnershipDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.database.PropertyDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreference
@@ -25,7 +26,8 @@ import kotlinx.coroutines.launch
 
 class PropertyViewModel(
     private val propertyRepo: PropertyDatabase,
-    private val partnershipRepo: PartnershipDatabase
+    private val partnershipRepo: PartnershipDatabase,
+    private val downloader: AndroidDownloader
 ) : ViewModel() {
 
     var uiState: UiState by mutableStateOf(
@@ -132,6 +134,10 @@ class PropertyViewModel(
                 it.asPartnershipRoomEntity()
             }
         )
+    }
+
+    fun downloadFile(url: String): Long {
+        return downloader.downloadFile(url)
     }
 
     fun switchPartnership(partnership: Partnership) {

@@ -1,4 +1,4 @@
-package foliocontrol.android.foliocontrolandroid.ui.components.cards
+package foliocontrol.android.foliocontrolandroid.ui.components.card
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -14,8 +14,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,16 +26,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import foliocontrol.android.foliocontrolandroid.data.remote.common.Constants.PROPERTYDOCUMENTS_URL
 import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 @Composable
-fun DocumentCard(document: PropertyDocument) {
-    // Customize this function to display each document item with icons and relevant information
-    // You can use icons from the Material Icons library or any other icon source
+fun DocumentCard(document: PropertyDocument, propertyViewModel: PropertyViewModel) {
+    val documentUrl = PROPERTYDOCUMENTS_URL + document.documentName
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Card(
         modifier = Modifier.padding(8.dp).clickable {
-            // TODO: Handle the click event for a specific document
+            propertyViewModel.downloadFile(
+                "$PROPERTYDOCUMENTS_URL/${document.documentName}"
+            ) > 0
         },
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
@@ -61,7 +69,7 @@ fun DocumentCard(document: PropertyDocument) {
 
                 // Display document information
                 Text(
-                    text = document.documentName,
+                    text = document.name,
                     maxLines = 2,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,

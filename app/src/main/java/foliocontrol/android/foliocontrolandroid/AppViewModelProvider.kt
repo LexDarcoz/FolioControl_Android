@@ -16,7 +16,8 @@ object AppViewModelProvider {
         initializer {
             PropertyViewModel(
                 propertyRepo = foliocontrolApplication().container.propertyDatabase,
-                partnershipRepo = foliocontrolApplication().container.partnershipDatabase
+                partnershipRepo = foliocontrolApplication().container.partnershipDatabase,
+                downloader = foliocontrolApplication().downloader
             )
         }
         initializer {

@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
 import foliocontrol.android.foliocontrolandroid.ui.components.OfflineScreen
-import foliocontrol.android.foliocontrolandroid.ui.components.cards.DocumentCard
+import foliocontrol.android.foliocontrolandroid.ui.components.card.DocumentCard
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.EmptyListScreen
 
@@ -41,21 +41,19 @@ fun PropertyDocumentsScreen(propertyViewModel: PropertyViewModel, offline: Boole
                 "No documents available."
             )
 
-            else -> PropertyList(propertyViewModel.propertyDocuments)
+            else -> PropertyList(propertyViewModel.propertyDocuments, propertyViewModel)
         }
     }
 }
 
 @Composable
-fun PropertyList(propertyDocuments: List<PropertyDocument>) {
+fun PropertyList(propertyDocuments: List<PropertyDocument>, propertyViewModel: PropertyViewModel) {
     Box(
-        modifier = Modifier.fillMaxWidth().padding(top = 32.dp).fillMaxHeight().clickable {
-            // TODO: Handle the click event (e.g., download documents from the server)
-        }
+        modifier = Modifier.fillMaxWidth().padding(top = 32.dp).fillMaxHeight()
     ) {
         LazyColumn {
             items(propertyDocuments) { document ->
-                DocumentCard(document)
+                DocumentCard(document, propertyViewModel)
             }
         }
     }

@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.domain.Premise
 import foliocontrol.android.foliocontrolandroid.ui.components.OfflineScreen
-import foliocontrol.android.foliocontrolandroid.ui.components.cards.PremiseCard
+import foliocontrol.android.foliocontrolandroid.ui.components.card.PremiseCard
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.EmptyListScreen
 

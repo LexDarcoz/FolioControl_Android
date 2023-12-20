@@ -1,4 +1,4 @@
-package foliocontrol.android.foliocontrolandroid.ui.components.cards
+package foliocontrol.android.foliocontrolandroid.ui.components.card
 
 import android.util.Log
 import androidx.compose.foundation.Image
