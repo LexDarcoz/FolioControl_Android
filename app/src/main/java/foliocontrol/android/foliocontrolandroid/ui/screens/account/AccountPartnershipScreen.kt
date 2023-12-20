@@ -20,13 +20,13 @@ fun AccountPartnershipScreen(
 ) {
     val partnerships = propertyViewModel.partnershipListState
     Box(
-        modifier = Modifier.fillMaxSize().padding(8.dp)
+        modifier = Modifier.fillMaxSize()
     ) {
         Column {
             Text(
                 text = "Partnerships Overview",
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 16.dp)
+                modifier = Modifier.padding(bottom = 8.dp, top = 8.dp, start = 8.dp)
             )
 
             LazyColumn {

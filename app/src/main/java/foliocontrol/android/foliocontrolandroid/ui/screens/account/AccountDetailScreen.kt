@@ -32,13 +32,13 @@ fun AccountDetailScreen(
     navigateTo: (Any?) -> Unit = {}
 ) {
     Box(
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+        modifier = Modifier.fillMaxSize()
     ) {
         Column {
             Text(
                 text = "Account details",
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 8.dp, top = 8.dp, start = 8.dp)
             )
 
             Column(
