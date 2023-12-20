@@ -36,8 +36,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import foliocontrol.android.foliocontrol_android.R
 import foliocontrol.android.foliocontrolandroid.data.remote.common.Constants
 import foliocontrol.android.foliocontrolandroid.domain.Property
@@ -45,6 +46,7 @@ import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.DeleteDial
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun PropertyCard(
     propertyViewModel: PropertyViewModel,
@@ -121,7 +123,7 @@ fun PropertyCard(
                     modifier = Modifier.fillMaxSize()
                 )
             } else {
-                AsyncImage(
+                GlideImage(
                     model = "$imageUrl/${property.propertyImg}",
                     contentDescription = "${property.propertyName} image",
                     contentScale = ContentScale.Crop,

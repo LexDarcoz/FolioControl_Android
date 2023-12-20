@@ -28,7 +28,7 @@ import foliocontrol.android.foliocontrol_android.R
 fun EmptyListScreen(text: String = "No data available.") {
     // Customize this composable to show the screen when premises list is empty
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.8f).padding(top = 32.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -44,18 +44,14 @@ fun ErrorScreen(
     onRetry: () -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             painter = rememberAsyncImagePainter(model = R.drawable.errorimg),
             contentDescription = null,
-            Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.4f)
+            Modifier.fillMaxWidth().fillMaxHeight(0.4f)
         )
 
         Text(
@@ -69,10 +65,7 @@ fun ErrorScreen(
 
         Button(
             onClick = onRetry,
-            modifier = Modifier
-                .padding(8.dp)
-                .height(48.dp)
-                .fillMaxWidth(),
+            modifier = Modifier.padding(8.dp).height(48.dp).fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.errorContainer,
                 contentColor = MaterialTheme.colorScheme.error

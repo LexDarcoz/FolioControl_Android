@@ -104,7 +104,6 @@ class PropertyViewModel(
 
     fun selectProperty(property: Property) {
         propertyState = property
-        Log.i("TEST", "selectProperty: $property")
         propertyDocuments = emptyList()
         propertyPremises = emptyList()
     }

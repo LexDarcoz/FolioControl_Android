@@ -9,16 +9,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.FileCopy
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,10 +29,6 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 @Composable
 fun DocumentCard(document: PropertyDocument, propertyViewModel: PropertyViewModel) {
-    val documentUrl = PROPERTYDOCUMENTS_URL + document.documentName
-    val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
-
     Card(
         modifier = Modifier.padding(8.dp).clickable {
             propertyViewModel.downloadFile(
@@ -58,16 +51,14 @@ fun DocumentCard(document: PropertyDocument, propertyViewModel: PropertyViewMode
                 modifier = Modifier.fillMaxWidth().padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Add your icon here, for example:
                 Icon(
-                    imageVector = Icons.Default.DateRange,
+                    imageVector = Icons.Default.FileCopy,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                // Display document information
                 Text(
                     text = document.name,
                     maxLines = 2,
@@ -79,7 +70,6 @@ fun DocumentCard(document: PropertyDocument, propertyViewModel: PropertyViewMode
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Additional document information
             Text(
                 text = "Type: ${document.documentType}",
                 color = Color.Gray,

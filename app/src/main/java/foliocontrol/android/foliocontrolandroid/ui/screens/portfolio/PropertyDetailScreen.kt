@@ -27,12 +27,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import foliocontrol.android.foliocontrolandroid.data.remote.common.Constants
 import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.items
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioDropdown
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioTextField
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun PropertyDetailScreen(
     propertyViewModel: PropertyViewModel,
@@ -55,7 +58,7 @@ fun PropertyDetailScreen(
                     modifier = Modifier.fillMaxWidth().fillMaxHeight(0.3f)
                 )
             } else {
-                AsyncImage(
+                GlideImage(
                     model = "$imageUrl/${propertyViewModel.propertyState.propertyImg}",
                     contentDescription = "${propertyViewModel.propertyState.propertyName} image",
                     contentScale = ContentScale.Crop,
@@ -68,7 +71,7 @@ fun PropertyDetailScreen(
                 contentColor = MaterialTheme.colorScheme.primary,
                 shape = MaterialTheme.shapes.medium,
                 shadowElevation = 4.dp,
-                modifier = Modifier.fillMaxWidth().padding(16.dp)
+                modifier = Modifier.fillMaxSize().padding(16.dp)
 
             ) {
                 var expanded by remember { mutableStateOf(false) }

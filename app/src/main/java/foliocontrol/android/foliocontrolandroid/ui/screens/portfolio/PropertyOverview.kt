@@ -6,7 +6,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
@@ -126,7 +125,10 @@ fun Overview(
             DialogLoader()
         }
     }
-    SwipeRefresh(state = swipeRefreshState, onRefresh = { propertyViewModel.getData() }) {
+    SwipeRefresh(state = swipeRefreshState, onRefresh = {
+        propertyViewModel.getData()
+        propertyViewModel.getDataForActiveProperty()
+    }) {
         Column {
             TabRow(
                 selectedTabIndex = selectedTabIndex,
@@ -150,7 +152,7 @@ fun Overview(
             }
             HorizontalPager(
                 state = pagerState,
-                Modifier.fillMaxWidth().zIndex(1f)
+                Modifier.fillMaxSize().zIndex(1f)
             ) { index ->
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     if (index == 0) {

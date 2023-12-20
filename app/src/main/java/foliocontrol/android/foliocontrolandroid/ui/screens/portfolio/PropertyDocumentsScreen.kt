@@ -1,14 +1,19 @@
 package foliocontrol.android.foliocontrolandroid.ui.screens.portfolio
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FileUpload
+import androidx.compose.material.icons.filled.WifiOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,21 +32,49 @@ fun PropertyDocumentsScreen(propertyViewModel: PropertyViewModel, offline: Boole
         modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+            modifier = Modifier.fillMaxSize()
         ) {
             Text(
                 text = "Documents Overview",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
-        }
-        when {
-            offline -> OfflineScreen()
-            propertyViewModel.propertyDocuments.isEmpty() -> EmptyListScreen(
-                "No documents available."
-            )
 
-            else -> PropertyList(propertyViewModel.propertyDocuments, propertyViewModel)
+            when {
+                offline -> OfflineScreen()
+                propertyViewModel.propertyDocuments.isEmpty() -> EmptyListScreen(
+                    "No documents available."
+                )
+
+                else -> PropertyList(propertyViewModel.propertyDocuments, propertyViewModel)
+            }
+            Button(
+                enabled = !offline,
+                onClick = {
+                    // TODO
+                },
+                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
+            ) {
+                if (offline) {
+                    Row {
+                        Icon(
+                            Icons.Default.WifiOff,
+                            contentDescription = null,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                        Text(text = "Offline preview")
+                    }
+                } else {
+                    Row {
+                        Icon(
+                            Icons.Default.FileUpload,
+                            contentDescription = null,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                        Text(text = "Upload document ")
+                    }
+                }
+            }
         }
     }
 }
@@ -49,7 +82,7 @@ fun PropertyDocumentsScreen(propertyViewModel: PropertyViewModel, offline: Boole
 @Composable
 fun PropertyList(propertyDocuments: List<PropertyDocument>, propertyViewModel: PropertyViewModel) {
     Box(
-        modifier = Modifier.fillMaxWidth().padding(top = 32.dp).fillMaxHeight()
+        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.8f).padding(top = 32.dp)
     ) {
         LazyColumn {
             items(propertyDocuments) { document ->

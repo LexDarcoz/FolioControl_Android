@@ -1,14 +1,19 @@
 package foliocontrol.android.foliocontrolandroid.ui.screens.portfolio
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddHomeWork
+import androidx.compose.material.icons.filled.FileUpload
+import androidx.compose.material.icons.filled.WifiOff
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,23 +29,19 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.EmptyListSc
 @Composable
 fun PremisesListScreen(propertyViewModel: PropertyViewModel, offline: Boolean = false) {
     Box(
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+            modifier = Modifier.fillMaxSize()
         ) {
             Text(
                 text = "Premises Overview",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
-        }
-        Box(
-            modifier = Modifier.fillMaxSize().padding(top = 32.dp).fillMaxHeight().clickable {
-                // TODO: Handle the click event
-            }
 
-        ) {
             when {
                 offline -> OfflineScreen()
                 propertyViewModel.propertyPremises.isEmpty() -> EmptyListScreen(
@@ -48,6 +49,35 @@ fun PremisesListScreen(propertyViewModel: PropertyViewModel, offline: Boolean = 
                 )
 
                 else -> PremisesList(propertyViewModel.propertyPremises)
+            }
+            Button(
+                enabled = offline,
+                onClick = {
+                    // TODO
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp)
+            ) {
+                if (offline) {
+                    Row {
+                        Icon(
+                            Icons.Default.WifiOff,
+                            contentDescription = null,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                        Text(text = "Offline preview")
+                    }
+                } else {
+                    Row {
+                        Icon(
+                            Icons.Default.AddHomeWork,
+                            contentDescription = null,
+                            modifier = Modifier.padding(end = 8.dp)
+                        )
+                        Text(text = "Add premise")
+                    }
+                }
             }
         }
     }
