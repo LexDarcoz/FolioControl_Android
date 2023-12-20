@@ -1,12 +1,16 @@
-package foliocontrol.android.foliocontrolandroid.ui.components
+package foliocontrol.android.foliocontrolandroid.ui.components.cards
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Apartment
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,13 +34,22 @@ fun PartnershipCard(partnership: Partnership) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(16.dp)
         ) {
-            Text(
-                text = partnership.name,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
+            Row {
+                Icon(
+                    imageVector = Icons.Default.Apartment,
+                    contentDescription = "Partnerships",
+                    Modifier.padding(end = 8.dp)
+                )
+                Text(
+                    text = partnership.name,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
 
-            )
+                )
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
+
             Text(
                 text = "Country: ${partnership.country}",
                 color = MaterialTheme.colorScheme.onSurface
@@ -48,6 +61,10 @@ fun PartnershipCard(partnership: Partnership) {
             )
             Text(
                 text = "ZIP Code: ${partnership.zipCode}",
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = "VAT: ${partnership.vatNumber}",
                 color = MaterialTheme.colorScheme.onSurface
             )
         }

@@ -1,4 +1,4 @@
-package foliocontrol.android.foliocontrolandroid.ui.components
+package foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,7 +33,7 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 fun SearchBar(propertyViewModel: PropertyViewModel) {
     var query by remember { mutableStateOf("") }
 
-    val searchBarBackgroundColor = MaterialTheme.colorScheme.secondary
+    val searchBarBackgroundColor = MaterialTheme.colorScheme.background
     val contentColor = MaterialTheme.colorScheme.onSurface
     val borderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
     val borderWidth = 2.dp

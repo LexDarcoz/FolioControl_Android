@@ -1,4 +1,4 @@
-package foliocontrol.android.foliocontrolandroid.ui.components
+package foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateFloat

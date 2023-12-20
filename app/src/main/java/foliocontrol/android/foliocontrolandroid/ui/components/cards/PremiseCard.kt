@@ -1,4 +1,4 @@
-package foliocontrol.android.foliocontrolandroid.ui.components
+package foliocontrol.android.foliocontrolandroid.ui.components.cards
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

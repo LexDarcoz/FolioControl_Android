@@ -138,7 +138,7 @@ fun Overview(
                     }, text = {
                         Text(text = item.title, color = MaterialTheme.colorScheme.primary)
                     }, icon = {
-                        (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary)?.let {
+                        (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary)?.let { // ktlint-disable max-line-length
                             Icon(
                                 tint = it,
                                 imageVector = if (selectedTabIndex == index) item.selectedIcon else item.unselectedIcon,

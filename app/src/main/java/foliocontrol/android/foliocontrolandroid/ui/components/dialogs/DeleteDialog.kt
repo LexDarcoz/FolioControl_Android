@@ -13,45 +13,34 @@ fun DeleteDialog(
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
     dialogTitle: String,
-    confirmText : String,
-    dismissText : String,
+    confirmText: String,
+    dismissText: String,
     dialogText: String,
     icon: ImageVector
 ) {
-    AlertDialog(
-        icon = {
-            Icon(
-                icon,
-                contentDescription = "Example Icon",
-                tint = MaterialTheme.colorScheme.error
-            )
-        },
-        title = {
-            Text(text = dialogTitle, color = MaterialTheme.colorScheme.secondary)
-        },
-        text = {
-            Text(text = dialogText, color = MaterialTheme.colorScheme.secondary)
-        },
-        onDismissRequest = {
-            onDismissRequest()
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onConfirmation()
-                }
-            ) {
-                Text(confirmText, color = MaterialTheme.colorScheme.secondary)
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = {
-                    onDismissRequest()
-                }
-            ) {
-                Text(dismissText, color = MaterialTheme.colorScheme.secondary)
-            }
+    AlertDialog(containerColor = MaterialTheme.colorScheme.primary, icon = {
+        Icon(
+            icon,
+            contentDescription = "Error Icon",
+            tint = MaterialTheme.colorScheme.error
+        )
+    }, title = {
+        Text(text = dialogTitle, color = MaterialTheme.colorScheme.secondary)
+    }, text = {
+        Text(text = dialogText, color = MaterialTheme.colorScheme.secondary)
+    }, onDismissRequest = {
+        onDismissRequest()
+    }, confirmButton = {
+        TextButton(onClick = {
+            onConfirmation()
+        }) {
+            Text(confirmText, color = MaterialTheme.colorScheme.secondary)
         }
-    )
+    }, dismissButton = {
+        TextButton(onClick = {
+            onDismissRequest()
+        }) {
+            Text(dismissText, color = MaterialTheme.colorScheme.secondary)
+        }
+    })
 }

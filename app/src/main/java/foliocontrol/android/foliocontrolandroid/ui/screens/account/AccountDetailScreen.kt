@@ -14,34 +14,41 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioTextField
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
 
 @Composable
-fun AccountDetailScreen(accountViewModel: AccountViewModel, offline:Boolean,navigateTo: (Any?) -> Unit = {}) {
+fun AccountDetailScreen(
+    accountViewModel: AccountViewModel,
+    offline: Boolean,
+    navigateTo: (Any?) -> Unit = {}
+) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
+        Column {
+            Text(
+                text = "Account Details",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
         ) {
             Surface(
                 color = MaterialTheme.colorScheme.secondary,
                 contentColor = MaterialTheme.colorScheme.primary,
                 shape = MaterialTheme.shapes.small,
                 shadowElevation = 4.dp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
+                modifier = Modifier.fillMaxWidth().padding(16.dp)
 
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
+                    modifier = Modifier.fillMaxSize().padding(16.dp)
                 ) {
                     FolioTextField(!offline, "Name", accountViewModel.user.name) {
                         accountViewModel.handleUserEdit(
@@ -77,12 +84,12 @@ fun AccountDetailScreen(accountViewModel: AccountViewModel, offline:Boolean,navi
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     Button(
-                        enabled = !offline, onClick = {
+                        enabled = !offline,
+                        onClick = {
                             accountViewModel.handleUserSave()
                             navigateTo("Home")
-                        }, modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp)
+                        },
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
                     ) {
                         if (offline) {
                             Text(text = "Offline preview")
