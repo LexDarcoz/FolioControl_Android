@@ -10,7 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.filled.WifiOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -122,9 +126,23 @@ fun AccountDetailScreen(
                             modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
                         ) {
                             if (offline) {
-                                Text(text = "Offline preview")
+                                Row {
+                                    Icon(
+                                        Icons.Default.WifiOff,
+                                        contentDescription = null,
+                                        modifier = Modifier.padding(end = 8.dp)
+                                    )
+                                    Text(text = "Offline preview")
+                                }
                             } else {
-                                Text(text = "Save")
+                                Row {
+                                    Icon(
+                                        Icons.Default.Save,
+                                        contentDescription = null,
+                                        modifier = Modifier.padding(end = 8.dp)
+                                    )
+                                    Text(text = "Save")
+                                }
                             }
                         }
                     }
