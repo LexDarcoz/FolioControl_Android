@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -17,11 +18,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import foliocontrol.android.foliocontrolandroid.data.remote.common.Constants
+import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.items
+import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioDropdown
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioTextField
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
@@ -63,6 +71,7 @@ fun PropertyDetailScreen(
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
 
             ) {
+                var expanded by remember { mutableStateOf(false) }
                 Column(
                     modifier = Modifier.fillMaxSize().padding(16.dp)
                 ) {
@@ -76,32 +85,61 @@ fun PropertyDetailScreen(
                             propertyName = it
                         )
                     }
-                    FolioTextField(!offline, "Type", propertyViewModel.propertyState.propertyType) {
-                        propertyViewModel.handlePropertyEdit(
-                            propertyType = it
-                        )
-                    }
-                    FolioTextField(!offline, "Street", propertyViewModel.propertyState.street) {
-                        propertyViewModel.handlePropertyEdit(street = it)
-                    }
-                    FolioTextField(
-                        !offline,
-                        "Street Number",
-                        propertyViewModel.propertyState.streetNumber
+                    FolioDropdown(
+                        expanded = expanded,
+                        toggleExpanded = { expanded = !expanded },
+                        items = items,
+                        label = "Type",
+                        onItemSelect = { selectedItem ->
+                            propertyViewModel.handlePropertyEdit(propertyType = selectedItem)
+                        },
+                        initialValue = propertyViewModel.propertyState.propertyType
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        propertyViewModel.handlePropertyEdit(streetNumber = it)
+                        Box(modifier = Modifier.weight(1f)) {
+                            FolioTextField(
+                                !offline,
+                                "Street",
+                                propertyViewModel.propertyState.street
+                            ) {
+                                propertyViewModel.handlePropertyEdit(street = it)
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Box(modifier = Modifier.weight(1f)) {
+                            FolioTextField(
+                                !offline,
+                                "Street Number",
+                                propertyViewModel.propertyState.streetNumber
+                            ) {
+                                propertyViewModel.handlePropertyEdit(streetNumber = it)
+                            }
+                        }
                     }
-                    FolioTextField(
-                        !offline,
-                        "Zip Code",
-                        propertyViewModel.propertyState.zipCode
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        propertyViewModel.handlePropertyEdit(
-                            zipCode = it
-                        )
-                    }
-                    FolioTextField(!offline, "City", propertyViewModel.propertyState.city) {
-                        propertyViewModel.handlePropertyEdit(city = it)
+                        Box(modifier = Modifier.weight(1f)) {
+                            FolioTextField(
+                                !offline,
+                                "Zip Code",
+                                propertyViewModel.propertyState.zipCode
+                            ) {
+                                propertyViewModel.handlePropertyEdit(
+                                    zipCode = it
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Box(modifier = Modifier.weight(1f)) {
+                            FolioTextField(!offline, "City", propertyViewModel.propertyState.city) {
+                                propertyViewModel.handlePropertyEdit(city = it)
+                            }
+                        }
                     }
                     FolioTextField(!offline, "Country", propertyViewModel.propertyState.country) {
                         propertyViewModel.handlePropertyEdit(

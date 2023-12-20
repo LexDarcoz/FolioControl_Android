@@ -1,13 +1,21 @@
 package foliocontrol.android.foliocontrolandroid.ui.components.dialogs
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddBox
 import androidx.compose.material.icons.filled.Apartment
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DomainAdd
 import androidx.compose.material.icons.filled.Garage
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.House
@@ -26,6 +34,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
@@ -93,7 +102,6 @@ fun AddPropertyDialog(
     offline: Boolean = false
 ) {
     Dialog(
-
         onDismissRequest = { onDismissRequest() },
         properties = DialogProperties(
             dismissOnBackPress = true,
@@ -119,7 +127,7 @@ fun AddPropertyDialog(
                     ) {
                         Row {
                             Icon(
-                                imageVector = Icons.Filled.AddBox,
+                                imageVector = Icons.Filled.DomainAdd,
                                 contentDescription = "Adding Property"
                             )
                             Text(
@@ -130,6 +138,7 @@ fun AddPropertyDialog(
                                 modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)
                             )
                         }
+
                         FolioTextField(
                             true,
                             "Name",
@@ -148,29 +157,61 @@ fun AddPropertyDialog(
                                 propertyViewModel.handlePropertyAddEdit(propertyType = selectedItem)
                             }
                         )
-//
-                        FolioTextField(true, "Street", propertyViewModel.addPropertyState.street) {
-                            propertyViewModel.handlePropertyAddEdit(street = it)
-                        }
-                        FolioTextField(
-                            true,
-                            "Street Number",
-                            propertyViewModel.addPropertyState.streetNumber
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            propertyViewModel.handlePropertyAddEdit(streetNumber = it)
+                            Box(modifier = Modifier.weight(1f)) {
+                                FolioTextField(
+                                    true,
+                                    "Street",
+                                    propertyViewModel.addPropertyState.street
+                                ) {
+                                    propertyViewModel.handlePropertyAddEdit(street = it)
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Box(modifier = Modifier.weight(1f)) {
+                                FolioTextField(
+                                    true,
+                                    "Street Number",
+                                    propertyViewModel.addPropertyState.streetNumber
+
+                                ) {
+                                    propertyViewModel.handlePropertyAddEdit(streetNumber = it)
+                                }
+                            }
                         }
-                        FolioTextField(
-                            true,
-                            "Zip Code",
-                            propertyViewModel.addPropertyState.zipCode
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            propertyViewModel.handlePropertyAddEdit(
-                                zipCode = it
-                            )
+                            Box(modifier = Modifier.weight(1f)) {
+                                FolioTextField(
+                                    true,
+                                    "Zip Code",
+                                    propertyViewModel.addPropertyState.zipCode
+                                ) {
+                                    propertyViewModel.handlePropertyAddEdit(
+                                        zipCode = it
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Box(modifier = Modifier.weight(1f)) {
+                                FolioTextField(
+                                    true,
+                                    "City",
+                                    propertyViewModel.addPropertyState.city
+                                ) {
+                                    propertyViewModel.handlePropertyAddEdit(city = it)
+                                }
+                            }
                         }
-                        FolioTextField(true, "City", propertyViewModel.addPropertyState.city) {
-                            propertyViewModel.handlePropertyAddEdit(city = it)
-                        }
+
                         FolioTextField(
                             true,
                             "Country",

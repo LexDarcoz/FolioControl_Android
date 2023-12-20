@@ -20,8 +20,9 @@ fun FolioTextField(
     label: String,
     value: String,
     onValueChange: (String) -> Unit
+
 ) {
-    Column {
+    Column() {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
@@ -42,9 +43,7 @@ fun FolioTextField(
                 color = MaterialTheme.colorScheme.onSurface
             ),
             singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.secondary)
+            modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.secondary)
                 .height(50.dp)
 
         )
