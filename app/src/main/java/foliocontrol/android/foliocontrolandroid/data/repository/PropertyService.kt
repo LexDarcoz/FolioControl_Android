@@ -1,6 +1,5 @@
 package foliocontrol.android.foliocontrolandroid.data.repository
 
-
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.Premise
 import foliocontrol.android.foliocontrolandroid.domain.Property

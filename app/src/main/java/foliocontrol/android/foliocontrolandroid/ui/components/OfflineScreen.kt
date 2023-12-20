@@ -12,8 +12,12 @@ import androidx.compose.ui.Modifier
 fun OfflineScreen() {
     // Customize this composable to show the offline screen
     Box(
-        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        Text(text = "You are offline. Please check your internet connection.", color = MaterialTheme.colorScheme.onSurface)
+        Text(
+            text = "You are offline. Please check your internet connection.",
+            color = MaterialTheme.colorScheme.onSurface
+        )
     }
 }

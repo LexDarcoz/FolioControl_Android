@@ -21,7 +21,8 @@ class PropertyServiceImpl : PropertyService {
     }
 
     override suspend fun getDocumentsForProperty(
-        token: String, property: Property
+        token: String,
+        property: Property
     ): List<PropertyDocument> {
         return fetchDocuments(token, property.propertyID)!!
     }

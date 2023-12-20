@@ -22,8 +22,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import foliocontrol.android.foliocontrolandroid.ui.components.cards.PropertyCard
 import foliocontrol.android.foliocontrolandroid.ui.components.InfoDialog
+import foliocontrol.android.foliocontrolandroid.ui.components.cards.PropertyCard
 import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.AddPropertyDialog
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.MultiFloatingButton
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.SearchBar

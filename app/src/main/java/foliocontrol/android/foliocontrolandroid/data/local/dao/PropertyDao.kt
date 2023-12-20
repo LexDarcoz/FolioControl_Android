@@ -13,8 +13,6 @@ interface PropertyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(property: PropertyRoomEntity)
 
-
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(properties: List<PropertyRoomEntity>)
 
@@ -22,8 +20,8 @@ interface PropertyDao {
     fun getAllProperties(): Flow<List<PropertyRoomEntity>>
 
     @Query("SELECT * FROM property_table where FK_partnership_id = :partnershipId")
-    fun getAllPropertiesFromCurrentPartnership(partnershipId : Int): Flow<List<PropertyRoomEntity>>
+    fun getAllPropertiesFromCurrentPartnership(partnershipId: Int): Flow<List<PropertyRoomEntity>>
 
     @Query("DELETE FROM property_table where FK_partnership_id = :partnershipID")
-    suspend fun dropTable(partnershipID : Int)
+    suspend fun dropTable(partnershipID: Int)
 }

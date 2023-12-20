@@ -54,37 +54,34 @@ suspend fun UserLoginRequest(
     }
 }
 
-
 suspend fun getUser(token: String): User {
     var user: User? = null
     var result: JsonObject? = null
-        val call: JsonObject = userApi.getUser(token = token)
-        result = call.jsonObject
-        Log.i("TEST", "getUser: $result")
-        user = User(
-            name = result["name"]?.jsonPrimitive?.content ?: "",
-            firstName = result["firstName"]?.jsonPrimitive?.content ?: "",
-            lastName = result["lastName"]?.jsonPrimitive?.content ?: "",
-            street = result.jsonObject["address"]?.jsonObject?.get("street")?.jsonPrimitive?.content
-                ?: "",
-            streetNumber = result.jsonObject["address"]?.jsonObject?.get("streetNumber")?.jsonPrimitive?.content
-                ?: "",
+    val call: JsonObject = userApi.getUser(token = token)
+    result = call.jsonObject
+    Log.i("TEST", "getUser: $result")
+    user = User(
+        name = result["name"]?.jsonPrimitive?.content ?: "",
+        firstName = result["firstName"]?.jsonPrimitive?.content ?: "",
+        lastName = result["lastName"]?.jsonPrimitive?.content ?: "",
+        street = result.jsonObject["address"]?.jsonObject?.get("street")?.jsonPrimitive?.content
+            ?: "",
+        streetNumber = result.jsonObject["address"]?.jsonObject?.get("streetNumber")?.jsonPrimitive?.content
+            ?: "",
 
-            zipCode = result.jsonObject["address"]?.jsonObject?.get("zipCode")?.jsonPrimitive?.content
-                ?: "",
+        zipCode = result.jsonObject["address"]?.jsonObject?.get("zipCode")?.jsonPrimitive?.content
+            ?: "",
 
-            city = result.jsonObject["address"]?.jsonObject?.get("city")?.jsonPrimitive?.content
-                ?: "",
+        city = result.jsonObject["address"]?.jsonObject?.get("city")?.jsonPrimitive?.content
+            ?: "",
 
-            country = result.jsonObject["address"]?.jsonObject?.get("country")?.jsonPrimitive?.content
-                ?: "",
+        country = result.jsonObject["address"]?.jsonObject?.get("country")?.jsonPrimitive?.content
+            ?: "",
 
-
-            email = result["email"]?.jsonPrimitive?.content ?: "",
-        )
+        email = result["email"]?.jsonPrimitive?.content ?: ""
+    )
     return user
 }
-
 
 suspend fun saveUser(token: String, user: User) {
     var body = buildJsonObject {

@@ -1,6 +1,5 @@
 package foliocontrol.android.foliocontrolandroid.ui.viewModels
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,11 +13,14 @@ import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.domain.User
 import foliocontrol.android.foliocontrolandroid.domain.asUserRoomEntity
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
-import kotlinx.coroutines.flow.first
 import java.io.IOException
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class AccountViewModel(private val propertyRepo: PropertyDatabase,private val accountRepo: AccountDatabase) : ViewModel() {
+class AccountViewModel(
+    private val propertyRepo: PropertyDatabase,
+    private val accountRepo: AccountDatabase
+) : ViewModel() {
 
     private val authService = AuthServiceImpl()
     var user: User by mutableStateOf(User())
@@ -34,28 +36,26 @@ class AccountViewModel(private val propertyRepo: PropertyDatabase,private val ac
                 getUserData()
             } catch (e: IOException) {
                 uiState = UiState.Offline("Failed to connect to server: ${e.message}")
-
             } catch (e: Exception) {
                 uiState = UiState.Error("Something went very wrong: ${e.message}")
             }
-
         }
     }
 
     fun getToken(): String {
         return getEncryptedPreference("token")
     }
+
     suspend fun getUserData() {
         try {
             var data = authService.getUserWithToken(getToken())
             user = data
             accountRepo.insertUser(user.asUserRoomEntity())
             uiState = UiState.Success("Loaded data successfully")
-        }catch (e: IOException) {
+        } catch (e: IOException) {
             user = accountRepo.getUser().first().asDomainModel()
             uiState = UiState.Offline("Failed to connect to server: ${e.message}")
         }
-
     }
 
     fun handleUserEdit(

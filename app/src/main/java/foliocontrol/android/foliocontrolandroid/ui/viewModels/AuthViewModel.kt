@@ -10,7 +10,6 @@ import foliocontrol.android.foliocontrolandroid.data.local.removeEncryptedPrefer
 import foliocontrol.android.foliocontrolandroid.data.local.saveEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.domain.LoginCredentials
-import foliocontrol.android.foliocontrolandroid.domain.Token
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import kotlinx.coroutines.launch
 

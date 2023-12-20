@@ -5,7 +5,6 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import foliocontrol.android.foliocontrolandroid.MainActivity
 
-
 val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
 
 fun getEncryptedPreference(key: String): String {

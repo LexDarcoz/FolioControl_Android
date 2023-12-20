@@ -1,29 +1,21 @@
 package foliocontrol.android.foliocontrolandroid.ui.components.dialogs
 
-
-import android.graphics.Bitmap
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,11 +45,11 @@ import kotlin.math.sin
 @Composable
 fun ImageDialog(
     onDismissRequest: () -> Unit,
-    imageUrl: String,
+    imageUrl: String
 ) {
     Dialog(
         onDismissRequest = { onDismissRequest() },
-        properties = DialogProperties(usePlatformDefaultWidth = false),
+        properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         Column(
             modifier = Modifier
@@ -65,16 +57,16 @@ fun ImageDialog(
                     brush = Brush.verticalGradient(
                         colors = listOf(
                             Color.Black.copy(),
-                            Color.Black,
-                        ),
-                    ),
+                            Color.Black
+                        )
+                    )
                 )
-                .fillMaxSize(),
+                .fillMaxSize()
         ) {
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .clip(RoundedCornerShape(8.dp)),
+                    .clip(RoundedCornerShape(8.dp))
             ) {
                 ZoomableImage(imageUrl)
 
@@ -86,8 +78,8 @@ fun ImageDialog(
                         .width(80.dp)
                         .height(80.dp),
                     colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = MaterialTheme.colorScheme.onPrimary,
-                    ),
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    )
                 ) {
                     Icon(
                         imageVector = Icons.Default.Close,
@@ -95,11 +87,10 @@ fun ImageDialog(
                         tint = Color.White,
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(8.dp), // Adjust padding as needed
+                            .padding(8.dp) // Adjust padding as needed
                     )
                 }
             }
-
         }
     }
 }
@@ -124,7 +115,7 @@ fun ZoomableImage(model: Any, contentDescription: String? = null) {
             .graphicsLayer(
                 scaleX = zoom,
                 scaleY = zoom,
-                rotationZ = angle,
+                rotationZ = angle
             )
             .fillMaxSize()
             .pointerInput(Unit) {
@@ -137,17 +128,17 @@ fun ZoomableImage(model: Any, contentDescription: String? = null) {
 
                         offsetX =
                             (offsetX + (x * cos(angleRad) - y * sin(angleRad)).toFloat()).coerceIn(
-                                -(screenWidth * zoom)..(screenWidth * zoom),
+                                -(screenWidth * zoom)..(screenWidth * zoom)
                             )
                         offsetY =
                             (offsetY + (x * sin(angleRad) + y * cos(angleRad)).toFloat()).coerceIn(
-                                -(screenHeight * zoom)..(screenHeight * zoom),
+                                -(screenHeight * zoom)..(screenHeight * zoom)
                             )
                     } else {
                         offsetX = 0F
                         offsetY = 0F
                     }
                 })
-            },
+            }
     )
 }

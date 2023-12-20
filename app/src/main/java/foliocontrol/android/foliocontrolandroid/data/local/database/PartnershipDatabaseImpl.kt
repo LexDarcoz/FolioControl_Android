@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 class PartnershipDatabaseImpl(private val partnershipDao: PartnershipDao) : PartnershipDatabase {
     override fun getPartnerships(): Flow<List<PartnershipRoomEntity>> {
-       return partnershipDao.getPartnerships();
+        return partnershipDao.getPartnerships()
     }
 
     override suspend fun insertAllPartnerships(partnerships: List<PartnershipRoomEntity>) {

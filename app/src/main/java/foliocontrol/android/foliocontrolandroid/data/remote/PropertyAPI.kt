@@ -26,7 +26,8 @@ interface PropertyAPI {
     @Headers("Accept: application/json")
     @GET("api/property/partnership/{partnershipID}")
     suspend fun getProperties(
-        @Header("Authorization") token: String, @Path("partnershipID") partnershipID: Int
+        @Header("Authorization") token: String,
+        @Path("partnershipID") partnershipID: Int
     ): JsonArray
 
     @Headers("Accept: application/json")
@@ -36,13 +37,15 @@ interface PropertyAPI {
     @Headers("Accept: application/json")
     @GET("api/propertyDocument/{propertyID}")
     suspend fun getDocumentsForProperty(
-        @Header("Authorization") token: String, @Path("propertyID") propertyID: Int
+        @Header("Authorization") token: String,
+        @Path("propertyID") propertyID: Int
     ): JsonArray
 
     @Headers("Accept: application/json")
     @GET("api/premises/property/{propertyID}")
     suspend fun getPremisesForProperty(
-        @Header("Authorization") token: String, @Path("propertyID") propertyID: Int
+        @Header("Authorization") token: String,
+        @Path("propertyID") propertyID: Int
     ): JsonArray
 
     @Headers("Accept: application/json")
@@ -56,13 +59,15 @@ interface PropertyAPI {
     @Headers("Accept: application/json")
     @POST("api/property/create")
     suspend fun createProperty(
-        @Header("Authorization") token: String, @Body property: JsonObject
+        @Header("Authorization") token: String,
+        @Body property: JsonObject
     )
 
     @Headers("Accept: application/json")
     @DELETE("api/property/{propertyID}")
     suspend fun deletePropertyById(
-        @Header("Authorization") token: String, @Path("propertyID") propertyID: Int
+        @Header("Authorization") token: String,
+        @Path("propertyID") propertyID: Int
     )
 }
 
@@ -70,7 +75,6 @@ private val propertyApi = createRetrofit(PropertyAPI::class.java)
 
 suspend fun fetchProperties(token: String, partnershipID: Int): List<Property>? {
     var properties = propertyApi.getProperties(token, partnershipID)
-
 
     return properties.map {
         Property(
@@ -105,13 +109,10 @@ suspend fun fetchPremises(token: String, propertyID: Int): List<Premise>? {
             it.jsonObject["isActive"]?.jsonPrimitive?.int ?: 0,
             it.jsonObject["isRented"]?.jsonPrimitive?.int ?: 0,
             it.jsonObject["tenant"]?.jsonPrimitive?.content ?: "",
-            it.jsonObject["FK_propertyID"]?.jsonPrimitive?.int ?: 0,
+            it.jsonObject["FK_propertyID"]?.jsonPrimitive?.int ?: 0
         )
     }
-
-
 }
-
 
 suspend fun fetchDocuments(token: String, propertyID: Int): List<PropertyDocument>? {
     var documents = propertyApi.getDocumentsForProperty(token, propertyID)
@@ -123,11 +124,9 @@ suspend fun fetchDocuments(token: String, propertyID: Int): List<PropertyDocumen
             it.jsonObject["documentName"]?.jsonPrimitive?.content ?: "",
             it.jsonObject["documentType"]?.jsonPrimitive?.content ?: "",
             it.jsonObject["expiryDate"]?.jsonPrimitive?.content ?: "",
-            it.jsonObject["FK_propertyID"]?.jsonPrimitive?.int ?: 0,
+            it.jsonObject["FK_propertyID"]?.jsonPrimitive?.int ?: 0
         )
     }
-
-
 }
 
 suspend fun getUserPartnerships(

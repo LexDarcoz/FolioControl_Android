@@ -1,6 +1,5 @@
 package foliocontrol.android.foliocontrolandroid.data.local.database
 
-import android.util.Log
 import foliocontrol.android.foliocontrolandroid.data.local.dao.UserDao
 import foliocontrol.android.foliocontrolandroid.data.local.schema.PartnershipRoomEntity
 import foliocontrol.android.foliocontrolandroid.data.local.schema.UserRoomEntity

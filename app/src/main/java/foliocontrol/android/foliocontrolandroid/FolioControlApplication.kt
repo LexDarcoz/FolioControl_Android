@@ -43,14 +43,16 @@ fun FolioControlApplication(
     val backStackEntry by navController.currentBackStackEntryAsState()
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    Scaffold(modifier = Modifier.fillMaxWidth(),
+    Scaffold(
+        modifier = Modifier.fillMaxWidth(),
         contentColor = MaterialTheme.colorScheme.primary,
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             when (authViewModel.loginUiState) {
                 is UiState.Success -> {
                     BottomNavigation(
-                        authViewModel = authViewModel, propertyViewModel = propertyViewModel
+                        authViewModel = authViewModel,
+                        propertyViewModel = propertyViewModel
                     )
                 }
 
@@ -60,7 +62,9 @@ fun FolioControlApplication(
         },
         topBar = {
             Navbar(
-                scrollBehavior, authViewModel = authViewModel, navController = navController
+                scrollBehavior,
+                authViewModel = authViewModel,
+                navController = navController
 //                navController.previousBackStackEntry != null
             )
         }
