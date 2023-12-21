@@ -13,6 +13,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -20,6 +21,7 @@ import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface PropertyAPI {
@@ -53,6 +55,7 @@ interface PropertyAPI {
     suspend fun savePropertyByPropertyID(
         @Header("Authorization") token: String,
         @Path("propertyID") propertyID: Int,
+        @Part propertyImage: MultipartBody.Part,
         @Body property: JsonObject
     )
 
@@ -173,7 +176,11 @@ fun parseResponse(response: JsonArray): List<Partnership> {
     return partnerships
 }
 
-suspend fun savePropertyByID(token: String, property: Property) {
+suspend fun savePropertyByID(
+    token: String,
+    property: Property,
+    propertyImage: MultipartBody.Part
+) {
     try {
         var body = buildJsonObject {
             put("propertyID", JsonPrimitive(property.propertyID))
@@ -188,7 +195,7 @@ suspend fun savePropertyByID(token: String, property: Property) {
             put("propertyDescription", JsonPrimitive(property.propertyDescription))
         }
 
-        propertyApi.savePropertyByPropertyID(token, property.propertyID, body)
+        propertyApi.savePropertyByPropertyID(token, property.propertyID, propertyImage, body)
     } catch (e: Exception) {
         Log.e("TESTING", "savePropertyByPropertyID failed", e)
     }

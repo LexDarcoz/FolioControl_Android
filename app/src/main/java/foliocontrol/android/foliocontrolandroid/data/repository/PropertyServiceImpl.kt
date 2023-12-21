@@ -10,14 +10,19 @@ import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.Premise
 import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
+import okhttp3.MultipartBody
 
 class PropertyServiceImpl : PropertyService {
     override suspend fun getProperties(token: String, partnership: Partnership): List<Property> {
         return fetchProperties(token, partnership.partnershipID)!!
     }
 
-    override suspend fun savePropertyByPropertyID(token: String, property: Property) {
-        savePropertyByID(token, property)
+    override suspend fun savePropertyByPropertyID(
+        token: String,
+        property: Property,
+        propertyImage: MultipartBody.Part
+    ) {
+        savePropertyByID(token, property, propertyImage)
     }
 
     override suspend fun getDocumentsForProperty(
