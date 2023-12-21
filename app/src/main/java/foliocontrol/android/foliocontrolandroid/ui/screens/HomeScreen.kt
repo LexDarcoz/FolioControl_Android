@@ -30,6 +30,7 @@ import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.Se
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.DialogLoader
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import kotlinx.coroutines.launch
 
@@ -38,9 +39,7 @@ enum class MultiFloatingState {
 }
 
 class MinFabItem(
-    val icon: ImageVector,
-    val label: String,
-    val identifier: String
+    val icon: ImageVector, val label: String, val identifier: String
 )
 
 enum class Identifier {
@@ -68,14 +67,14 @@ fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit 
         }
 
         is UiState.Loading -> {
-            Home(propertyViewModel, navigateTo, loading = true)
+            LoadingScreen()
+//            Home(propertyViewModel, navigateTo, loading = true)
+            //add skeleton
         }
 
         else -> {
-            ErrorScreen(
-                errorMessage = (propertyViewModel.uiState as UiState.Error).message,
-                onRetry = { propertyViewModel.getData() }
-            )
+            ErrorScreen(errorMessage = (propertyViewModel.uiState as UiState.Error).message,
+                onRetry = { propertyViewModel.getData() })
         }
     }
 }
@@ -93,16 +92,13 @@ fun Home(
     }
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-    val isLoading = propertyViewModel.uiState == UiState.Loading
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = loading)
     val infoDialog = remember { mutableStateOf(offline) }
 
     // Everything for fab
     val items = listOf(
         MinFabItem(
-            icon = Icons.Filled.Search,
-            label = "Search",
-            identifier = Identifier.SearchFab.name
+            icon = Icons.Filled.Search, label = "Search", identifier = Identifier.SearchFab.name
         ),
 
         MinFabItem(
@@ -115,14 +111,8 @@ fun Home(
     )
 
     when {
-        loading -> {
-            // Loading
-            DialogLoader()
-        }
-
         propertyViewModel.isAddPropertyDialogOpen -> {
-            AddPropertyDialog(
-                onDismissRequest = { propertyViewModel.togglePropertyAddDialog() },
+            AddPropertyDialog(onDismissRequest = { propertyViewModel.togglePropertyAddDialog() },
                 onConfirmation = {
                     propertyViewModel.handlePropertyAdd()
                     propertyViewModel.togglePropertyAddDialog()
@@ -148,8 +138,7 @@ fun Home(
 
         Scaffold(floatingActionButton = {
             if (!offline) {
-                MultiFloatingButton(
-                    multiFloatingState = multiFloatingState,
+                MultiFloatingButton(multiFloatingState = multiFloatingState,
                     onMultiFabStateChange = {
                         multiFloatingState = it
                     },
@@ -159,8 +148,7 @@ fun Home(
                     },
                     toggleSearchBar = {
                         propertyViewModel.toggleSearchBar()
-                    }
-                )
+                    })
             }
         }, snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -193,13 +181,11 @@ fun Home(
             }
 
             if (infoDialog.value) {
-                InfoDialog(
-                    title = "Whoops!",
+                InfoDialog(title = "Whoops!",
                     desc = "No Internet Connection found.\n" + "Check your connection or try again.",
                     onDismiss = {
                         infoDialog.value = false
-                    }
-                )
+                    })
             }
         }
     }

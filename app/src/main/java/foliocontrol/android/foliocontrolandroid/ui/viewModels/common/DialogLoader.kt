@@ -28,17 +28,21 @@ fun DialogLoader(
     loadingText: String = "Loading..."
 ) {
     Box(
-        modifier = Modifier.fillMaxSize().background(backgroundColor).then(modifier)
+        modifier = Modifier
+            .fillMaxSize()
+            .then(modifier)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.background(contentColor).padding(16.dp)
+            modifier = Modifier
+                .padding(16.dp)
                 .clip(RoundedCornerShape(8.dp))
         ) {
             CircularProgressIndicator(
-                modifier = Modifier.size(150.dp).padding(16.dp),
-                color = progressBarColor
+                modifier = Modifier
+                    .size(150.dp)
+                    .padding(16.dp), color = progressBarColor
             )
             Text(
                 text = loadingText,
