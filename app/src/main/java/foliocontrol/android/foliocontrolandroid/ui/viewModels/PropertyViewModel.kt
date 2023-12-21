@@ -262,7 +262,7 @@ class PropertyViewModel(
 
                 )
                 getData()
-                //pop from list and delete in db
+                // pop from list and delete in db
             } catch (e: Exception) {
                 println("Error: ${e.message}")
             } finally {

@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,11 +12,22 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.WifiOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,16 +35,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import foliocontrol.android.foliocontrolandroid.data.remote.common.Constants
+import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.DeleteDialog
 import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.ImageDialog
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -41,7 +54,8 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
     val imageUrl = Constants.PROPERTYPHOTOS_URL
     val defaultImage = "$imageUrl/default.avif"
     val propertyImg = propertyViewModel.propertyState.propertyImg.ifEmpty { "null" }
-
+    val openDeleteDialog = remember { mutableStateOf(false) }
+    val property = propertyViewModel.propertyState
     val image = when (propertyImg) {
         "null" -> defaultImage
         else -> "$imageUrl/$propertyImg"
@@ -58,6 +72,55 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
                 selectedImageUri = uri
             }
         )
+    when {
+        openDeleteDialog.value -> {
+            if (propertyViewModel.uiState is UiState.Success) {
+                if (selectedImageUri != null) {
+                    DeleteDialog(
+                        onDismissRequest = { openDeleteDialog.value = false },
+                        onConfirmation = {
+                            openDeleteDialog.value = false
+                            selectedImageUri = null
+                        },
+                        confirmText = "Confirm",
+                        dismissText = "Dismiss",
+                        dialogTitle = "Clear Image",
+                        dialogText = "Are you sure you want to delete this image?",
+                        icon = Icons.Default.Warning
+                    )
+                } else {
+                    DeleteDialog(
+                        onDismissRequest = { openDeleteDialog.value = false },
+                        onConfirmation = {
+                            openDeleteDialog.value = false
+                            propertyViewModel.handlePropertyEdit(
+                                propertyImg = "null"
+                            )
+                            propertyViewModel.handlePropertySave()
+                        },
+                        confirmText = "Confirm",
+                        dismissText = "Dismiss",
+                        dialogTitle = "Clear Image",
+                        dialogText = "Are you sure you want to delete this image?",
+                        icon = Icons.Default.Warning
+                    )
+                }
+            } else {
+                DeleteDialog(
+                    onDismissRequest = { openDeleteDialog.value = false },
+                    onConfirmation = {
+                        openDeleteDialog.value = false
+                        propertyViewModel.getData()
+                    },
+                    confirmText = "Retry Connection",
+                    dismissText = "Dismiss",
+                    dialogTitle = "Network Error",
+                    dialogText = "You need to be online in order to delete images.",
+                    icon = Icons.Default.Info
+                )
+            }
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize().padding(16.dp)
@@ -72,16 +135,65 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
                 fontWeight = FontWeight.Bold
             )
 
-            Box(
-                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.8f).padding(top = 32.dp)
-            ) {
-                GlideImage(
-                    model = image,
-                    contentDescription = "Property Image",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.fillMaxSize()
+            Card(
+
+                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.8f).padding(top = 32.dp),
+                elevation = CardDefaults.cardElevation(
+                    defaultElevation = 6.dp
+                ),
+                shape = MaterialTheme.shapes.small,
+                colors = CardDefaults.cardColors(
+                    contentColor = MaterialTheme.colorScheme.primary,
+                    containerColor = MaterialTheme.colorScheme.secondary
                 )
+
+            ) {
+                Box() {
+                    if (selectedImageUri != null) {
+                        GlideImage(
+                            model = selectedImageUri,
+                            contentDescription = "Property Image",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize().clickable {
+                                propertyViewModel.isAddPropertyDialogOpen = true
+                            }
+
+                        )
+                    } else {
+                        GlideImage(
+                            model = image,
+                            contentDescription = "Property Image",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize().width(100.dp).clickable {
+                                propertyViewModel.isAddPropertyDialogOpen = true
+                            }
+                        )
+                    }
+                    Icon(
+                        imageVector = Constants.propertyTypesIcons[property.propertyType]
+                            ?: Icons.Default.Home,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.size(40.dp).align(Alignment.BottomStart).padding(8.dp)
+                    )
+                    IconButton(
+                        onClick = { openDeleteDialog.value = true },
+                        modifier = Modifier.align(Alignment.TopEnd),
+                        colors = IconButtonDefaults.iconButtonColors(
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            containerColor = MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.size(40.dp).padding(8.dp)
+                        )
+                    }
+                }
             }
+
             Button(
                 enabled = !offline,
                 onClick = {
@@ -101,32 +213,26 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
                         Text(text = "Offline preview")
                     }
                 } else {
-                    Row {
-                        Icon(
-                            Icons.Default.Image,
-                            contentDescription = null,
-                            modifier = Modifier.padding(end = 8.dp)
-                        )
-                        Text(text = "Select Image")
+                    if (selectedImageUri != null) {
+                        Row {
+                            Icon(
+                                Icons.Default.Upload,
+                                contentDescription = null,
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            Text(text = "Upload Image")
+                        }
+                    } else {
+                        Row {
+                            Icon(
+                                Icons.Default.Image,
+                                contentDescription = null,
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            Text(text = "Select Image")
+                        }
                     }
                 }
-            }
-            selectedImageUri?.let { uri ->
-                // Display the selected image
-                Image(
-                    painter = rememberAsyncImagePainter(uri),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
-                )
-
-                Button(
-                    onClick = {
-                        selectedImageUri?.let {
-                            propertyViewModel.uploadImage(it)
-                        }
-                    },
-                    content = { Text("Upload Image") }
-                )
             }
         }
     }
@@ -137,7 +243,11 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
                 onDismissRequest = {
                     propertyViewModel.isAddPropertyDialogOpen = false
                 },
-                imageUrl = image
+                imageUrl = if (selectedImageUri != null) {
+                    selectedImageUri.toString()
+                } else {
+                    image
+                }
             )
         }
     }

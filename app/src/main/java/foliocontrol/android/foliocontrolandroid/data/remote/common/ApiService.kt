@@ -1,5 +1,15 @@
 package foliocontrol.android.foliocontrolandroid.data.remote.common
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Apartment
+import androidx.compose.material.icons.filled.Garage
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.House
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Store
+import androidx.compose.material.icons.filled.Villa
+import androidx.compose.material.icons.filled.Warehouse
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -19,6 +29,19 @@ object Constants {
 //    const val PROPERTYDOCUMENTS_URL = "http://10.0.2.2:9000/propertyDocuments"
 //    const val PREMISESPHOTOS_URL = "http://10.0.2.2:9000/propertyphotos/"
 //    const val PREMISESDOCUMENTS_URL = "http://10.0.2.2:9000/premisesDocuments"
+
+    val propertyTypesIcons: Map<String, ImageVector> = mapOf(
+        "Apartment" to Icons.Default.Apartment,
+        "House" to Icons.Default.House,
+        "Garage" to Icons.Default.Garage,
+        "Store" to Icons.Default.Store,
+        "Terraced House" to Icons.Default.Villa,
+        "Semi-detached" to Icons.Default.Home,
+        "Villa" to Icons.Default.Villa,
+        "Storage" to Icons.Default.Warehouse,
+        "Other" to Icons.Default.Info
+
+    )
 }
 
 fun <T> createRetrofit(apiClass: Class<T>): T {

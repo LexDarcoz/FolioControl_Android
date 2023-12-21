@@ -22,7 +22,11 @@ class PropertyServiceImpl : PropertyService {
         property: Property,
         propertyImage: MultipartBody.Part
     ) {
-        savePropertyByID(token, property, propertyImage)
+        savePropertyByID(
+            token,
+            property,
+            propertyImage
+        )
     }
 
     override suspend fun getDocumentsForProperty(

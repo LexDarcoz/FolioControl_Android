@@ -19,6 +19,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
@@ -51,6 +52,7 @@ interface PropertyAPI {
     ): JsonArray
 
     @Headers("Accept: application/json")
+    @Multipart
     @PUT("api/property/{propertyID}")
     suspend fun savePropertyByPropertyID(
         @Header("Authorization") token: String,
@@ -195,7 +197,12 @@ suspend fun savePropertyByID(
             put("propertyDescription", JsonPrimitive(property.propertyDescription))
         }
 
-        propertyApi.savePropertyByPropertyID(token, property.propertyID, propertyImage, body)
+        propertyApi.savePropertyByPropertyID(
+            token,
+            property.propertyID,
+            propertyImage,
+            body
+        )
     } catch (e: Exception) {
         Log.e("TESTING", "savePropertyByPropertyID failed", e)
     }

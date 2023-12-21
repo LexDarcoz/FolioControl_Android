@@ -9,16 +9,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Apartment
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Garage
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.House
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Store
-import androidx.compose.material.icons.filled.Villa
-import androidx.compose.material.icons.filled.Warehouse
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -33,10 +28,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import foliocontrol.android.foliocontrol_android.R
@@ -87,18 +81,7 @@ fun PropertyCard(
             }
         }
     }
-    val propertyTypesIcons: Map<String, ImageVector> = mapOf(
-        "Apartment" to Icons.Default.Apartment,
-        "House" to Icons.Default.House,
-        "Garage" to Icons.Default.Garage,
-        "Store" to Icons.Default.Store,
-        "Terraced House" to Icons.Default.Villa,
-        "Semi-detached" to Icons.Default.Home,
-        "Villa" to Icons.Default.Villa,
-        "Storage" to Icons.Default.Warehouse,
-        "Other" to Icons.Default.Info
 
-    )
     Card(
         modifier = Modifier.padding(8.dp),
         elevation = CardDefaults.cardElevation(
@@ -112,15 +95,16 @@ fun PropertyCard(
 
     ) {
         Box(
-            modifier = Modifier.height(150.dp).fillMaxSize()
+            modifier = Modifier.height(165.dp).fillMaxSize()
         ) {
             // Load property image here
+
             if (property.propertyImg == "null") {
                 Image(
-                    painter = rememberAsyncImagePainter(model = R.drawable.ic_default),
+                    painter = painterResource(id = R.drawable.ic_default),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize().width(200.dp)
                 )
             } else {
                 GlideImage(
@@ -133,7 +117,8 @@ fun PropertyCard(
 
             // Rounded icon
             Icon(
-                imageVector = propertyTypesIcons[property.propertyType] ?: Icons.Default.Home,
+                imageVector = Constants.propertyTypesIcons[property.propertyType]
+                    ?: Icons.Default.Home,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.size(40.dp).align(Alignment.BottomStart).padding(8.dp)
