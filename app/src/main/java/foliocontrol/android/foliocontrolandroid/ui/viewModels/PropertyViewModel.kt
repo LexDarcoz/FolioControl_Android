@@ -1,9 +1,11 @@
 package foliocontrol.android.foliocontrolandroid.ui.viewModels
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.net.toFile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import foliocontrol.android.foliocontrolandroid.data.document.AndroidDownloader
@@ -23,6 +25,9 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import java.io.IOException
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 
 class PropertyViewModel(
     private val propertyRepo: PropertyDatabase,
@@ -53,6 +58,14 @@ class PropertyViewModel(
     var filteredList by mutableStateOf(emptyList<Property>())
         private set
     var propertyState by mutableStateOf(Property())
+        private set
+
+    var propertyImageState by mutableStateOf<MultipartBody.Part>(
+        MultipartBody.Part.createFormData(
+            "image",
+            "null"
+        )
+    )
         private set
     var isAddPropertyDialogOpen by mutableStateOf(false)
     var isSearchBarEnabled by mutableStateOf(false)
@@ -164,6 +177,15 @@ class PropertyViewModel(
         }
     }
 
+    fun uploadImage(uri: Uri) {
+        Log.i("TEST", "uploadImage: ${uri.path}")
+        val file = uri.toFile()
+        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+        propertyImageState = MultipartBody.Part.createFormData("image", file.name, requestFile)
+
+        handlePropertySave()
+    }
+
     suspend fun getPremisesForProperty(property: Property) {
         propertyPremises = propertyService.getPremisesForProperty(
             getEncryptedPreference("token"),
@@ -220,7 +242,8 @@ class PropertyViewModel(
             try {
                 propertyService.savePropertyByPropertyID(
                     getEncryptedPreference("token"),
-                    propertyState
+                    propertyState,
+                    propertyImageState
                 )
             } catch (e: Exception) {
                 println("Error: ${e.message}")
