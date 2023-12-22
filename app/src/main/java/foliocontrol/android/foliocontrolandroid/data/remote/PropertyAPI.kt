@@ -29,8 +29,7 @@ interface PropertyAPI {
     @Headers("Accept: application/json")
     @GET("api/property/partnership/{partnershipID}")
     suspend fun getProperties(
-        @Header("Authorization") token: String,
-        @Path("partnershipID") partnershipID: Int
+        @Header("Authorization") token: String, @Path("partnershipID") partnershipID: Int
     ): JsonArray
 
     @Headers("Accept: application/json")
@@ -40,15 +39,13 @@ interface PropertyAPI {
     @Headers("Accept: application/json")
     @GET("api/propertyDocument/{propertyID}")
     suspend fun getDocumentsForProperty(
-        @Header("Authorization") token: String,
-        @Path("propertyID") propertyID: Int
+        @Header("Authorization") token: String, @Path("propertyID") propertyID: Int
     ): JsonArray
 
     @Headers("Accept: application/json")
     @GET("api/premises/property/{propertyID}")
     suspend fun getPremisesForProperty(
-        @Header("Authorization") token: String,
-        @Path("propertyID") propertyID: Int
+        @Header("Authorization") token: String, @Path("propertyID") propertyID: Int
     ): JsonArray
 
     @Headers("Accept: application/json")
@@ -58,21 +55,25 @@ interface PropertyAPI {
         @Header("Authorization") token: String,
         @Path("propertyID") propertyID: Int,
         @Part propertyImage: MultipartBody.Part,
-        @Body property: JsonObject
+        @Part("property") property: JsonObject
     )
 
     @Headers("Accept: application/json")
     @POST("api/property/create")
     suspend fun createProperty(
-        @Header("Authorization") token: String,
-        @Body property: JsonObject
+        @Header("Authorization") token: String, @Body property: JsonObject
     )
+
+    @Headers("Accept: application/json")
+    @GET("api/property/{propertyID}")
+    suspend fun getProperty(
+        @Header("Authorization") token: String, @Path("propertyID") propertyID: Int
+    ) : JsonObject
 
     @Headers("Accept: application/json")
     @DELETE("api/property/{propertyID}")
     suspend fun deletePropertyById(
-        @Header("Authorization") token: String,
-        @Path("propertyID") propertyID: Int
+        @Header("Authorization") token: String, @Path("propertyID") propertyID: Int
     )
 }
 
@@ -117,6 +118,25 @@ suspend fun fetchPremises(token: String, propertyID: Int): List<Premise>? {
             it.jsonObject["FK_propertyID"]?.jsonPrimitive?.int ?: 0
         )
     }
+}
+
+suspend fun fetchProperty(token: String, propertyID: Int): Property? {
+    var property = propertyApi.getProperty(token, propertyID)
+    return Property(
+        property.jsonObject["propertyID"]?.jsonPrimitive?.int ?: 0,
+        property.jsonObject["propertyName"]?.jsonPrimitive?.content ?: "",
+        property.jsonObject["propertyType"]?.jsonPrimitive?.content ?: "",
+        property.jsonObject["propertyImg"]?.jsonPrimitive?.content ?: "",
+        property.jsonObject["street"]?.jsonPrimitive?.content ?: "",
+        property.jsonObject["streetNumber"]?.jsonPrimitive?.content ?: "",
+        property.jsonObject["city"]?.jsonPrimitive?.content ?: "",
+        property.jsonObject["zipCode"]?.jsonPrimitive?.content ?: "",
+        property.jsonObject["country"]?.jsonPrimitive?.content ?: "",
+        property.jsonObject["propertyDescription"]?.jsonPrimitive?.content ?: "",
+        property.jsonObject["FK_partnershipID"]?.jsonPrimitive?.int ?: 0
+    )
+
+
 }
 
 suspend fun fetchDocuments(token: String, propertyID: Int): List<PropertyDocument>? {
@@ -179,9 +199,7 @@ fun parseResponse(response: JsonArray): List<Partnership> {
 }
 
 suspend fun savePropertyByID(
-    token: String,
-    property: Property,
-    propertyImage: MultipartBody.Part
+    token: String, property: Property, propertyImage: MultipartBody.Part
 ) {
     try {
         var body = buildJsonObject {
@@ -198,10 +216,7 @@ suspend fun savePropertyByID(
         }
 
         propertyApi.savePropertyByPropertyID(
-            token,
-            property.propertyID,
-            propertyImage,
-            body
+            token, property.propertyID, propertyImage, body
         )
     } catch (e: Exception) {
         Log.e("TESTING", "savePropertyByPropertyID failed", e)

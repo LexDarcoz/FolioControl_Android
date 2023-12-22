@@ -3,6 +3,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -57,21 +58,23 @@ fun PropertyDetailScreen(
                     painter = painterResource(id = R.drawable.ic_default),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.3f)
+                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.3f).aspectRatio(16f / 9f) // Adjust the aspect ratio as needed
+                        .align(Alignment.CenterHorizontally)
                 )
             } else {
                 GlideImage(
                     model = "$imageUrl/${propertyViewModel.propertyState.propertyImg}",
                     contentDescription = "${propertyViewModel.propertyState.propertyName} image",
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.3f)
+                    modifier = Modifier.fillMaxWidth().aspectRatio(16f / 9f) // Adjust the aspect ratio as needed
+                        .align(Alignment.CenterHorizontally)
                 )
             }
 
             Surface(
                 color = MaterialTheme.colorScheme.secondary,
                 contentColor = MaterialTheme.colorScheme.primary,
-                shape = MaterialTheme.shapes.medium,
+                shape = MaterialTheme.shapes.small,
                 shadowElevation = 4.dp,
                 modifier = Modifier.fillMaxSize().padding(16.dp)
 

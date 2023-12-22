@@ -27,6 +27,7 @@ import foliocontrol.android.foliocontrolandroid.ui.components.card.PropertyCard
 import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.AddPropertyDialog
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.MultiFloatingButton
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.SearchBar
+import foliocontrol.android.foliocontrolandroid.ui.screens.loadingSkeleton.HomeSkeleton
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.DialogLoader
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
@@ -67,9 +68,7 @@ fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit 
         }
 
         is UiState.Loading -> {
-            LoadingScreen()
-//            Home(propertyViewModel, navigateTo, loading = true)
-            //add skeleton
+            HomeSkeleton()
         }
 
         else -> {

@@ -158,7 +158,6 @@ fun PropertyCard(
             )
             Button(
                 onClick = {
-                    Log.i("TEST", "PropertyCard:selected property: $property")
                     propertyViewModel.selectProperty(property)
                     navigateTo("PropertyDetail")
                 },

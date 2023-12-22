@@ -1,11 +1,11 @@
 package foliocontrol.android.foliocontrolandroid.ui.viewModels
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.core.net.toFile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import foliocontrol.android.foliocontrolandroid.data.document.AndroidDownloader
@@ -28,6 +28,8 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+import java.io.FileOutputStream
 
 class PropertyViewModel(
     private val propertyRepo: PropertyDatabase,
@@ -60,10 +62,9 @@ class PropertyViewModel(
     var propertyState by mutableStateOf(Property())
         private set
 
-    var propertyImageState by mutableStateOf<MultipartBody.Part>(
+    var propertyImageState by mutableStateOf(
         MultipartBody.Part.createFormData(
-            "image",
-            "null"
+            "propertyImage", "null"
         )
     )
         private set
@@ -73,8 +74,8 @@ class PropertyViewModel(
         private set
 
     fun getData() {
+        uiState = UiState.Loading
         viewModelScope.launch {
-            uiState = UiState.Loading
             try {
                 getPartnershipListForLoggedInUser()
                 if (partnershipListState.isNotEmpty() && currentPartnership.partnershipID == 0) {
@@ -110,9 +111,9 @@ class PropertyViewModel(
 
     fun filterProperties(query: String) {
         filteredList = propertyListState.filter {
-            it.propertyName.contains(query, ignoreCase = true) ||
-                it.propertyType.contains(query, ignoreCase = true)||
-                    it.country.contains(query, ignoreCase = true)
+            it.propertyName.contains(query, ignoreCase = true) || it.propertyType.contains(
+                query, ignoreCase = true
+            ) || it.country.contains(query, ignoreCase = true)
         }
     }
 
@@ -125,8 +126,7 @@ class PropertyViewModel(
     suspend fun getPropertyListForPartnership() {
         try {
             propertyListState = propertyService.getProperties(
-                getEncryptedPreference("token"),
-                currentPartnership
+                getEncryptedPreference("token"), currentPartnership
             )
             if (propertyListState.isNotEmpty()) {
                 propertyRepo.dropTable(currentPartnership.partnershipID)
@@ -142,11 +142,9 @@ class PropertyViewModel(
     suspend fun getPartnershipListForLoggedInUser() {
         partnershipListState =
             authService.getPartnershipsForLoggedInUser(getEncryptedPreference("token"))
-        partnershipRepo.insertAllPartnerships(
-            partnershipListState.map {
-                it.asPartnershipRoomEntity()
-            }
-        )
+        partnershipRepo.insertAllPartnerships(partnershipListState.map {
+            it.asPartnershipRoomEntity()
+        })
     }
 
     fun downloadFile(url: String): Long {
@@ -164,8 +162,8 @@ class PropertyViewModel(
 
     fun getDataForActiveProperty() {
         viewModelScope.launch {
-            uiState = UiState.Loading
             try {
+                getDetailsForProperty(propertyState)
                 getPremisesForProperty(propertyState)
                 getDocumentsForProperty(propertyState)
                 uiState = UiState.Success("Succesfully retrieved data")
@@ -178,26 +176,48 @@ class PropertyViewModel(
         }
     }
 
-    fun uploadImage(uri: Uri) {
-        Log.i("TEST", "uploadImage: ${uri.path}")
-        val file = uri.toFile()
-        val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-        propertyImageState = MultipartBody.Part.createFormData("image", file.name, requestFile)
+    fun uploadImage(context: Context, uri: Uri) {
+        val file = uriToFile(context, uri)
+        val requestFile = file?.asRequestBody("image/*".toMediaTypeOrNull())
 
+        if (file != null && requestFile != null) {
+            propertyImageState =
+                MultipartBody.Part.createFormData("propertyImage", file.name, requestFile)
+        } else {
+            // Handle the case when the conversion fails
+        }
         handlePropertySave()
+        getDataForActiveProperty()
+    }
+
+    private fun uriToFile(context: Context, uri: Uri): File? {
+        val inputStream = context.contentResolver.openInputStream(uri)
+        val tempFile = kotlin.io.path.createTempFile()
+
+        inputStream?.use { input ->
+            tempFile.toFile().outputStream().use { output ->
+                input.copyTo(output)
+            }
+        }
+
+        return tempFile.toFile()
     }
 
     suspend fun getPremisesForProperty(property: Property) {
         propertyPremises = propertyService.getPremisesForProperty(
-            getEncryptedPreference("token"),
-            property
+            getEncryptedPreference("token"), property
+        )
+    }
+
+    suspend fun getDetailsForProperty(property: Property) {
+        propertyState = propertyService.getDetailsForProperty(
+            getEncryptedPreference("token"), property
         )
     }
 
     suspend fun getDocumentsForProperty(property: Property) {
         propertyDocuments = propertyService.getDocumentsForProperty(
-            getEncryptedPreference("token"),
-            property
+            getEncryptedPreference("token"), property
         )
     }
 
@@ -237,15 +257,26 @@ class PropertyViewModel(
         }
     }
 
+    fun clearImage() {
+        handlePropertyEdit(
+            propertyImg = "null",
+        )
+        propertyImageState = MultipartBody.Part.createFormData(
+            "propertyImage", "null"
+        )
+
+        handlePropertySave()
+    }
+
+
     fun handlePropertySave() {
         viewModelScope.launch {
-            Log.i("TEST", "Update: $propertyState")
+            Log.i("TEST", "saving impor: ${propertyState}, ${propertyImageState}")
             try {
                 propertyService.savePropertyByPropertyID(
-                    getEncryptedPreference("token"),
-                    propertyState,
-                    propertyImageState
+                    getEncryptedPreference("token"), propertyState, propertyImageState
                 )
+                getDataForActiveProperty()
             } catch (e: Exception) {
                 println("Error: ${e.message}")
             } finally {
@@ -258,8 +289,7 @@ class PropertyViewModel(
         viewModelScope.launch {
             try {
                 propertyService.deletePropertyByPropertyID(
-                    getEncryptedPreference("token"),
-                    propertyId
+                    getEncryptedPreference("token"), propertyId
 
                 )
                 getData()
@@ -319,8 +349,7 @@ class PropertyViewModel(
         viewModelScope.launch {
             try {
                 propertyService.addProperty(
-                    getEncryptedPreference("token"),
-                    addPropertyState
+                    getEncryptedPreference("token"), addPropertyState
                 )
                 getData()
             } catch (e: Exception) {

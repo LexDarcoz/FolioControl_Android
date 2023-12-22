@@ -22,7 +22,6 @@ import foliocontrol.android.foliocontrolandroid.components.BottomNavigation
 import foliocontrol.android.foliocontrolandroid.components.Navbar
 import foliocontrol.android.foliocontrolandroid.screens.AccountScreen
 import foliocontrol.android.foliocontrolandroid.screens.AuthScreen
-import foliocontrol.android.foliocontrolandroid.screens.SearchScreen
 import foliocontrol.android.foliocontrolandroid.screens.SettingScreen
 import foliocontrol.android.foliocontrolandroid.ui.screens.portfolio.PropertyOverviewScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
@@ -43,16 +42,14 @@ fun FolioControlApplication(
     val backStackEntry by navController.currentBackStackEntryAsState()
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    Scaffold(
-        modifier = Modifier.fillMaxWidth(),
+    Scaffold(modifier = Modifier.fillMaxWidth(),
         contentColor = MaterialTheme.colorScheme.primary,
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             when (authViewModel.loginUiState) {
                 is UiState.Success -> {
                     BottomNavigation(
-                        authViewModel = authViewModel,
-                        propertyViewModel = propertyViewModel
+                        authViewModel = authViewModel, propertyViewModel = propertyViewModel
                     )
                 }
 
@@ -62,9 +59,7 @@ fun FolioControlApplication(
         },
         topBar = {
             Navbar(
-                scrollBehavior,
-                authViewModel = authViewModel,
-                navController = navController
+                scrollBehavior, authViewModel = authViewModel, navController = navController
 //                navController.previousBackStackEntry != null
             )
         }
@@ -104,7 +99,6 @@ fun AppNavigator(
         // Main
         composable("Account") { AccountScreen(accountViewModel, propertyViewModel) }
         composable("Settings") { SettingScreen(/*...*/) }
-        composable("Search") { SearchScreen(/*...*/) }
         // Portfolio
         composable("PropertyDetail") {
             PropertyOverviewScreen(

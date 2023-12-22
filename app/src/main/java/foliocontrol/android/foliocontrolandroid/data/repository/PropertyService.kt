@@ -14,6 +14,8 @@ interface PropertyService {
         propertyImage: MultipartBody.Part
     )
 
+    suspend fun getDetailsForProperty(token: String, property: Property): Property
+
     suspend fun getDocumentsForProperty(token: String, property: Property): List<PropertyDocument>
     suspend fun getPremisesForProperty(token: String, property: Property): List<Premise>
     suspend fun addProperty(token: String, property: Property)

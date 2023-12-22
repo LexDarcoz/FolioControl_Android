@@ -2,6 +2,7 @@ package foliocontrol.android.foliocontrolandroid.ui.screens.portfolio
 
 import PropertyDetailScreen
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,17 +49,15 @@ val tabItemsList = listOf(
 )
 
 data class TabItem(
-    val title: String,
-    val unselectedIcon: ImageVector,
-    val selectedIcon: ImageVector
+    val title: String, val unselectedIcon: ImageVector, val selectedIcon: ImageVector
 )
 
 @Composable
 fun PropertyOverviewScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}) {
     DisposableEffect(propertyViewModel.propertyState.propertyID) {
-        if (propertyViewModel.propertyPremises.isEmpty()) {
-            propertyViewModel.getDataForActiveProperty()
-        }
+
+        propertyViewModel.getDataForActiveProperty()
+
         onDispose {}
     }
 
@@ -76,14 +75,13 @@ fun PropertyOverviewScreen(propertyViewModel: PropertyViewModel, navigateTo: (An
         }
 
         is UiState.Loading -> {
-            Overview(propertyViewModel, navigateTo, loading = true)
+
         }
 
+
         else -> {
-            ErrorScreen(
-                errorMessage = (propertyViewModel.uiState as UiState.Error).message,
-                onRetry = { propertyViewModel.getData() }
-            )
+            ErrorScreen(errorMessage = (propertyViewModel.uiState as UiState.Error).message,
+                onRetry = { propertyViewModel.getData() })
         }
     }
 }
@@ -95,15 +93,23 @@ fun Overview(
     propertyViewModel: PropertyViewModel,
     navigateTo: (Any?) -> Unit = {},
     offline: Boolean = false,
-    loading: Boolean = false
 ) {
+    var loading by remember { mutableStateOf(true) }
     var tabItems = tabItemsList
     if (propertyViewModel.propertyState.propertyType != "Apartment") {
         tabItems = tabItems.subList(0, tabItems.size - 1)
     }
+    when (propertyViewModel.uiState) {
+        is UiState.Loading -> {
+            loading = false
+        }
 
-    val isLoading = propertyViewModel.uiState == UiState.Loading
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
+        else -> {
+            loading = false
+        }
+    }
+
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = loading)
     val pagerState = rememberPagerState {
         tabItems.size
     }
@@ -126,7 +132,6 @@ fun Overview(
         }
     }
     SwipeRefresh(state = swipeRefreshState, onRefresh = {
-        propertyViewModel.getData()
         propertyViewModel.getDataForActiveProperty()
     }) {
         Column {
@@ -152,7 +157,9 @@ fun Overview(
             }
             HorizontalPager(
                 state = pagerState,
-                Modifier.fillMaxSize().zIndex(1f)
+                Modifier
+                    .fillMaxSize()
+                    .zIndex(1f)
             ) { index ->
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     if (index == 0) {
@@ -161,8 +168,7 @@ fun Overview(
                         PropertyPhotosScreen(propertyViewModel, offline)
                     } else if (index == 2) {
                         PropertyDocumentsScreen(
-                            propertyViewModel,
-                            offline
+                            propertyViewModel, offline
                         )
                     } else {
                         PremisesListScreen(propertyViewModel, offline)

@@ -29,13 +29,14 @@ fun LoadingScreen() {
             .padding(16.dp),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally,
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background.copy(alpha = 0.9f))
                 .padding(16.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .clickable { /* Handle click if needed */ }) {
+        ) {
             CircularProgressIndicator(
                 modifier = Modifier
                     .size(150.dp)

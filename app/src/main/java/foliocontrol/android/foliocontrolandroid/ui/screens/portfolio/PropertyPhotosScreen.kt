@@ -1,6 +1,7 @@
 package foliocontrol.android.foliocontrolandroid.ui.screens.portfolio
 
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -56,6 +58,9 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
     val propertyImg = propertyViewModel.propertyState.propertyImg.ifEmpty { "null" }
     val openDeleteDialog = remember { mutableStateOf(false) }
     val property = propertyViewModel.propertyState
+    var imageFullScreen by remember { mutableStateOf(false) }
+    //get the context
+    val context = LocalContext.current
     val image = when (propertyImg) {
         "null" -> defaultImage
         else -> "$imageUrl/$propertyImg"
@@ -65,19 +70,16 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
         mutableStateOf<Uri?>(null)
     }
 
-    val singlePhotoPickerLauncher =
-        rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.PickVisualMedia(),
-            onResult = { uri ->
-                selectedImageUri = uri
-            }
-        )
+    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            selectedImageUri = uri
+        })
     when {
         openDeleteDialog.value -> {
             if (propertyViewModel.uiState is UiState.Success) {
                 if (selectedImageUri != null) {
-                    DeleteDialog(
-                        onDismissRequest = { openDeleteDialog.value = false },
+                    DeleteDialog(onDismissRequest = { openDeleteDialog.value = false },
                         onConfirmation = {
                             openDeleteDialog.value = false
                             selectedImageUri = null
@@ -89,28 +91,23 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
                         icon = Icons.Default.Warning
                     )
                 } else {
-                    DeleteDialog(
-                        onDismissRequest = { openDeleteDialog.value = false },
+                    DeleteDialog(onDismissRequest = { openDeleteDialog.value = false },
                         onConfirmation = {
+                            propertyViewModel.clearImage()
                             openDeleteDialog.value = false
-                            propertyViewModel.handlePropertyEdit(
-                                propertyImg = "null"
-                            )
-                            propertyViewModel.handlePropertySave()
                         },
                         confirmText = "Confirm",
                         dismissText = "Dismiss",
                         dialogTitle = "Clear Image",
-                        dialogText = "Are you sure you want to delete this image?",
+                        dialogText = "Are you sure you want to revert to default?",
                         icon = Icons.Default.Warning
                     )
                 }
             } else {
-                DeleteDialog(
-                    onDismissRequest = { openDeleteDialog.value = false },
+                DeleteDialog(onDismissRequest = { openDeleteDialog.value = false },
                     onConfirmation = {
                         openDeleteDialog.value = false
-                        propertyViewModel.getData()
+                        propertyViewModel.getDataForActiveProperty()
                     },
                     confirmText = "Retry Connection",
                     dismissText = "Dismiss",
@@ -123,7 +120,9 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
     }
 
     Box(
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -137,7 +136,10 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
 
             Card(
 
-                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.8f).padding(top = 32.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.8f)
+                    .padding(top = 32.dp),
                 elevation = CardDefaults.cardElevation(
                     defaultElevation = 6.dp
                 ),
@@ -150,31 +152,37 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
             ) {
                 Box() {
                     if (selectedImageUri != null) {
-                        GlideImage(
-                            model = selectedImageUri,
+                        GlideImage(model = selectedImageUri,
                             contentDescription = "Property Image",
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize().clickable {
-                                propertyViewModel.isAddPropertyDialogOpen = true
-                            }
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clickable {
+                                    imageFullScreen = true
+
+                                }
 
                         )
                     } else {
-                        GlideImage(
-                            model = image,
+                        GlideImage(model = image,
                             contentDescription = "Property Image",
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize().width(100.dp).clickable {
-                                propertyViewModel.isAddPropertyDialogOpen = true
-                            }
-                        )
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .width(100.dp)
+                                .clickable {
+                                    imageFullScreen = true
+                                })
                     }
                     Icon(
                         imageVector = Constants.propertyTypesIcons[property.propertyType]
                             ?: Icons.Default.Home,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.size(40.dp).align(Alignment.BottomStart).padding(8.dp)
+                        modifier = Modifier
+                            .size(40.dp)
+                            .align(Alignment.BottomStart)
+                            .padding(8.dp)
                     )
                     IconButton(
                         onClick = { openDeleteDialog.value = true },
@@ -188,20 +196,31 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
                             imageVector = Icons.Default.Close,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onPrimary,
-                            modifier = Modifier.size(40.dp).padding(8.dp)
+                            modifier = Modifier
+                                .size(40.dp)
+                                .padding(8.dp)
                         )
                     }
                 }
             }
 
             Button(
-                enabled = !offline,
-                onClick = {
-                    singlePhotoPickerLauncher.launch(
-                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                    )
-                },
-                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
+                enabled = !offline, onClick = {
+
+                    if (selectedImageUri != null) {
+                        propertyViewModel.uploadImage(context, selectedImageUri!!)
+                        selectedImageUri = null
+                    } else {
+                        singlePhotoPickerLauncher.launch(
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        )
+                    }
+
+                    Log.i("TEST", "PropertyPhotosScreen: ${selectedImageUri.toString()}")
+
+                }, modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp)
             ) {
                 if (offline) {
                     Row {
@@ -238,12 +257,11 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
     }
 
     when {
-        propertyViewModel.isAddPropertyDialogOpen -> {
+        imageFullScreen -> {
             ImageDialog(
                 onDismissRequest = {
-                    propertyViewModel.isAddPropertyDialogOpen = false
-                },
-                imageUrl = if (selectedImageUri != null) {
+                    imageFullScreen = false
+                }, imageUrl = if (selectedImageUri != null) {
                     selectedImageUri.toString()
                 } else {
                     image
