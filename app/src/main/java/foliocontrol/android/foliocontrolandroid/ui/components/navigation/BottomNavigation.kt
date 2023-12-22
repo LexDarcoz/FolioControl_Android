@@ -104,12 +104,9 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
         }
         if (isPartnershipsSelected) {
             DropdownMenu(
-//                modifier = Modifier // Set the desired offset here
-// //                    .fillMaxWidth(),
                 modifier = Modifier.background(MaterialTheme.colorScheme.surface),
                 expanded = true,
                 onDismissRequest = {
-                    // Dismiss the dropdown when clicked outside
                     selectedIcon = -1
                 },
                 offset = DpOffset(x = 256.dp, y = (-50).dp)

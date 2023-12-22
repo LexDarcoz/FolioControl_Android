@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class AccountViewModel(
-    private val propertyRepo: PropertyDatabase,
     private val accountRepo: AccountDatabase
 ) : ViewModel() {
 
@@ -102,8 +101,7 @@ class AccountViewModel(
         viewModelScope.launch {
             try {
                 authService.saveUserByToken(
-                    getEncryptedPreference("token"),
-                    user
+                    getEncryptedPreference("token"), user
                 )
             } catch (e: Exception) {
                 println("Error: ${e.message}")

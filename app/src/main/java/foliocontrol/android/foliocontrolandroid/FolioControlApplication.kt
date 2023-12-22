@@ -16,13 +16,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import foliocontrol.android.foliocontrol_android.R
 import foliocontrol.android.foliocontrolandroid.components.BottomNavigation
 import foliocontrol.android.foliocontrolandroid.components.Navbar
 import foliocontrol.android.foliocontrolandroid.screens.AccountScreen
 import foliocontrol.android.foliocontrolandroid.screens.AuthScreen
-import foliocontrol.android.foliocontrolandroid.screens.SettingScreen
 import foliocontrol.android.foliocontrolandroid.ui.screens.portfolio.PropertyOverviewScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.AuthViewModel
@@ -37,10 +36,7 @@ fun FolioControlApplication(
     propertyViewModel: PropertyViewModel = viewModel(factory = AppViewModelProvider.Factory),
     accountViewModel: AccountViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController()
-
 ) {
-    val backStackEntry by navController.currentBackStackEntryAsState()
-
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Scaffold(modifier = Modifier.fillMaxWidth(),
         contentColor = MaterialTheme.colorScheme.primary,
@@ -59,8 +55,9 @@ fun FolioControlApplication(
         },
         topBar = {
             Navbar(
-                scrollBehavior, authViewModel = authViewModel, navController = navController
-//                navController.previousBackStackEntry != null
+                scrollBehavior,
+                authViewModel = authViewModel,
+                navController = navController,
             )
         }
 
@@ -91,14 +88,12 @@ fun AppNavigator(
         composable("Home") {
             AuthScreen(authViewModel = authViewModel, propertyViewModel = propertyViewModel) {
                 navController.navigate(
-//                    "PropertyDetail/" +
                     "$it"
                 )
             }
         }
-        // Main
+        // Account
         composable("Account") { AccountScreen(accountViewModel, propertyViewModel) }
-        composable("Settings") { SettingScreen(/*...*/) }
         // Portfolio
         composable("PropertyDetail") {
             PropertyOverviewScreen(

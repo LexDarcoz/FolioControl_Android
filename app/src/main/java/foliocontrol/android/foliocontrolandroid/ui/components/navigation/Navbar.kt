@@ -24,33 +24,27 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 fun Navbar(
     scrollBehavior: TopAppBarScrollBehavior,
     authViewModel: AuthViewModel,
-    navController: NavHostController
-//    canNavigateBack: Boolean,
+    navController: NavHostController,
 ) {
-    CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.largeTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.secondary
-        ),
-        title = {
-            Text(
-                "FolioControl",
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.onPrimary
+    CenterAlignedTopAppBar(colors = TopAppBarDefaults.largeTopAppBarColors(
+        containerColor = MaterialTheme.colorScheme.primary,
+        titleContentColor = MaterialTheme.colorScheme.secondary
+    ), title = {
+        Text(
+            "FolioControl",
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+    }, navigationIcon = {
+        IconButton(onClick = { navController.navigateUp() }) {
+            Icon(
+                tint = MaterialTheme.colorScheme.onPrimary,
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Back"
             )
-        },
-        navigationIcon = {
-//        if (canNavigateBack) {
-            IconButton(onClick = { navController.navigateUp() }) {
-                Icon(
-                    tint = MaterialTheme.colorScheme.onPrimary,
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Back"
-                )
-            }
-//        }
-        },
+        }
+    },
 
         actions = {
             when (authViewModel.loginUiState) {
@@ -61,7 +55,7 @@ fun Navbar(
                     }) {
                         Icon(
                             imageVector = Icons.Filled.ExitToApp,
-                            contentDescription = "Localized description",
+                            contentDescription = "Log out",
                             tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
