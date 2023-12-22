@@ -64,9 +64,8 @@ interface PropertyAPI {
     @POST("api/propertyDocument/create")
     suspend fun uploadDocumentByPropertyID(
         @Header("Authorization") token: String,
-        @Path("propertyID") propertyID: Int,
-        @Part propertyImage: MultipartBody.Part,
-        @Part("document") document: JsonObject
+        @Path("property") property: JsonObject,
+        @Part("document") document: MultipartBody.Part
     )
 
     @Headers("Accept: application/json")
@@ -239,7 +238,7 @@ suspend fun savePropertyByID(
 }
 
 suspend fun uploadDocumentByPropertyID(
-    token: String, documentImage: MultipartBody.Part, document: PropertyDocument,
+    token: String, documentFile: MultipartBody.Part, document: PropertyDocument,
 ) {
     try {
         var body = buildJsonObject {
@@ -250,7 +249,7 @@ suspend fun uploadDocumentByPropertyID(
             put("FK_propertyID", JsonPrimitive(document.FK_propertyID))
         }
         propertyApi.uploadDocumentByPropertyID(
-            token, document.FK_propertyID, documentImage, body
+            token, body,documentFile
         )
     } catch (e: Exception) {
         Log.e("TESTING", "uploadDocumentByPropertyID failed", e)

@@ -26,8 +26,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -84,6 +83,8 @@ dependencies {
     // images
     implementation("io.coil-kt:coil-compose:2.5.0")
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+
+    implementation("com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

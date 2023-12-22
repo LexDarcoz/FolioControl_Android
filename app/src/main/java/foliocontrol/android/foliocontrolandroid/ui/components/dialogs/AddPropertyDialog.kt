@@ -49,49 +49,77 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 val items = listOf(
     DropDownMenuItem(
-        "Apartment",
-        { Icon(Icons.Default.Apartment, contentDescription = "Apartment") },
-        "Apartment"
-    ),
-    DropDownMenuItem(
-        "House",
-        { Icon(Icons.Default.House, contentDescription = "House") },
-        "House"
-    ),
-    DropDownMenuItem(
-        "Garage",
-        { Icon(Icons.Default.Garage, contentDescription = "Garage") },
-        "Garage"
-    ),
-    DropDownMenuItem(
-        "Store",
-        { Icon(Icons.Default.Store, contentDescription = "Store") },
-        "Store"
-    ),
-    DropDownMenuItem(
-        "Terraced House",
-        { Icon(Icons.Default.Villa, contentDescription = "Terraced House") },
-        "Terraced House"
-    ),
-    DropDownMenuItem(
-        "Semi-detached",
-        { Icon(Icons.Default.Home, contentDescription = "Semi-detached") },
-        "Semi-detached"
-    ),
-    DropDownMenuItem(
-        "Villa",
-        { Icon(Icons.Default.Villa, contentDescription = "Villa") },
-        "Villa"
-    ),
-    DropDownMenuItem(
-        "Storage",
-        { Icon(Icons.Default.Warehouse, contentDescription = "Storage") },
-        "Storage"
-    ),
-    DropDownMenuItem(
-        "Other",
-        { Icon(Icons.Default.Info, contentDescription = "Other") },
-        "Other"
+        "Apartment", icon = {
+            Icon(
+                Icons.Default.Apartment,
+                contentDescription = "Apartment",
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        }, "Apartment"
+    ), DropDownMenuItem(
+        "House", icon = {
+            Icon(
+                Icons.Default.House,
+                contentDescription = "House",
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        }, "House"
+    ), DropDownMenuItem(
+        "Garage", icon = {
+            Icon(
+                Icons.Default.Garage,
+                contentDescription = "Garage",
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        }, "Garage"
+    ), DropDownMenuItem(
+        "Store", icon = {
+            Icon(
+                Icons.Default.Store,
+                contentDescription = "Store",
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        }, "Store"
+    ), DropDownMenuItem(
+        "Terraced House", icon = {
+            Icon(
+                Icons.Default.Villa,
+                contentDescription = "Terraced House",
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        }, "Terraced House"
+    ), DropDownMenuItem(
+        "Semi-detached", icon = {
+            Icon(
+                Icons.Default.Home,
+                contentDescription = "Semi-detached",
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        }, "Semi-detached"
+    ), DropDownMenuItem(
+        "Villa", icon = {
+            Icon(
+                Icons.Default.Villa,
+                contentDescription = "Villa",
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        }, "Villa"
+    ), DropDownMenuItem(
+        "Storage", icon = {
+            Icon(
+                Icons.Default.Warehouse,
+                contentDescription = "Storage",
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        }, "Storage"
+    ), DropDownMenuItem(
+        "Other", icon = {
+            Icon(
+                Icons.Default.Info,
+                contentDescription = "Other",
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        }, "Other"
     )
 )
 
@@ -103,25 +131,22 @@ fun AddPropertyDialog(
     offline: Boolean = false
 ) {
     Dialog(
-        onDismissRequest = { onDismissRequest() },
-        properties = DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = true,
-            usePlatformDefaultWidth = false
+        onDismissRequest = { onDismissRequest() }, properties = DialogProperties(
+            dismissOnBackPress = true, dismissOnClickOutside = true, usePlatformDefaultWidth = false
         )
 
     ) {
         var expanded by remember { mutableStateOf(false) }
         Box(
-            modifier = Modifier.fillMaxSize().background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.Black.copy(alpha = 0.75f),
-                        Color.Black.copy(alpha = 0.75f)
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Black.copy(alpha = 0.75f), Color.Black.copy(alpha = 0.75f)
+                        )
                     )
-                )
-            ),
-            contentAlignment = Alignment.Center
+                ), contentAlignment = Alignment.Center
         ) {
             if (!offline) {
                 Column(
@@ -131,11 +156,16 @@ fun AddPropertyDialog(
                         color = MaterialTheme.colorScheme.onPrimary,
                         contentColor = MaterialTheme.colorScheme.primary,
                         shape = MaterialTheme.shapes.large,
-                        modifier = Modifier.fillMaxWidth().clip(MaterialTheme.shapes.medium)
-                            .padding(16.dp).height(500.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(MaterialTheme.shapes.medium)
+                            .padding(16.dp)
+                            .height(500.dp)
                     ) {
                         Column(
-                            modifier = Modifier.fillMaxSize().padding(16.dp)
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp)
                         ) {
                             Row {
                                 Icon(
@@ -152,16 +182,13 @@ fun AddPropertyDialog(
                             }
 
                             FolioTextField(
-                                true,
-                                "Name",
-                                propertyViewModel.addPropertyState.propertyName
+                                true, "Name", propertyViewModel.addPropertyState.propertyName
                             ) {
                                 propertyViewModel.handlePropertyAddEdit(
                                     propertyName = it
                                 )
                             }
-                            FolioDropdown(
-                                expanded = expanded,
+                            FolioDropdown(expanded = expanded,
                                 toggleExpanded = { expanded = !expanded },
                                 items = items,
                                 label = "Type",
@@ -169,8 +196,7 @@ fun AddPropertyDialog(
                                     propertyViewModel.handlePropertyAddEdit(
                                         propertyType = selectedItem
                                     )
-                                }
-                            )
+                                })
 
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -178,9 +204,7 @@ fun AddPropertyDialog(
                             ) {
                                 Box(modifier = Modifier.weight(1f)) {
                                     FolioTextField(
-                                        true,
-                                        "Street",
-                                        propertyViewModel.addPropertyState.street
+                                        true, "Street", propertyViewModel.addPropertyState.street
                                     ) {
                                         propertyViewModel.handlePropertyAddEdit(street = it)
                                     }
@@ -205,9 +229,7 @@ fun AddPropertyDialog(
                             ) {
                                 Box(modifier = Modifier.weight(1f)) {
                                     FolioTextField(
-                                        true,
-                                        "Zip Code",
-                                        propertyViewModel.addPropertyState.zipCode
+                                        true, "Zip Code", propertyViewModel.addPropertyState.zipCode
                                     ) {
                                         propertyViewModel.handlePropertyAddEdit(
                                             zipCode = it
@@ -217,9 +239,7 @@ fun AddPropertyDialog(
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Box(modifier = Modifier.weight(1f)) {
                                     FolioTextField(
-                                        true,
-                                        "City",
-                                        propertyViewModel.addPropertyState.city
+                                        true, "City", propertyViewModel.addPropertyState.city
                                     ) {
                                         propertyViewModel.handlePropertyAddEdit(city = it)
                                     }
@@ -227,9 +247,7 @@ fun AddPropertyDialog(
                             }
 
                             FolioTextField(
-                                true,
-                                "Country",
-                                propertyViewModel.addPropertyState.country
+                                true, "Country", propertyViewModel.addPropertyState.country
                             ) {
                                 propertyViewModel.handlePropertyAddEdit(
                                     country = it
@@ -237,11 +255,16 @@ fun AddPropertyDialog(
                             }
                             Spacer(modifier = Modifier.weight(1f))
                             Row(
-                                modifier = Modifier.fillMaxWidth().padding(top = 16.dp)
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 16.dp)
                             ) {
                                 Button(
                                     onClick = { onDismissRequest() },
-                                    modifier = Modifier.fillMaxWidth().height(48.dp).weight(1f)
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(48.dp)
+                                        .weight(1f)
                                         .padding(end = 8.dp)
                                 ) {
                                     Icon(
@@ -255,7 +278,10 @@ fun AddPropertyDialog(
                                     onClick = {
                                         onConfirmation()
                                     },
-                                    modifier = Modifier.fillMaxWidth().height(48.dp).weight(1f)
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(48.dp)
+                                        .weight(1f)
                                         .padding(start = 8.dp)
                                 ) {
                                     Icon(

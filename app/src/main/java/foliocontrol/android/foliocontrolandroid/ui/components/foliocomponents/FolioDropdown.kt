@@ -13,6 +13,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -27,9 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 data class DropDownMenuItem(
-    val text: String,
-    val icon: @Composable () -> Unit,
-    val description: String
+    val text: String, val icon: @Composable () -> Unit, val description: String
 )
 
 @Composable
@@ -39,23 +38,23 @@ fun FolioDropdown(
     toggleExpanded: () -> Unit,
     items: List<DropDownMenuItem>,
     label: String,
-    onItemSelect: (String) -> Unit = {},
-    initialValue: String = ""
+    onItemSelect: (String) -> Unit,
+    initialValue: String = "",
 ) {
     var selected by remember { mutableStateOf(initialValue) }
     Column {
         Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge.copy(
+            text = label, style = MaterialTheme.typography.bodyLarge.copy(
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.primary
-            ),
-            modifier = Modifier.padding(bottom = 4.dp)
+            ), modifier = Modifier.padding(bottom = 4.dp)
         )
 
         Box(
-            modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.secondary)
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.secondary)
                 .height(50.dp)
         ) {
             OutlinedTextField(
@@ -65,11 +64,20 @@ fun FolioDropdown(
                 textStyle = MaterialTheme.typography.bodySmall.copy(
                     color = MaterialTheme.colorScheme.onSurface
                 ),
-                modifier = Modifier.fillMaxWidth().clickable { toggleExpanded() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { toggleExpanded() },
+
+                leadingIcon = {
+                    Icon(
+                        Icons.Default.MoreVert, contentDescription = "Localized description"
+                    )
+                },
+
+
                 trailingIcon = {
                     Icon(
-                        Icons.Default.MoreVert,
-                        contentDescription = "Localized description"
+                        Icons.Default.MoreVert, contentDescription = "Localized description"
                     )
                 },
                 colors = OutlinedTextFieldDefaults.colors(
@@ -87,7 +95,7 @@ fun FolioDropdown(
                 items.forEach { item ->
                     DropdownMenuItem(
                         text = { Text(text = item.text) },
-                        leadingIcon = { item.icon },
+                        leadingIcon = { item.icon() },
                         onClick = {
                             onItemSelect(item.text)
                             selected = item.text
