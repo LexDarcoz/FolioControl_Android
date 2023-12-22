@@ -111,7 +111,8 @@ class PropertyViewModel(
     fun filterProperties(query: String) {
         filteredList = propertyListState.filter {
             it.propertyName.contains(query, ignoreCase = true) ||
-                it.propertyType.contains(query, ignoreCase = true)
+                it.propertyType.contains(query, ignoreCase = true)||
+                    it.country.contains(query, ignoreCase = true)
         }
     }
 
