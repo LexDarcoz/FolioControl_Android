@@ -13,9 +13,9 @@ class AndroidDownloader(private val context: Context) : Downloader {
 //            .setAllowedNetworkTypes(
 //                DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE
 //            )
-            .setTitle("Download").setDescription("Downloading document...")
+            .setTitle("Download").setDescription("Downloading Property Document...")
 //            .addRequestHeader("Authorization", "Bearer ${"token"}")
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
             .setDestinationInExternalPublicDir(
                 Environment.DIRECTORY_DOWNLOADS,
                 "foliocontrol_document.pdf"
