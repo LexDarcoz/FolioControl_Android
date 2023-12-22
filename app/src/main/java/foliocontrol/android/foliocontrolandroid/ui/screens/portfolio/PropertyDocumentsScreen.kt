@@ -141,11 +141,11 @@ fun PropertyDocumentsScreen(propertyViewModel: PropertyViewModel, offline: Boole
     var selectedDocumentUri by remember {
         mutableStateOf<Uri?>(null)
     }
-    val singleDocumentLauncher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.OpenDocument(),
-            onResult = { uri ->
-                selectedDocumentUri = uri
-            })
+    val singleDocumentLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument(),
+        onResult = { uri ->
+            selectedDocumentUri = uri
+        })
 
 
     Box(
@@ -351,6 +351,7 @@ fun AddDocument(
                             propertyViewModel.uploadDocument(
                                 context, selectedDocumentUri
                             )
+                            changeSelectedDocumentUri(null)
                         }) {
                         Text("Submit")
                     }

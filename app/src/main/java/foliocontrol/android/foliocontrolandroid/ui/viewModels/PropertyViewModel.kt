@@ -217,6 +217,7 @@ class PropertyViewModel(
 
     fun uploadDocument(context: Context, uri: Uri) {
         val file = uriToFile(context, uri)
+        val name = file?.name
         val requestFile = file?.asRequestBody("pdf/*".toMediaTypeOrNull())
 
         if (file != null && requestFile != null) {
@@ -225,8 +226,12 @@ class PropertyViewModel(
         } else {
             // Handle the case when the conversion fails
         }
+
+        handleAddDocumentEdit(
+            FK_propertyID = propertyState.propertyID, name = name
+        )
         handleDocumentUpload()
-        getDataForActiveProperty()
+        clearDocument()
     }
 
     private fun uriToFile(context: Context, uri: Uri): File? {
@@ -297,13 +302,19 @@ class PropertyViewModel(
     }
 
     fun handleAddDocumentEdit(
+        name: String? = null,
         documentType: String? = null,
         expiryDate: String? = null,
+        FK_propertyID: Int? = null
     ) {
-
-
+        name?.let {
+            propertyDocument = propertyDocument.copy(name = it)
+        }
         documentType?.let {
             propertyDocument = propertyDocument.copy(documentType = it)
+        }
+        FK_propertyID?.let {
+            propertyDocument = propertyDocument.copy(propertyId = it)
         }
         expiryDate?.let {
             propertyDocument = propertyDocument.copy(expiryDate = it)
@@ -326,6 +337,9 @@ class PropertyViewModel(
     fun clearDocument() {
         propertyDocumentState = MultipartBody.Part.createFormData(
             "document", "null"
+        )
+        handleAddDocumentEdit(
+            name = " ", documentType = " ", expiryDate = " ", FK_propertyID = null
         )
     }
 

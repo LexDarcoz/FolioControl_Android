@@ -57,7 +57,7 @@ data class PropertyDocument(
     val documentName: String = "",
     val documentType: String = "",
     val expiryDate: String = "",
-    val FK_propertyID: Int = 0
+    val propertyId: Int = 0
 )
 
 fun Property.asPropertyRoomEntity() = PropertyRoomEntity(
