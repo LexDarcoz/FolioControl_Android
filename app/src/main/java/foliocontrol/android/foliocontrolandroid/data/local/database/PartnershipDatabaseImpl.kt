@@ -12,4 +12,8 @@ class PartnershipDatabaseImpl(private val partnershipDao: PartnershipDao) : Part
     override suspend fun insertAllPartnerships(partnerships: List<PartnershipRoomEntity>) {
         partnershipDao.insertAllPartnerships(partnerships)
     }
+
+    override suspend fun clearAllTables() {
+        partnershipDao.clearAllTables()
+    }
 }

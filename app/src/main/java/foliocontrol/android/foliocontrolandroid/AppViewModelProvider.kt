@@ -11,7 +11,8 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
-            AuthViewModel()
+            AuthViewModel(    propertyRepo = foliocontrolApplication().container.propertyDatabase,
+                partnershipRepo = foliocontrolApplication().container.partnershipDatabase,accountRepo = foliocontrolApplication().container.accountDatabase)
         }
         initializer {
             PropertyViewModel(
@@ -22,7 +23,6 @@ object AppViewModelProvider {
         }
         initializer {
             AccountViewModel(
-                propertyRepo = foliocontrolApplication().container.propertyDatabase,
                 accountRepo = foliocontrolApplication().container.accountDatabase
             )
         }

@@ -17,4 +17,8 @@ class AccountDatabaseImpl(private val userDao: UserDao) : AccountDatabase {
     override suspend fun insertUser(user: UserRoomEntity) {
         userDao.insert(user)
     }
+
+    override suspend fun clearAllTables() {
+        userDao.clearAllTables()
+    }
 }

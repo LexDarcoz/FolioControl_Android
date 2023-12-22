@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FileCopy
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -28,18 +29,19 @@ import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 @Composable
-fun DocumentCard(document: PropertyDocument, propertyViewModel: PropertyViewModel) {
+fun DocumentCard(
+    document: PropertyDocument, propertyViewModel: PropertyViewModel, toggleDialog: () -> Unit
+) {
     Card(
-        modifier = Modifier.padding(8.dp).clickable {
-            propertyViewModel.downloadFile(
-                "$PROPERTYDOCUMENTS_URL/${document.documentName}"
-            ) > 0
-        },
-        elevation = CardDefaults.cardElevation(
+        modifier = Modifier
+            .padding(8.dp)
+            .clickable {
+                propertyViewModel.downloadFile(
+                    "$PROPERTYDOCUMENTS_URL/${document.documentName}"
+                ) > 0
+            }, elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
-        ),
-        shape = MaterialTheme.shapes.small,
-        colors = CardDefaults.cardColors(
+        ), shape = MaterialTheme.shapes.small, colors = CardDefaults.cardColors(
             contentColor = MaterialTheme.colorScheme.primary,
             containerColor = MaterialTheme.colorScheme.secondary
         )
@@ -48,7 +50,9 @@ fun DocumentCard(document: PropertyDocument, propertyViewModel: PropertyViewMode
             modifier = Modifier.padding(16.dp)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
@@ -83,6 +87,16 @@ fun DocumentCard(document: PropertyDocument, propertyViewModel: PropertyViewMode
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
+
+            Button(
+                onClick = {
+                    toggleDialog()
+                }, modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(top = 8.dp)
+            ) {
+                Text("Delete")
+            }
         }
     }
 }

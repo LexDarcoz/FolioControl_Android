@@ -18,6 +18,10 @@ class PropertyDatabaseImpl(private val propertyDao: PropertyDao) : PropertyDatab
         propertyDao.dropTable(partnershipID)
     }
 
+    override suspend fun clearAllTables() {
+        propertyDao.clearAllTables()
+    }
+
     override suspend fun insertAll(properties: List<PropertyRoomEntity>) {
         propertyDao.insertAll(properties)
     }

@@ -9,4 +9,6 @@ interface AccountDatabase {
     suspend fun getPartnershipsByLoggedInUser(token: String): List<PartnershipRoomEntity>
 
     suspend fun insertUser(user: UserRoomEntity)
+
+    suspend fun clearAllTables()
 }

@@ -15,7 +15,7 @@ class AndroidDownloader(private val context: Context) : Downloader {
 //            )
             .setTitle("Download").setDescription("Downloading Property Document...")
 //            .addRequestHeader("Authorization", "Bearer ${"token"}")
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setDestinationInExternalPublicDir(
                 Environment.DIRECTORY_DOWNLOADS,
                 "foliocontrol_document.pdf"

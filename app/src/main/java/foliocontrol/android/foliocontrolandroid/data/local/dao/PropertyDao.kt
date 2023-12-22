@@ -24,4 +24,7 @@ interface PropertyDao {
 
     @Query("DELETE FROM property_table where FK_partnership_id = :partnershipID")
     suspend fun dropTable(partnershipID: Int)
+
+    @Query("DELETE FROM property_table")
+    suspend fun clearAllTables()
 }

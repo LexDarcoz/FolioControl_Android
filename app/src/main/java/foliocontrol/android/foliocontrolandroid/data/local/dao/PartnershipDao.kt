@@ -15,4 +15,7 @@ interface PartnershipDao {
 
     @Query("SELECT * FROM partnership_table")
     fun getPartnerships(): Flow<List<PartnershipRoomEntity>>
+
+    @Query("DELETE FROM partnership_table")
+    suspend fun clearAllTables()
 }

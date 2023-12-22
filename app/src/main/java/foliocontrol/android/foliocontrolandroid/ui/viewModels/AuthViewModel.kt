@@ -5,6 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import foliocontrol.android.foliocontrolandroid.data.local.database.AccountDatabase
+import foliocontrol.android.foliocontrolandroid.data.local.database.PartnershipDatabase
+import foliocontrol.android.foliocontrolandroid.data.local.database.PropertyDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.local.removeEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.local.saveEncryptedPreference
@@ -13,7 +16,11 @@ import foliocontrol.android.foliocontrolandroid.domain.LoginCredentials
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import kotlinx.coroutines.launch
 
-class AuthViewModel : ViewModel() {
+class AuthViewModel(
+    private val propertyRepo: PropertyDatabase,
+    private val partnershipRepo: PartnershipDatabase,
+    private val accountRepo: AccountDatabase
+) : ViewModel() {
     lateinit var navigateTo: (String) -> Unit
     private val authService = AuthServiceImpl()
 
@@ -54,8 +61,7 @@ class AuthViewModel : ViewModel() {
     }
 
     fun updateLoginState(
-        email: String? = null,
-        password: String? = null
+        email: String? = null, password: String? = null
     ) {
         email?.let {
             loginCredentials = loginCredentials.copy(email = it)
@@ -89,8 +95,18 @@ class AuthViewModel : ViewModel() {
     }
 
     fun logOut() {
-        resetToken()
-        removeEncryptedPreference("token")
+        viewModelScope.launch {
+            try {
+                resetToken()
+                removeEncryptedPreference("token")
+                partnershipRepo.clearAllTables()
+                propertyRepo.clearAllTables()
+                accountRepo.clearAllTables()
+            } catch (e: Exception) {
+                println("Error logging out")
+            }
+        }
+
         loginUiState = UiState.LoggedOut("You logged out")
     }
 

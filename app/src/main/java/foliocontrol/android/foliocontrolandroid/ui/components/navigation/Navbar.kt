@@ -26,6 +26,7 @@ fun Navbar(
     authViewModel: AuthViewModel,
     navController: NavHostController,
 ) {
+
     CenterAlignedTopAppBar(colors = TopAppBarDefaults.largeTopAppBarColors(
         containerColor = MaterialTheme.colorScheme.primary,
         titleContentColor = MaterialTheme.colorScheme.secondary
@@ -50,6 +51,7 @@ fun Navbar(
             when (authViewModel.loginUiState) {
                 is UiState.Success -> {
                     IconButton(onClick = {
+
                         authViewModel.logOut()
                         navController.navigate("Home")
                     }) {
