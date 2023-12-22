@@ -1,5 +1,6 @@
 package foliocontrol.android.foliocontrolandroid.ui.screens.portfolio
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,8 +20,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -96,14 +99,16 @@ fun DocumentsList(propertyDocuments: List<PropertyDocument>, propertyViewModel: 
             .padding(top = 32.dp)
     ) {
         val openDeleteDialog = remember { mutableStateOf(false) }
-
+        var documentID by remember { mutableStateOf(0) }
         when {
             openDeleteDialog.value -> {
                 if (propertyViewModel.uiState is UiState.Success) {
-                    DeleteDialog(onDismissRequest = { openDeleteDialog.value = false },
+                    DeleteDialog(
+                        onDismissRequest = { openDeleteDialog.value = false },
                         onConfirmation = {
+                            propertyViewModel.handleDocumentDelete(documentID)
                             openDeleteDialog.value = false
-                            //todo
+
                         },
                         confirmText = "Delete",
                         dismissText = "Dismiss",
@@ -112,7 +117,8 @@ fun DocumentsList(propertyDocuments: List<PropertyDocument>, propertyViewModel: 
                         icon = Icons.Default.Warning
                     )
                 } else {
-                    DeleteDialog(onDismissRequest = { openDeleteDialog.value = false },
+                    DeleteDialog(
+                        onDismissRequest = { openDeleteDialog.value = false },
                         onConfirmation = {
                             openDeleteDialog.value = false
                             propertyViewModel.getDataForActiveProperty()
@@ -130,10 +136,11 @@ fun DocumentsList(propertyDocuments: List<PropertyDocument>, propertyViewModel: 
 
         LazyColumn {
             items(propertyDocuments) { document ->
-                DocumentCard(
-                    document,
-                    propertyViewModel,
-                    toggleDialog = { openDeleteDialog.value = true })
+                DocumentCard(document, propertyViewModel) {
+                    Log.i("TEST", "DocumentsList: ${it}")
+                    documentID = it
+                    openDeleteDialog.value = !openDeleteDialog.value
+                }
             }
         }
     }

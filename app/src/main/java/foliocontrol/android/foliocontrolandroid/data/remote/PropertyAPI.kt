@@ -6,6 +6,7 @@ import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.Premise
 import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -59,21 +60,38 @@ interface PropertyAPI {
     )
 
     @Headers("Accept: application/json")
+    @Multipart
+    @POST("api/propertyDocument/create")
+    suspend fun uploadDocumentByPropertyID(
+        @Header("Authorization") token: String,
+        @Path("propertyID") propertyID: Int,
+        @Part propertyImage: MultipartBody.Part,
+        @Part("document") document: JsonObject
+    )
+
+    @Headers("Accept: application/json")
     @POST("api/property/create")
     suspend fun createProperty(
         @Header("Authorization") token: String, @Body property: JsonObject
     )
 
+
     @Headers("Accept: application/json")
     @GET("api/property/{propertyID}")
     suspend fun getProperty(
         @Header("Authorization") token: String, @Path("propertyID") propertyID: Int
-    ) : JsonObject
+    ): JsonObject
 
     @Headers("Accept: application/json")
     @DELETE("api/property/{propertyID}")
     suspend fun deletePropertyById(
         @Header("Authorization") token: String, @Path("propertyID") propertyID: Int
+    )
+
+    @Headers("Accept: application/json")
+    @DELETE("api/propertyDocument/delete/{documentID}")
+    suspend fun deleteDocumentById(
+        @Header("Authorization") token: String, @Path("documentID") documentID: Int
     )
 }
 
@@ -101,8 +119,6 @@ suspend fun fetchProperties(token: String, partnershipID: Int): List<Property>? 
 
 suspend fun fetchPremises(token: String, propertyID: Int): List<Premise>? {
     var premises = propertyApi.getPremisesForProperty(token, propertyID)
-
-    Log.i("TEST", "fetchPremisesss: $premises")
     return premises.map {
         Premise(
             it.jsonObject["premisesID"]?.jsonPrimitive?.int ?: 0,
@@ -141,10 +157,9 @@ suspend fun fetchProperty(token: String, propertyID: Int): Property? {
 
 suspend fun fetchDocuments(token: String, propertyID: Int): List<PropertyDocument>? {
     var documents = propertyApi.getDocumentsForProperty(token, propertyID)
-
     return documents.map {
         PropertyDocument(
-            it.jsonObject["documentID"]?.jsonPrimitive?.int ?: 0,
+            it.jsonObject["propertyDocumentID"]?.jsonPrimitive?.int ?: 0,
             it.jsonObject["name"]?.jsonPrimitive?.content ?: "",
             it.jsonObject["documentName"]?.jsonPrimitive?.content ?: "",
             it.jsonObject["documentType"]?.jsonPrimitive?.content ?: "",
@@ -223,9 +238,27 @@ suspend fun savePropertyByID(
     }
 }
 
-suspend fun createProperty(token: String, property: Property) {
-    Log.i("TEST", "createProperty: $property}")
+suspend fun uploadDocumentByPropertyID(
+    token: String, documentImage: MultipartBody.Part, document: PropertyDocument,
+) {
+    try {
+        var body = buildJsonObject {
+            put("name", JsonPrimitive(document.name))
+            put("documentName", JsonPrimitive(document.documentName))
+            put("documentType", JsonPrimitive(document.documentType))
+            put("expiryDate", JsonPrimitive(document.expiryDate))
+            put("FK_propertyID", JsonPrimitive(document.FK_propertyID))
+        }
+        propertyApi.uploadDocumentByPropertyID(
+            token, document.FK_propertyID, documentImage, body
+        )
+    } catch (e: Exception) {
+        Log.e("TESTING", "uploadDocumentByPropertyID failed", e)
+    }
+}
 
+
+suspend fun createProperty(token: String, property: Property) {
     try {
         var body = buildJsonObject {
             put("propertyName", JsonPrimitive(property.propertyName))
@@ -250,5 +283,13 @@ suspend fun deletePropertyById(token: String, propertyID: Int) {
         propertyApi.deletePropertyById(token, propertyID)
     } catch (e: Exception) {
         Log.e("TESTING", "deletePropertyById failed", e)
+    }
+}
+
+suspend fun deleteDocumentByID(token: String, documentID: Int) {
+    try {
+        propertyApi.deleteDocumentById(token, documentID)
+    } catch (e: Exception) {
+        Log.e("TESTING", "deleteDocumentById failed", e)
     }
 }

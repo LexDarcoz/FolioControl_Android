@@ -9,9 +9,7 @@ import okhttp3.MultipartBody
 interface PropertyService {
     suspend fun getProperties(token: String, partnership: Partnership): List<Property>
     suspend fun savePropertyByPropertyID(
-        token: String,
-        property: Property,
-        propertyImage: MultipartBody.Part
+        token: String, property: Property, propertyImage: MultipartBody.Part
     )
 
     suspend fun getDetailsForProperty(token: String, property: Property): Property
@@ -20,4 +18,11 @@ interface PropertyService {
     suspend fun getPremisesForProperty(token: String, property: Property): List<Premise>
     suspend fun addProperty(token: String, property: Property)
     suspend fun deletePropertyByPropertyID(token: String, propertyID: Int)
+    suspend fun deleteDocumentByPropertyID(token: String, documentID: Int)
+    suspend fun uploadDocument(
+        token: String,
+        documentImage: MultipartBody.Part, document: PropertyDocument,
+    )
+
+
 }

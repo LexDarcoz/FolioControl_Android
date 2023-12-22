@@ -49,8 +49,12 @@ class PropertyViewModel(
 
     var propertyDocuments by mutableStateOf(emptyList<PropertyDocument>())
         private set
+
+    var propertyDocument by mutableStateOf(PropertyDocument())
+        private set
     var propertyPremises by mutableStateOf(emptyList<Premise>())
         private set
+
 
     var partnershipListState by mutableStateOf(emptyList<Partnership>())
         private set
@@ -65,6 +69,13 @@ class PropertyViewModel(
     var propertyImageState by mutableStateOf(
         MultipartBody.Part.createFormData(
             "propertyImage", "null"
+        )
+    )
+        private set
+
+    var propertyDocumentState by mutableStateOf(
+        MultipartBody.Part.createFormData(
+            "document", "null"
         )
     )
         private set
@@ -187,6 +198,34 @@ class PropertyViewModel(
             // Handle the case when the conversion fails
         }
         handlePropertySave()
+    }
+
+    fun handleDocumentUpload() {
+        viewModelScope.launch {
+            try {
+                propertyService.uploadDocument(
+                    getEncryptedPreference("token"), propertyDocumentState, propertyDocument
+                )
+                getDataForActiveProperty()
+            } catch (e: Exception) {
+                println("Error: ${e.message}")
+            } finally {
+                println("Finally")
+            }
+        }
+    }
+
+    fun uploadDocument(context: Context, uri: Uri) {
+        val file = uriToFile(context, uri)
+        val requestFile = file?.asRequestBody("pdf/*".toMediaTypeOrNull())
+
+        if (file != null && requestFile != null) {
+            propertyDocumentState =
+                MultipartBody.Part.createFormData("document", file.name, requestFile)
+        } else {
+            // Handle the case when the conversion fails
+        }
+        handleDocumentUpload()
         getDataForActiveProperty()
     }
 
@@ -257,6 +296,22 @@ class PropertyViewModel(
         }
     }
 
+    fun handleAddDocumentEdit(
+        documentType: String? = null,
+        expiryDate: String? = null,
+    ) {
+
+
+        documentType?.let {
+            propertyDocument = propertyDocument.copy(documentType = it)
+        }
+        expiryDate?.let {
+            propertyDocument = propertyDocument.copy(expiryDate = it)
+        }
+
+    }
+
+
     fun clearImage() {
         handlePropertyEdit(
             propertyImg = "null",
@@ -268,10 +323,15 @@ class PropertyViewModel(
         handlePropertySave()
     }
 
+    fun clearDocument() {
+        propertyDocumentState = MultipartBody.Part.createFormData(
+            "document", "null"
+        )
+    }
+
 
     fun handlePropertySave() {
         viewModelScope.launch {
-            Log.i("TEST", "saving impor: ${propertyState}, ${propertyImageState}")
             try {
                 propertyService.savePropertyByPropertyID(
                     getEncryptedPreference("token"), propertyState, propertyImageState
@@ -293,6 +353,23 @@ class PropertyViewModel(
 
                 )
                 getData()
+                // pop from list and delete in db
+            } catch (e: Exception) {
+                println("Error: ${e.message}")
+            } finally {
+                println("Finally")
+            }
+        }
+    }
+
+    fun handleDocumentDelete(selectedDocumentID: Int) {
+        viewModelScope.launch {
+            try {
+                Log.i("TEST", "handleDocumentDelete: ${selectedDocumentID}")
+                propertyService.deleteDocumentByPropertyID(
+                    getEncryptedPreference("token"), selectedDocumentID
+                )
+                getDataForActiveProperty()
                 // pop from list and delete in db
             } catch (e: Exception) {
                 println("Error: ${e.message}")

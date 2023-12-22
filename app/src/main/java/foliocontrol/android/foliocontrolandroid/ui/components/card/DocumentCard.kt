@@ -30,7 +30,7 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 @Composable
 fun DocumentCard(
-    document: PropertyDocument, propertyViewModel: PropertyViewModel, toggleDialog: () -> Unit
+    document: PropertyDocument, propertyViewModel: PropertyViewModel, toggleDialog: (Int) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -90,7 +90,7 @@ fun DocumentCard(
 
             Button(
                 onClick = {
-                    toggleDialog()
+                    toggleDialog(document.propertyDocumentID)
                 }, modifier = Modifier
                     .align(Alignment.End)
                     .padding(top = 8.dp)

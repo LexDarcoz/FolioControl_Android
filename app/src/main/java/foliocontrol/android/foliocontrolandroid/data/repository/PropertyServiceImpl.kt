@@ -1,12 +1,14 @@
 package foliocontrol.android.foliocontrolandroid.data.repository
 
 import foliocontrol.android.foliocontrolandroid.data.remote.createProperty
+import foliocontrol.android.foliocontrolandroid.data.remote.deleteDocumentByID
 import foliocontrol.android.foliocontrolandroid.data.remote.deletePropertyById
 import foliocontrol.android.foliocontrolandroid.data.remote.fetchDocuments
 import foliocontrol.android.foliocontrolandroid.data.remote.fetchPremises
 import foliocontrol.android.foliocontrolandroid.data.remote.fetchProperties
 import foliocontrol.android.foliocontrolandroid.data.remote.fetchProperty
 import foliocontrol.android.foliocontrolandroid.data.remote.savePropertyByID
+import foliocontrol.android.foliocontrolandroid.data.remote.uploadDocumentByPropertyID
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.Premise
 import foliocontrol.android.foliocontrolandroid.domain.Property
@@ -19,16 +21,11 @@ class PropertyServiceImpl : PropertyService {
     }
 
 
-
     override suspend fun savePropertyByPropertyID(
-        token: String,
-        property: Property,
-        propertyImage: MultipartBody.Part
+        token: String, property: Property, propertyImage: MultipartBody.Part
     ) {
         savePropertyByID(
-            token,
-            property,
-            propertyImage
+            token, property, propertyImage
         )
     }
 
@@ -37,8 +34,7 @@ class PropertyServiceImpl : PropertyService {
     }
 
     override suspend fun getDocumentsForProperty(
-        token: String,
-        property: Property
+        token: String, property: Property
     ): List<PropertyDocument> {
         return fetchDocuments(token, property.propertyID)!!
     }
@@ -53,5 +49,16 @@ class PropertyServiceImpl : PropertyService {
 
     override suspend fun deletePropertyByPropertyID(token: String, propertyID: Int) {
         deletePropertyById(token, propertyID)
+    }
+
+    override suspend fun deleteDocumentByPropertyID(token: String, documentID: Int) {
+        deleteDocumentByID(token, documentID)
+    }
+
+    override suspend fun uploadDocument(
+        token: String,
+        documentImage: MultipartBody.Part, document: PropertyDocument,
+    ) {
+        uploadDocumentByPropertyID(token, documentImage, document)
     }
 }

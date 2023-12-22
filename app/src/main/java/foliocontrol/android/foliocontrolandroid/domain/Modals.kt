@@ -6,8 +6,7 @@ import foliocontrol.android.foliocontrolandroid.data.local.schema.UserRoomEntity
 import kotlinx.serialization.Serializable
 
 data class LoginCredentials(
-    var email: String = "",
-    var password: String = ""
+    var email: String = "", var password: String = ""
 
 )
 
@@ -52,14 +51,8 @@ data class Premise(
     val FK_propertyID: Int = 0
 )
 
-data class Photo(
-    val photoID: Int = 0,
-    val photoImg: String = "",
-    val FK_propertyID: Int = 0
-)
-
 data class PropertyDocument(
-    val PropertyDocumentID: Int = 0,
+    val propertyDocumentID: Int = 0,
     val name: String = "",
     val documentName: String = "",
     val documentType: String = "",
