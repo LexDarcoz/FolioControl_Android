@@ -2,6 +2,7 @@ package foliocontrol.android.foliocontrolandroid.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Apartment
@@ -22,6 +23,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -46,23 +49,17 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
         mutableStateOf(0)
     }
 
-    val items = listOf(
-        BottomNavigationItem(
-            title = "Home",
-            selectedIcon = Icons.Filled.Domain,
-            unselectedIcon = Icons.Outlined.Domain,
-            onClick = { }
-        ),
+    val items = listOf(BottomNavigationItem(title = "Home",
+        selectedIcon = Icons.Filled.Domain,
+        unselectedIcon = Icons.Outlined.Domain,
+        onClick = { }),
 
-        BottomNavigationItem(
-            title = "Account",
+        BottomNavigationItem(title = "Account",
             selectedIcon = Icons.Filled.AccountCircle,
             unselectedIcon = Icons.Outlined.AccountCircle,
             onClick = { }
 
-        ),
-        BottomNavigationItem(
-            title = currentPartnership.name,
+        ), BottomNavigationItem(title = currentPartnership.name,
             selectedIcon = Icons.Filled.Apartment,
             unselectedIcon = Icons.Outlined.Apartment,
             onClick = { }
@@ -76,29 +73,28 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
 
     NavigationBar(
         contentColor = MaterialTheme.colorScheme.onPrimary,
-        containerColor = MaterialTheme.colorScheme.primary
-    ) {
+        containerColor = MaterialTheme.colorScheme.primary,
+        modifier = Modifier
+            .graphicsLayer {
+                shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
+                clip = true
+            }
+        ) {
         items.forEachIndexed { index, item ->
-            NavigationBarItem(
-                selected = selectedIcon == index,
-                onClick = {
-                    selectedIcon = index
-                    if (item.title != currentPartnership.name) {
-                        authViewModel.navigateTo(item.title)
-                    }
-                },
-                label = {
-                    Text(text = item.title, color = MaterialTheme.colorScheme.onPrimary)
-                },
-                alwaysShowLabel = item.title == currentPartnership.name,
-                icon = {
-                    Icon(
-                        imageVector = if (selectedIcon == index) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length
-                        contentDescription = item.title,
-                        tint = MaterialTheme.colorScheme.onPrimary
-
-                    )
+            NavigationBarItem(selected = selectedIcon == index, onClick = {
+                selectedIcon = index
+                if (item.title != currentPartnership.name) {
+                    authViewModel.navigateTo(item.title)
                 }
+            }, label = {
+                Text(text = item.title, color = MaterialTheme.colorScheme.onPrimary)
+            }, alwaysShowLabel = item.title == currentPartnership.name, icon = {
+                Icon(
+                    imageVector = if (selectedIcon == index) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length
+                    contentDescription = item.title, tint = MaterialTheme.colorScheme.onPrimary
+
+                )
+            }
 
             )
         }
@@ -113,14 +109,13 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
             ) {
                 partnershipList.forEach { partnership ->
                     if (partnership.name == currentPartnership.name) {
-                        DropdownMenuItem(
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Filled.Apartment,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
-                            },
+                        DropdownMenuItem(leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Filled.Apartment,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        },
 
                             text = {
                                 Text(
@@ -128,20 +123,17 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.primary
                                 )
-                            },
-                            onClick = {
+                            }, onClick = {
                                 selectedIcon = 0
-                            }
-                        )
+                            })
                     } else {
-                        DropdownMenuItem(
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Outlined.Apartment,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
-                            },
+                        DropdownMenuItem(leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Apartment,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        },
 
                             text = {
                                 Text(
@@ -149,13 +141,11 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
-                            },
-                            onClick = {
+                            }, onClick = {
                                 propertyViewModel.switchPartnership(partnership)
                                 authViewModel.navigateTo("Home")
                                 selectedIcon = 0
-                            }
-                        )
+                            })
                     }
                 }
             }

@@ -95,7 +95,9 @@ fun PropertyCard(
 
     ) {
         Box(
-            modifier = Modifier.height(165.dp).fillMaxSize()
+            modifier = Modifier
+                .height(165.dp)
+                .fillMaxSize()
         ) {
             // Load property image here
 
@@ -104,7 +106,9 @@ fun PropertyCard(
                     painter = painterResource(id = R.drawable.ic_default),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize().width(200.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .width(200.dp)
                 )
             } else {
                 GlideImage(
@@ -121,7 +125,10 @@ fun PropertyCard(
                     ?: Icons.Default.Home,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier.size(40.dp).align(Alignment.BottomStart).padding(8.dp)
+                modifier = Modifier
+                    .size(40.dp)
+                    .align(Alignment.BottomStart)
+                    .padding(8.dp)
             )
             IconButton(
                 onClick = { openDeleteDialog.value = true },
@@ -135,7 +142,9 @@ fun PropertyCard(
                     imageVector = Icons.Default.Close,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.size(40.dp).padding(8.dp)
+                    modifier = Modifier
+                        .size(40.dp)
+                        .padding(8.dp)
                 )
             }
         }
@@ -161,7 +170,9 @@ fun PropertyCard(
                     propertyViewModel.selectProperty(property)
                     navigateTo("PropertyDetail")
                 },
-                modifier = Modifier.fillMaxWidth().padding(top = 4.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp)
             ) {
                 Text(text = "View Property")
             }
