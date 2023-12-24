@@ -27,33 +27,37 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
 
 @Composable
 fun AccountDetailScreen(
-    accountViewModel: AccountViewModel,
-    offline: Boolean,
-    navigateTo: (Any?) -> Unit = {}
+    accountViewModel: AccountViewModel, offline: Boolean, navigateTo: (Any?) -> Unit = {}
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
         Column {
             Text(
-                text = "Account details",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp, top = 8.dp, start = 8.dp)
+                text = "Details:",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(8.dp)
             )
 
             Column(
-                modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
             ) {
                 Surface(
                     color = MaterialTheme.colorScheme.secondary,
                     contentColor = MaterialTheme.colorScheme.primary,
                     shape = MaterialTheme.shapes.small,
                     shadowElevation = 4.dp,
-                    modifier = Modifier.fillMaxWidth().padding(16.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
 
                 ) {
                     Column(
-                        modifier = Modifier.fillMaxSize().padding(16.dp)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp)
                     ) {
                         FolioTextField(!offline, "Name", accountViewModel.user.name) {
                             accountViewModel.handleUserEdit(
@@ -80,9 +84,7 @@ fun AccountDetailScreen(
                             Spacer(modifier = Modifier.width(8.dp))
                             Box(modifier = Modifier.weight(1f)) {
                                 FolioTextField(
-                                    !offline,
-                                    "Street Number",
-                                    accountViewModel.user.streetNumber
+                                    !offline, "Street Number", accountViewModel.user.streetNumber
                                 ) {
                                     accountViewModel.handleUserEdit(streetNumber = it)
                                 }
@@ -95,9 +97,7 @@ fun AccountDetailScreen(
                         ) {
                             Box(modifier = Modifier.weight(1f)) {
                                 FolioTextField(
-                                    !offline,
-                                    "Zip Code",
-                                    accountViewModel.user.zipCode
+                                    !offline, "Zip Code", accountViewModel.user.zipCode
                                 ) {
                                     accountViewModel.handleUserEdit(
                                         zipCode = it
@@ -118,12 +118,12 @@ fun AccountDetailScreen(
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         Button(
-                            enabled = !offline,
-                            onClick = {
+                            enabled = !offline, onClick = {
                                 accountViewModel.handleUserSave()
                                 navigateTo("Home")
-                            },
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
+                            }, modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp)
                         ) {
                             if (offline) {
                                 Row {

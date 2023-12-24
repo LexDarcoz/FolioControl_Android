@@ -81,7 +81,7 @@ fun PropertyOverviewScreen(propertyViewModel: PropertyViewModel, navigateTo: (An
 
         else -> {
             ErrorScreen(errorMessage = (propertyViewModel.uiState as UiState.Error).message,
-                onRetry = { propertyViewModel.getData() })
+                onRetry = { propertyViewModel.getDataForActiveProperty() })
         }
     }
 }

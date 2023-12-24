@@ -157,8 +157,8 @@ fun PropertyDocumentsScreen(propertyViewModel: PropertyViewModel, offline: Boole
             modifier = Modifier.fillMaxSize()
         ) {
             Text(
-                text = "Documents Overview",
-                style = MaterialTheme.typography.titleMedium,
+                text = "Documents:",
+                style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(8.dp)
             )

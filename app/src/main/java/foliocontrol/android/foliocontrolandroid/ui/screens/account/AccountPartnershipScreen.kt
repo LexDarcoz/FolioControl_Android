@@ -24,9 +24,9 @@ fun AccountPartnershipScreen(
     ) {
         Column {
             Text(
-                text = "Partnerships Overview",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp, top = 8.dp, start = 8.dp)
+                text = "Partnerships:",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(8.dp)
             )
 
             LazyColumn {

@@ -70,11 +70,11 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
         mutableStateOf<Uri?>(null)
     }
 
-    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { uri ->
-            selectedImageUri = uri
-        })
+    val singlePhotoPickerLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia(),
+            onResult = { uri ->
+                selectedImageUri = uri
+            })
     when {
         openDeleteDialog.value -> {
             if (propertyViewModel.uiState is UiState.Success) {
@@ -129,8 +129,8 @@ fun PropertyPhotosScreen(propertyViewModel: PropertyViewModel, offline: Boolean 
 
         ) {
             Text(
-                text = "Photos Overview",
-                style = MaterialTheme.typography.titleMedium,
+                text = "Photos:",
+                style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
 

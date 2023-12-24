@@ -37,9 +37,10 @@ fun PremisesListScreen(propertyViewModel: PropertyViewModel, offline: Boolean = 
             modifier = Modifier.fillMaxSize()
         ) {
             Text(
-                text = "Premises Overview",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                text = "Premises:",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(8.dp)
             )
 
             when {
