@@ -1,7 +1,6 @@
 package foliocontrol.android.foliocontrolandroid
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,19 +11,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import foliocontrol.android.foliocontrol_android.R
 import foliocontrol.android.foliocontrolandroid.components.BottomNavigation
 import foliocontrol.android.foliocontrolandroid.components.Navbar
 import foliocontrol.android.foliocontrolandroid.screens.AccountScreen
@@ -34,6 +27,8 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.AuthViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.rememberWindowInfo
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,18 +39,21 @@ fun FolioControlApplication(
     accountViewModel: AccountViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController()
 ) {
-
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    Scaffold(modifier = Modifier.fillMaxWidth(),
+    val windowInfo = rememberWindowInfo()
+    Scaffold(
+        modifier = Modifier.fillMaxWidth(),
         contentColor = MaterialTheme.colorScheme.primary,
         contentWindowInsets = WindowInsets(left = 0.dp, top = 0.dp, right = 0.dp, bottom = 0.dp),
         bottomBar = {
             when (authViewModel.loginUiState) {
                 is UiState.Success -> {
-                    BottomNavigation(
-
-                        authViewModel = authViewModel, propertyViewModel = propertyViewModel
-                    )
+                    if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compact) {
+                        BottomNavigation(
+                            authViewModel = authViewModel,
+                            propertyViewModel = propertyViewModel
+                        )
+                    }
                 }
 
                 else -> {
@@ -66,7 +64,7 @@ fun FolioControlApplication(
             Navbar(
                 scrollBehavior,
                 authViewModel = authViewModel,
-                navController = navController,
+                navController = navController
             )
         }
 
@@ -90,7 +88,18 @@ fun AppNavigator(
     accountViewModel: AccountViewModel
 ) {
     authViewModel.navigateTo = {
-        navController.navigate(it)
+        navController.navigate(it) {
+            // Pop up to the start destination of the graph to
+            // avoid building up a large stack of destinations
+            popUpTo(navController.graph.startDestinationId) {
+                saveState = true
+            }
+            // Avoid multiple copies of the same destination when
+            // reselecting the same item
+            launchSingleTop = true
+            // Restore state when reselecting a previously selected item
+            restoreState = true
+        }
     }
     NavHost(navController = navController, startDestination = "Home") {
         // Auth
