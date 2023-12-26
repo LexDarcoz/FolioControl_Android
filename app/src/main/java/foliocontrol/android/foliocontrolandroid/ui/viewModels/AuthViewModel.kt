@@ -21,7 +21,6 @@ class AuthViewModel(
     private val partnershipRepo: PartnershipDatabase,
     private val accountRepo: AccountDatabase
 ) : ViewModel() {
-    lateinit var navigateTo: (String) -> Unit
     private val authService = AuthServiceImpl()
 
     var loginUiState: UiState by mutableStateOf(

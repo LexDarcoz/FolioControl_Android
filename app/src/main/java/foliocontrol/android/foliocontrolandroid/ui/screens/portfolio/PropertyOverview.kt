@@ -40,6 +40,8 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.DialogLoader
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.rememberWindowInfo
 
 val tabItemsList = listOf(
     TabItem("Details", Icons.Outlined.HomeWork, Icons.Filled.HomeWork),
@@ -53,7 +55,11 @@ data class TabItem(
 )
 
 @Composable
-fun PropertyOverviewScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}) {
+fun PropertyOverviewScreen(
+    propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}
+) {
+
+
     DisposableEffect(propertyViewModel.propertyState.propertyID) {
 
         propertyViewModel.getDataForActiveProperty()
@@ -117,6 +123,8 @@ fun Overview(
         mutableStateOf(0)
     }
 
+    val windowInfo = rememberWindowInfo()
+
     LaunchedEffect(selectedTabIndex) {
         pagerState.animateScrollToPage(selectedTabIndex)
     }
@@ -165,13 +173,13 @@ fun Overview(
                     if (index == 0) {
                         PropertyDetailScreen(propertyViewModel, navigateTo, offline)
                     } else if (index == 1) {
-                        PropertyPhotosScreen(propertyViewModel, offline)
+                        PropertyPhotosScreen(propertyViewModel, windowInfo, offline)
                     } else if (index == 2) {
                         PropertyDocumentsScreen(
-                            propertyViewModel, offline
+                            propertyViewModel, windowInfo, offline
                         )
                     } else {
-                        PremisesListScreen(propertyViewModel, offline)
+                        PremisesListScreen(propertyViewModel, windowInfo, offline)
                     }
                 }
             }

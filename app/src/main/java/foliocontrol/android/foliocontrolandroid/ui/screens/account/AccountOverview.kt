@@ -38,18 +38,13 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScre
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 val tabItems = listOf(
-    TabItem("Details", Icons.Outlined.AccountBox, Icons.Filled.AccountBox),
-    TabItem(
-        "Partnerships",
-        Icons.Outlined.Apartment,
-        Icons.Filled.Apartment
+    TabItem("Details", Icons.Outlined.AccountBox, Icons.Filled.AccountBox), TabItem(
+        "Partnerships", Icons.Outlined.Apartment, Icons.Filled.Apartment
     )
 )
 
 data class TabItem(
-    val title: String,
-    val unselectedIcon: ImageVector,
-    val selectedIcon: ImageVector
+    val title: String, val unselectedIcon: ImageVector, val selectedIcon: ImageVector
 )
 
 @Composable
@@ -58,9 +53,8 @@ fun AccountScreen(
     propertyViewModel: PropertyViewModel,
     navigateTo: (Any?) -> Unit = {}
 ) {
-    DisposableEffect(accountViewModel) {
+    DisposableEffect(accountViewModel.user) {
         accountViewModel.getData()
-        Log.i("TEST", "AccountScreen: ${accountViewModel.uiState}")
         onDispose { }
     }
     when (accountViewModel.uiState) {
@@ -81,10 +75,8 @@ fun AccountScreen(
         }
 
         else -> {
-            ErrorScreen(
-                errorMessage = (accountViewModel.uiState as UiState.Error).message,
-                onRetry = { accountViewModel.getData() }
-            )
+            ErrorScreen(errorMessage = (accountViewModel.uiState as UiState.Error).message,
+                onRetry = { accountViewModel.getData() })
         }
     }
 }
@@ -133,7 +125,9 @@ fun AccountOverview(
         }
         HorizontalPager(
             state = pagerState,
-            Modifier.fillMaxWidth().zIndex(1f)
+            Modifier
+                .fillMaxWidth()
+                .zIndex(1f)
         ) { index ->
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 if (index == 0) {

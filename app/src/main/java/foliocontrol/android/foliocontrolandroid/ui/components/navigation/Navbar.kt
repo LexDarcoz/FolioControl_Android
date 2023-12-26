@@ -3,6 +3,7 @@ package foliocontrol.android.foliocontrolandroid.components
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,33 +25,39 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.rememberWin
 fun Navbar(
     scrollBehavior: TopAppBarScrollBehavior,
     authViewModel: AuthViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+    toggleDrawer: () -> Unit
 ) {
     val windowInfo = rememberWindowInfo()
-    CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.largeTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.secondary
-        ),
-        title = {
-            Text(
-                "FolioControl",
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-        },
-        navigationIcon = {
-            if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compact) {
-                IconButton(onClick = { navController.navigateUp() }) {
-                    Icon(
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back"
-                    )
-                }
+    CenterAlignedTopAppBar(colors = TopAppBarDefaults.largeTopAppBarColors(
+        containerColor = MaterialTheme.colorScheme.primary,
+        titleContentColor = MaterialTheme.colorScheme.secondary
+    ), title = {
+        Text(
+            "FolioControl",
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+    }, navigationIcon = {
+        if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compact) {
+            IconButton(onClick = { navController.navigateUp() }) {
+                Icon(
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Back"
+                )
             }
-        },
+        } else {
+            IconButton(onClick = { toggleDrawer() }) {
+                Icon(
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    imageVector = Icons.Filled.Menu,
+                    contentDescription = "Open Navigation Menu"
+                )
+            }
+        }
+    },
 
         actions = {
             when (authViewModel.loginUiState) {

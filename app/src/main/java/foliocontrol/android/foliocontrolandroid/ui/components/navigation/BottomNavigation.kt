@@ -27,15 +27,18 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.AuthViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthViewModel) {
-    var partnershipList = propertyViewModel.partnershipListState
-    var currentPartnership = propertyViewModel.currentPartnership
-
+fun BottomNavigation(
+    currentPartnership: Partnership,
+    partnershipList: List<Partnership>,
+    switchPartnership: (Partnership) -> Unit,
+    navigateTo: (String) -> Unit
+) {
     data class BottomNavigationItem(
         val title: String,
         val selectedIcon: ImageVector,
@@ -48,23 +51,17 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
         mutableStateOf(0)
     }
 
-    val items = listOf(
-        BottomNavigationItem(
-            title = "Home",
-            selectedIcon = Icons.Filled.Domain,
-            unselectedIcon = Icons.Outlined.Domain,
-            onClick = { }
-        ),
+    val items = listOf(BottomNavigationItem(title = "Home",
+        selectedIcon = Icons.Filled.Domain,
+        unselectedIcon = Icons.Outlined.Domain,
+        onClick = { }),
 
-        BottomNavigationItem(
-            title = "Account",
+        BottomNavigationItem(title = "Account",
             selectedIcon = Icons.Filled.AccountCircle,
             unselectedIcon = Icons.Outlined.AccountCircle,
             onClick = { }
 
-        ),
-        BottomNavigationItem(
-            title = currentPartnership.name,
+        ), BottomNavigationItem(title = currentPartnership.name,
             selectedIcon = Icons.Filled.Apartment,
             unselectedIcon = Icons.Outlined.Apartment,
             onClick = { }
@@ -76,36 +73,27 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
     val isPartnershipsSelected =
         selectedIcon == items.indexOfFirst { it.title == currentPartnership.name }
 
-    NavigationBar(
-        contentColor = MaterialTheme.colorScheme.onPrimary,
+    NavigationBar(contentColor = MaterialTheme.colorScheme.onPrimary,
         containerColor = MaterialTheme.colorScheme.primary,
-        modifier = Modifier
-            .graphicsLayer {
-                shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
-                clip = true
-            }
-    ) {
+        modifier = Modifier.graphicsLayer {
+            shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
+            clip = true
+        }) {
         items.forEachIndexed { index, item ->
-            NavigationBarItem(
-                selected = selectedIcon == index,
-                onClick = {
-                    selectedIcon = index
-                    if (item.title != currentPartnership.name) {
-                        authViewModel.navigateTo(item.title)
-                    }
-                },
-                label = {
-                    Text(text = item.title, color = MaterialTheme.colorScheme.onPrimary)
-                },
-                alwaysShowLabel = item.title == currentPartnership.name,
-                icon = {
-                    Icon(
-                        imageVector = if (selectedIcon == index) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length
-                        contentDescription = item.title,
-                        tint = MaterialTheme.colorScheme.onPrimary
-
-                    )
+            NavigationBarItem(selected = selectedIcon == index, onClick = {
+                selectedIcon = index
+                if (item.title != currentPartnership.name) {
+                    navigateTo(item.title)
                 }
+            }, label = {
+                Text(text = item.title, color = MaterialTheme.colorScheme.onPrimary)
+            }, alwaysShowLabel = item.title == currentPartnership.name, icon = {
+                Icon(
+                    imageVector = if (selectedIcon == index) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length
+                    contentDescription = item.title, tint = MaterialTheme.colorScheme.onPrimary
+
+                )
+            }
 
             )
         }
@@ -120,14 +108,13 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
             ) {
                 partnershipList.forEach { partnership ->
                     if (partnership.name == currentPartnership.name) {
-                        DropdownMenuItem(
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Filled.Apartment,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
-                            },
+                        DropdownMenuItem(leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Filled.Apartment,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        },
 
                             text = {
                                 Text(
@@ -135,20 +122,17 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.primary
                                 )
-                            },
-                            onClick = {
+                            }, onClick = {
                                 selectedIcon = 0
-                            }
-                        )
+                            })
                     } else {
-                        DropdownMenuItem(
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Outlined.Apartment,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
-                            },
+                        DropdownMenuItem(leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Apartment,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                        },
 
                             text = {
                                 Text(
@@ -156,13 +140,11 @@ fun BottomNavigation(propertyViewModel: PropertyViewModel, authViewModel: AuthVi
                                     style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
-                            },
-                            onClick = {
-                                propertyViewModel.switchPartnership(partnership)
-                                authViewModel.navigateTo("Home")
+                            }, onClick = {
+                                switchPartnership(partnership)
+                                navigateTo("Home")
                                 selectedIcon = 0
-                            }
-                        )
+                            })
                     }
                 }
             }

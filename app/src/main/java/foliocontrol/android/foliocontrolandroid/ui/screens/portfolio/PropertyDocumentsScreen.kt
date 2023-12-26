@@ -20,8 +20,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apartment
 import androidx.compose.material.icons.filled.AttachMoney
@@ -78,6 +80,7 @@ import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.Fo
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.EmptyListScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
 import java.util.Calendar
 
 
@@ -134,9 +137,10 @@ val documentTypes = listOf(
 )
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PropertyDocumentsScreen(propertyViewModel: PropertyViewModel, offline: Boolean = false) {
+fun PropertyDocumentsScreen(
+    propertyViewModel: PropertyViewModel, windowInfo: WindowInfo, offline: Boolean = false
+) {
     val pdfMimeType = "application/pdf"
     var selectedDocumentUri by remember {
         mutableStateOf<Uri?>(null)
@@ -151,16 +155,32 @@ fun PropertyDocumentsScreen(propertyViewModel: PropertyViewModel, offline: Boole
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(
+                if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+                    16.dp
+                } else {
+                    4.dp
+                }
+            )
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(
+
+            )
+
+
         ) {
-            Text(
-                text = "Documents:",
-                style = MaterialTheme.typography.titleLarge,
+            Text(text = "Documents:",
+                style = windowInfo.screenWidthInfo.let { windowType ->
+                    if (windowType == WindowInfo.WindowType.Compact) MaterialTheme.typography.titleLarge
+                    else MaterialTheme.typography.bodySmall
+                },
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(8.dp)
+                modifier = windowInfo.screenWidthInfo.let { windowType ->
+                    if (windowType == WindowInfo.WindowType.Compact) Modifier.padding(8.dp)
+                    else Modifier.padding(4.dp)
+                }
+
             )
 
             when {
@@ -177,7 +197,9 @@ fun PropertyDocumentsScreen(propertyViewModel: PropertyViewModel, offline: Boole
                 }
 
                 else -> {
-                    DocumentsList(propertyViewModel.propertyDocuments, propertyViewModel)
+                    DocumentsList(
+                        propertyViewModel.propertyDocuments, propertyViewModel, windowInfo
+                    )
 
 
                 }
@@ -370,12 +392,22 @@ fun AddDocument(
 
 
 @Composable
-fun DocumentsList(propertyDocuments: List<PropertyDocument>, propertyViewModel: PropertyViewModel) {
+fun DocumentsList(
+    propertyDocuments: List<PropertyDocument>,
+    propertyViewModel: PropertyViewModel,
+    windowInfo: WindowInfo
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.8f)
-            .padding(top = 32.dp)
+            .padding(
+                top = if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+                    32.dp
+                } else {
+                    8.dp
+                }
+            )
     ) {
         val openDeleteDialog = remember { mutableStateOf(false) }
         var documentID by remember { mutableStateOf(0) }

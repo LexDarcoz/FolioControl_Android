@@ -37,12 +37,14 @@ import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.items
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioDropdown
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioTextField
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun PropertyDetailScreen(
     propertyViewModel: PropertyViewModel,
     navigateTo: (Any?) -> Unit = {},
+
     offline: Boolean = false
 ) {
     val imageUrl = Constants.PROPERTYPHOTOS_URL
@@ -53,7 +55,9 @@ fun PropertyDetailScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(
+                    enabled = true, state = rememberScrollState()
+                )
         ) {
             if (propertyViewModel.propertyState.propertyImg == "null") {
                 Image(
@@ -99,7 +103,9 @@ fun PropertyDetailScreen(
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
-                    FolioTextField(!offline, "Name", propertyViewModel.propertyState.propertyName) {
+                    FolioTextField(
+                        !offline, "Name", propertyViewModel.propertyState.propertyName
+                    ) {
                         propertyViewModel.handlePropertyEdit(
                             propertyName = it
                         )
@@ -120,9 +126,7 @@ fun PropertyDetailScreen(
                     ) {
                         Box(modifier = Modifier.weight(1f)) {
                             FolioTextField(
-                                !offline,
-                                "Street",
-                                propertyViewModel.propertyState.street
+                                !offline, "Street", propertyViewModel.propertyState.street
                             ) {
                                 propertyViewModel.handlePropertyEdit(street = it)
                             }
@@ -144,9 +148,7 @@ fun PropertyDetailScreen(
                     ) {
                         Box(modifier = Modifier.weight(1f)) {
                             FolioTextField(
-                                !offline,
-                                "Zip Code",
-                                propertyViewModel.propertyState.zipCode
+                                !offline, "Zip Code", propertyViewModel.propertyState.zipCode
                             ) {
                                 propertyViewModel.handlePropertyEdit(
                                     zipCode = it
@@ -155,24 +157,26 @@ fun PropertyDetailScreen(
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         Box(modifier = Modifier.weight(1f)) {
-                            FolioTextField(!offline, "City", propertyViewModel.propertyState.city) {
+                            FolioTextField(
+                                !offline, "City", propertyViewModel.propertyState.city
+                            ) {
                                 propertyViewModel.handlePropertyEdit(city = it)
                             }
                         }
                     }
-                    FolioTextField(!offline, "Country", propertyViewModel.propertyState.country) {
+                    FolioTextField(
+                        !offline, "Country", propertyViewModel.propertyState.country
+                    ) {
                         propertyViewModel.handlePropertyEdit(
                             country = it
                         )
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     Button(
-                        enabled = !offline,
-                        onClick = {
+                        enabled = !offline, onClick = {
                             propertyViewModel.handlePropertySave()
                             navigateTo("Home")
-                        },
-                        modifier = Modifier
+                        }, modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 16.dp)
                     ) {

@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddHomeWork
 import androidx.compose.material.icons.filled.FileUpload
@@ -25,22 +27,38 @@ import foliocontrol.android.foliocontrolandroid.ui.components.OfflineScreen
 import foliocontrol.android.foliocontrolandroid.ui.components.card.PremiseCard
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.EmptyListScreen
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
 
 @Composable
-fun PremisesListScreen(propertyViewModel: PropertyViewModel, offline: Boolean = false) {
+fun PremisesListScreen(
+    propertyViewModel: PropertyViewModel, windowInfo: WindowInfo, offline: Boolean = false
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+                16.dp
+            } else {
+                4.dp
+            })
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
+
         ) {
             Text(
                 text = "Premises:",
-                style = MaterialTheme.typography.titleLarge,
+                style = if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+                    MaterialTheme.typography.titleLarge
+                } else {
+                    MaterialTheme.typography.bodySmall
+                },
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(8.dp)
+                modifier = if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+                    Modifier.padding(8.dp)
+                } else {
+                    Modifier.padding(4.dp)
+                }
             )
 
             when {
@@ -52,11 +70,9 @@ fun PremisesListScreen(propertyViewModel: PropertyViewModel, offline: Boolean = 
                 else -> PremisesList(propertyViewModel.propertyPremises)
             }
             Button(
-                enabled = offline,
-                onClick = {
+                enabled = offline, onClick = {
                     // TODO
-                },
-                modifier = Modifier
+                }, modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 16.dp)
             ) {
