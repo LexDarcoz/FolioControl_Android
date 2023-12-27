@@ -48,7 +48,7 @@ enum class Identifier {
 }
 
 @Composable
-fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}) {
+fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit) {
     DisposableEffect(propertyViewModel.partnershipListState) {
         propertyViewModel.getData()
         onDispose {}
@@ -82,7 +82,7 @@ fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit 
 @Composable
 fun Home(
     propertyViewModel: PropertyViewModel,
-    navigateTo: (Any?) -> Unit = {},
+    navigateTo: (Any?) -> Unit,
     offline: Boolean = false,
     loading: Boolean = false
 ) {

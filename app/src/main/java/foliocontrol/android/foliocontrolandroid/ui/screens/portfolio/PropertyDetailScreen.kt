@@ -56,8 +56,7 @@ fun PropertyDetailScreen(
     handlePropertyEditCity: (String) -> Unit = {},
     handlePropertyEditCountry: (String) -> Unit = {},
 
-
-    navigateTo: (Any?) -> Unit = {},
+    navigateTo: (Any?) -> Unit,
 
     offline: Boolean = false
 ) {

@@ -185,15 +185,14 @@ fun AppNavigator(
                 uploadDocument = { context, uri -> propertyViewModel.uploadDocument(context, uri) },
                 propertyPremises = propertyViewModel.propertyPremises,
                 getDataForActiveProperty = { propertyViewModel.getDataForActiveProperty() },
-                saveDataForActiveProperty = { propertyViewModel.handlePropertySave() }) {
-                navController.navigate("$it") {
-                    popUpTo(navController.graph.startDestinationId) {
-                        saveState = true
-                    }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            }
+                saveDataForActiveProperty = { propertyViewModel.handlePropertySave() },
+                navigateTo = {
+                    navController.navigate(
+                        "$it"
+                    )
+                })
+
+
         }
     }
 }

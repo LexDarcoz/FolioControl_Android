@@ -43,9 +43,7 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun PropertyCard(
-    propertyViewModel: PropertyViewModel,
-    property: Property,
-    navigateTo: (Any?) -> Unit = {}
+    propertyViewModel: PropertyViewModel, property: Property, navigateTo: (Any?) -> Unit
 
 ) {
     val imageUrl = Constants.PROPERTYPHOTOS_URL
@@ -83,12 +81,9 @@ fun PropertyCard(
     }
 
     Card(
-        modifier = Modifier.padding(8.dp),
-        elevation = CardDefaults.cardElevation(
+        modifier = Modifier.padding(8.dp), elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
-        ),
-        shape = MaterialTheme.shapes.small,
-        colors = CardDefaults.cardColors(
+        ), shape = MaterialTheme.shapes.small, colors = CardDefaults.cardColors(
             contentColor = MaterialTheme.colorScheme.primary,
             containerColor = MaterialTheme.colorScheme.secondary
         )
@@ -169,8 +164,7 @@ fun PropertyCard(
                 onClick = {
                     propertyViewModel.selectProperty(property)
                     navigateTo("PropertyDetail")
-                },
-                modifier = Modifier
+                }, modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 4.dp)
             ) {

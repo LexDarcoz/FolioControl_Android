@@ -87,7 +87,7 @@ fun PropertyOverviewScreen(
     //SAVE DATA
     saveDataForActiveProperty: () -> Unit,
 
-    navigateTo: (Any?) -> Unit = {},
+    navigateTo: (Any?) -> Unit,
 ) {
 
 
@@ -204,7 +204,7 @@ fun Overview(
     //SAVE DATA
     saveDataForActiveProperty: () -> Unit,
 
-    navigateTo: (Any?) -> Unit = {},
+    navigateTo: (Any?) -> Unit,
     offline: Boolean = false,
 ) {
     var loading by remember { mutableStateOf(true) }
@@ -288,7 +288,7 @@ fun Overview(
                             handlePropertyEditZipCode,
                             handlePropertyEditCity,
                             handlePropertyEditCountry,
-                            navigateTo,
+                            navigateTo = navigateTo,
                             offline
                         )
                     } else if (index == 1) {
