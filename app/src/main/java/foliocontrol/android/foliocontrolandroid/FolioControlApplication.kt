@@ -1,7 +1,6 @@
 package foliocontrol.android.foliocontrolandroid
 
 import NavigationDrawer
-import NavigationItem
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -129,7 +128,6 @@ fun FolioControlApplication(
                     authViewModel = authViewModel,
                     propertyViewModel = propertyViewModel,
                     accountViewModel = accountViewModel,
-                    windowInfo = windowInfo
                 )
             }
         }
@@ -143,14 +141,17 @@ fun AppNavigator(
     authViewModel: AuthViewModel,
     propertyViewModel: PropertyViewModel,
     accountViewModel: AccountViewModel,
-    windowInfo: WindowInfo
 ) {
 
 
     NavHost(navController = navController, startDestination = "Home") {
         // Auth
         composable("Home") {
-            AuthScreen(authViewModel = authViewModel, propertyViewModel = propertyViewModel) {
+            AuthScreen(
+                authViewModel = authViewModel,
+                authViewModel.loginUiState,
+                propertyViewModel = propertyViewModel
+            ) {
                 navController.navigate(
                     "$it"
                 )
@@ -160,9 +161,31 @@ fun AppNavigator(
         composable("Account") { AccountScreen(accountViewModel, propertyViewModel) }
         // Portfolio
         composable("PropertyDetail") {
-            PropertyOverviewScreen(
-                propertyViewModel
-            ) {
+            PropertyOverviewScreen(uiState = propertyViewModel.uiState,
+                propertyState = propertyViewModel.propertyState,
+                handlePropertyEditName = { propertyViewModel.handlePropertyEdit(propertyName = it) },
+                handlePropertyEditType = { propertyViewModel.handlePropertyEdit(propertyType = it) },
+                handlePropertyEditStreet = { propertyViewModel.handlePropertyEdit(street = it) },
+                handlePropertyEditStreetNumber = { propertyViewModel.handlePropertyEdit(streetNumber = it) },
+                handlePropertyEditZipCode = { propertyViewModel.handlePropertyEdit(zipCode = it) },
+                handlePropertyEditCity = { propertyViewModel.handlePropertyEdit(city = it) },
+                handlePropertyEditCountry = { propertyViewModel.handlePropertyEdit(country = it) },
+                clearImage = { propertyViewModel.clearImage() },
+                uploadImage = { context, uri ->
+                    if (uri != null) {
+                        propertyViewModel.uploadImage(context, uri)
+                    }
+                },
+                propertyDocuments = propertyViewModel.propertyDocuments,
+                handleDocumentDelete = { propertyViewModel.handleDocumentDelete(it) },
+                downloadFile = { propertyViewModel.downloadFile(it) },
+                handleAddDocumentDateEdit = { propertyViewModel.handleAddDocumentEdit(expiryDate = it) },
+                handleAddDocumentTypeEdit = { propertyViewModel.handleAddDocumentEdit(documentType = it) },
+                propertyDocumentState = propertyViewModel.propertyDocument,
+                uploadDocument = { context, uri -> propertyViewModel.uploadDocument(context, uri) },
+                propertyPremises = propertyViewModel.propertyPremises,
+                getDataForActiveProperty = { propertyViewModel.getDataForActiveProperty() },
+                saveDataForActiveProperty = { propertyViewModel.handlePropertySave() }) {
                 navController.navigate("$it") {
                     popUpTo(navController.graph.startDestinationId) {
                         saveState = true

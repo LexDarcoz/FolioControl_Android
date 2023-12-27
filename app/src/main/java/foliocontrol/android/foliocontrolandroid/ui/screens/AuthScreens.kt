@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import foliocontrol.android.foliocontrolandroid.domain.LoginCredentials
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.AuthViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
@@ -36,18 +37,17 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 @Composable
 fun AuthScreen(
     authViewModel: AuthViewModel,
+    loginUiState: UiState,
     propertyViewModel: PropertyViewModel,
     navigateTo: (Any?) -> Unit = {}
 ) {
-// Main auth
-// For every screen a view-model is needed
-    when (authViewModel.loginUiState) {
+    when (loginUiState) {
         is UiState.LoggedOut -> {
-            LoginScreen(
-                errorName = (authViewModel.loginUiState as UiState.LoggedOut).message,
-                authViewModel
-
-            )
+            LoginScreen(errorName = (authViewModel.loginUiState as UiState.LoggedOut).message,
+                authViewModel.loginCredentials,
+                { authViewModel.updateLoginState(email = it) },
+                { authViewModel.updateLoginState(password = it) },
+                { authViewModel.login() })
         }
 
         is UiState.Success -> {
@@ -67,14 +67,15 @@ fun AuthScreen(
 @Composable
 fun LoginScreen(
     errorName: String,
-    authViewModel: AuthViewModel
-
+    loginCredentials: LoginCredentials,
+    updateLoginStateEmail: (String) -> Unit,
+    updateLoginStatePassword: (String) -> Unit,
+    login: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.8f),
-        contentAlignment = Alignment.Center
+            .fillMaxHeight(0.8f), contentAlignment = Alignment.Center
     ) {
         Column(
             modifier = Modifier
@@ -97,9 +98,8 @@ fun LoginScreen(
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                OutlinedTextField(
-                    value = authViewModel.loginCredentials.email,
-                    onValueChange = { authViewModel.updateLoginState(email = it) },
+                OutlinedTextField(value = loginCredentials.email,
+                    onValueChange = { updateLoginStateEmail(it) },
                     label = { Text("Email") },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default.copy(
@@ -107,14 +107,12 @@ fun LoginScreen(
                     ),
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.Email, contentDescription = null)
-                    }
-                )
+                    })
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                OutlinedTextField(
-                    value = authViewModel.loginCredentials.password,
-                    onValueChange = { authViewModel.updateLoginState(password = it) },
+                OutlinedTextField(value = loginCredentials.password,
+                    onValueChange = { updateLoginStatePassword(it) },
                     label = { Text("Password") },
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions.Default.copy(
@@ -122,8 +120,7 @@ fun LoginScreen(
                     ),
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.Lock, contentDescription = null)
-                    }
-                )
+                    })
 
                 Text(
                     text = errorName,
@@ -135,16 +132,14 @@ fun LoginScreen(
 
                 Button(
                     onClick = {
-                        authViewModel.login()
-                    },
-                    modifier = Modifier
+                        login()
+                    }, modifier = Modifier
                         .height(64.dp)
                         .width(200.dp)
                         .padding(top = 16.dp)
                 ) {
                     Text(
-                        "Login",
-                        style = MaterialTheme.typography.titleMedium
+                        "Login", style = MaterialTheme.typography.titleMedium
 
                     )
                 }

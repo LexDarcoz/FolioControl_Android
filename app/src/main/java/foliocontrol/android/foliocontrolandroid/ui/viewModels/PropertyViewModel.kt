@@ -379,7 +379,6 @@ class PropertyViewModel(
     fun handleDocumentDelete(selectedDocumentID: Int) {
         viewModelScope.launch {
             try {
-                Log.i("TEST", "handleDocumentDelete: ${selectedDocumentID}")
                 propertyService.deleteDocumentByPropertyID(
                     getEncryptedPreference("token"), selectedDocumentID
                 )

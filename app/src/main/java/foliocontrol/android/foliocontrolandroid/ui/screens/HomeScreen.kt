@@ -94,7 +94,6 @@ fun Home(
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = loading)
     val infoDialog = remember { mutableStateOf(offline) }
 
-    // Everything for fab
     val items = listOf(
         MinFabItem(
             icon = Icons.Filled.Search, label = "Search", identifier = Identifier.SearchFab.name
@@ -111,7 +110,8 @@ fun Home(
 
     when {
         propertyViewModel.isAddPropertyDialogOpen -> {
-            AddPropertyDialog(onDismissRequest = { propertyViewModel.togglePropertyAddDialog() },
+            AddPropertyDialog(
+                onDismissRequest = { propertyViewModel.togglePropertyAddDialog() },
                 onConfirmation = {
                     propertyViewModel.handlePropertyAdd()
                     propertyViewModel.togglePropertyAddDialog()

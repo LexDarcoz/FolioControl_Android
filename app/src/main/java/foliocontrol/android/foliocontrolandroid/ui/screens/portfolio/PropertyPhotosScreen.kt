@@ -1,5 +1,6 @@
 package foliocontrol.android.foliocontrolandroid.ui.screens.portfolio
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -48,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import foliocontrol.android.foliocontrolandroid.data.remote.common.Constants
+import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.DeleteDialog
 import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.ImageDialog
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
@@ -57,13 +59,25 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun PropertyPhotosScreen(
-    propertyViewModel: PropertyViewModel, windowInfo: WindowInfo, offline: Boolean = false
+    //GET DATA
+    getDataForActiveProperty: () -> Unit,
+    //IMAGE FUNCTIONS
+    clearImage: () -> Unit, uploadImage: (Context, Uri?) -> Unit,
+    //Property state
+    propertyState: Property,
+    //EDITTING
+
+
+    //UISTATE
+    uiState: UiState,
+
+
+    windowInfo: WindowInfo, offline: Boolean = false
 ) {
     val imageUrl = Constants.PROPERTYPHOTOS_URL
     val defaultImage = "$imageUrl/default.avif"
-    val propertyImg = propertyViewModel.propertyState.propertyImg.ifEmpty { "null" }
+    val propertyImg = propertyState.propertyImg.ifEmpty { "null" }
     val openDeleteDialog = remember { mutableStateOf(false) }
-    val property = propertyViewModel.propertyState
     var imageFullScreen by remember { mutableStateOf(false) }
     //get the context
     val context = LocalContext.current
@@ -76,14 +90,14 @@ fun PropertyPhotosScreen(
         mutableStateOf<Uri?>(null)
     }
 
-    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { uri ->
-            selectedImageUri = uri
-        })
+    val singlePhotoPickerLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia(),
+            onResult = { uri ->
+                selectedImageUri = uri
+            })
     when {
         openDeleteDialog.value -> {
-            if (propertyViewModel.uiState is UiState.Success) {
+            if (uiState is UiState.Success) {
                 if (selectedImageUri != null) {
                     DeleteDialog(onDismissRequest = { openDeleteDialog.value = false },
                         onConfirmation = {
@@ -99,7 +113,7 @@ fun PropertyPhotosScreen(
                 } else {
                     DeleteDialog(onDismissRequest = { openDeleteDialog.value = false },
                         onConfirmation = {
-                            propertyViewModel.clearImage()
+                            clearImage()
                             openDeleteDialog.value = false
                         },
                         confirmText = "Confirm",
@@ -113,7 +127,8 @@ fun PropertyPhotosScreen(
                 DeleteDialog(onDismissRequest = { openDeleteDialog.value = false },
                     onConfirmation = {
                         openDeleteDialog.value = false
-                        propertyViewModel.getDataForActiveProperty()
+
+                        getDataForActiveProperty()
                     },
                     confirmText = "Retry Connection",
                     dismissText = "Dismiss",
@@ -157,16 +172,15 @@ fun PropertyPhotosScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.8f)
-                    .padding(top = if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
-                        32.dp
-                    } else {
-                        8.dp
-                    }),
-                elevation = CardDefaults.cardElevation(
+                    .padding(
+                        top = if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+                            32.dp
+                        } else {
+                            8.dp
+                        }
+                    ), elevation = CardDefaults.cardElevation(
                     defaultElevation = 6.dp
-                ),
-                shape = MaterialTheme.shapes.small,
-                colors = CardDefaults.cardColors(
+                ), shape = MaterialTheme.shapes.small, colors = CardDefaults.cardColors(
                     contentColor = MaterialTheme.colorScheme.primary,
                     containerColor = MaterialTheme.colorScheme.secondary
                 )
@@ -197,7 +211,7 @@ fun PropertyPhotosScreen(
                                 })
                     }
                     Icon(
-                        imageVector = Constants.propertyTypesIcons[property.propertyType]
+                        imageVector = Constants.propertyTypesIcons[propertyState.propertyType]
                             ?: Icons.Default.Home,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.secondary,
@@ -230,7 +244,7 @@ fun PropertyPhotosScreen(
                 enabled = !offline, onClick = {
 
                     if (selectedImageUri != null) {
-                        propertyViewModel.uploadImage(context, selectedImageUri!!)
+                        uploadImage(context, selectedImageUri!!)
                         selectedImageUri = null
                     } else {
                         singlePhotoPickerLauncher.launch(

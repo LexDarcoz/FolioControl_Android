@@ -2,7 +2,8 @@ package foliocontrol.android.foliocontrolandroid.ui.screens.portfolio
 
 import PropertyDetailScreen
 import android.annotation.SuppressLint
-import android.util.Log
+import android.content.Context
+import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,11 +37,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.zIndex
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
+import foliocontrol.android.foliocontrolandroid.domain.Premise
+import foliocontrol.android.foliocontrolandroid.domain.Property
+import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.DialogLoader
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.rememberWindowInfo
 
 val tabItemsList = listOf(
@@ -56,28 +58,105 @@ data class TabItem(
 
 @Composable
 fun PropertyOverviewScreen(
-    propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit = {}
+    //UISTATE
+    uiState: UiState,
+    //PROPERTY STATE
+    propertyState: Property,
+    //Edit Detail Data
+    handlePropertyEditName: (String) -> Unit = {},
+    handlePropertyEditType: (String) -> Unit = {},
+    handlePropertyEditStreet: (String) -> Unit = {},
+    handlePropertyEditStreetNumber: (String) -> Unit = {},
+    handlePropertyEditZipCode: (String) -> Unit = {},
+    handlePropertyEditCity: (String) -> Unit = {},
+    handlePropertyEditCountry: (String) -> Unit = {},
+    //Image Functions
+    clearImage: () -> Unit, uploadImage: (Context, Uri?) -> Unit,
+    //Document Functions
+    propertyDocuments: List<PropertyDocument>,
+    handleDocumentDelete: (Int) -> Unit,
+    downloadFile: (String) -> Long,
+    handleAddDocumentDateEdit: (String) -> Unit,
+    handleAddDocumentTypeEdit: (String) -> Unit,
+    propertyDocumentState: PropertyDocument,
+    uploadDocument: (Context, Uri) -> Unit,
+    //Premises
+    propertyPremises: List<Premise>,
+    //GETDATA
+    getDataForActiveProperty: () -> Unit,
+    //SAVE DATA
+    saveDataForActiveProperty: () -> Unit,
+
+    navigateTo: (Any?) -> Unit = {},
 ) {
 
 
-    DisposableEffect(propertyViewModel.propertyState.propertyID) {
+    DisposableEffect(propertyState.propertyID) {
 
-        propertyViewModel.getDataForActiveProperty()
+        getDataForActiveProperty()
 
         onDispose {}
     }
 
-    when (propertyViewModel.uiState) {
+    when (uiState) {
         is UiState.LoggedOut -> {
             navigateTo("home")
         }
 
         is UiState.Success -> {
-            Overview(propertyViewModel, navigateTo)
+            Overview(
+                uiState = uiState,
+                propertyState = propertyState,
+                handlePropertyEditName = handlePropertyEditName,
+                handlePropertyEditType = handlePropertyEditType,
+                handlePropertyEditStreet = handlePropertyEditStreet,
+                handlePropertyEditStreetNumber = handlePropertyEditStreetNumber,
+                handlePropertyEditZipCode = handlePropertyEditZipCode,
+                handlePropertyEditCity = handlePropertyEditCity,
+                handlePropertyEditCountry = handlePropertyEditCountry,
+                clearImage = clearImage,
+                uploadImage = uploadImage,
+                propertyDocuments = propertyDocuments,
+                handleDocumentDelete = handleDocumentDelete,
+                downloadFile = downloadFile,
+                handleAddDocumentDateEdit = handleAddDocumentDateEdit,
+                handleAddDocumentTypeEdit = handleAddDocumentTypeEdit,
+                propertyDocumentState = propertyDocumentState,
+                uploadDocument = uploadDocument,
+                propertyPremises = propertyPremises,
+                saveDataForActiveProperty = saveDataForActiveProperty,
+                getDataForActiveProperty = getDataForActiveProperty,
+                navigateTo = navigateTo,
+
+                )
         }
 
         is UiState.Offline -> {
-            Overview(propertyViewModel, navigateTo, offline = true)
+            Overview(
+                uiState = uiState,
+                propertyState = propertyState,
+                handlePropertyEditName = handlePropertyEditName,
+                handlePropertyEditType = handlePropertyEditType,
+                handlePropertyEditStreet = handlePropertyEditStreet,
+                handlePropertyEditStreetNumber = handlePropertyEditStreetNumber,
+                handlePropertyEditZipCode = handlePropertyEditZipCode,
+                handlePropertyEditCity = handlePropertyEditCity,
+                handlePropertyEditCountry = handlePropertyEditCountry,
+                clearImage = clearImage,
+                uploadImage = uploadImage,
+                propertyDocuments = propertyDocuments,
+                handleDocumentDelete = handleDocumentDelete,
+                downloadFile = downloadFile,
+                handleAddDocumentDateEdit = handleAddDocumentDateEdit,
+                handleAddDocumentTypeEdit = handleAddDocumentTypeEdit,
+                propertyDocumentState = propertyDocumentState,
+                uploadDocument = uploadDocument,
+                propertyPremises = propertyPremises,
+                saveDataForActiveProperty = saveDataForActiveProperty,
+                getDataForActiveProperty = getDataForActiveProperty,
+                navigateTo = navigateTo,
+                offline = true
+            )
         }
 
         is UiState.Loading -> {
@@ -86,8 +165,8 @@ fun PropertyOverviewScreen(
 
 
         else -> {
-            ErrorScreen(errorMessage = (propertyViewModel.uiState as UiState.Error).message,
-                onRetry = { propertyViewModel.getDataForActiveProperty() })
+            ErrorScreen(errorMessage = (uiState as UiState.Error).message,
+                onRetry = { getDataForActiveProperty() })
         }
     }
 }
@@ -96,16 +175,44 @@ fun PropertyOverviewScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Overview(
-    propertyViewModel: PropertyViewModel,
+    //UISTATE
+    uiState: UiState,
+    //PROPERTY STATE
+    propertyState: Property,
+    //Edit Detail Data
+    handlePropertyEditName: (String) -> Unit = {},
+    handlePropertyEditType: (String) -> Unit = {},
+    handlePropertyEditStreet: (String) -> Unit = {},
+    handlePropertyEditStreetNumber: (String) -> Unit = {},
+    handlePropertyEditZipCode: (String) -> Unit = {},
+    handlePropertyEditCity: (String) -> Unit = {},
+    handlePropertyEditCountry: (String) -> Unit = {},
+    //Image Functions
+    clearImage: () -> Unit, uploadImage: (Context, Uri?) -> Unit,
+    //Document Functions
+    propertyDocuments: List<PropertyDocument>,
+    handleDocumentDelete: (Int) -> Unit,
+    downloadFile: (String) -> Long,
+    handleAddDocumentDateEdit: (String) -> Unit,
+    handleAddDocumentTypeEdit: (String) -> Unit,
+    propertyDocumentState: PropertyDocument,
+    uploadDocument: (Context, Uri) -> Unit,
+    //Premises
+    propertyPremises: List<Premise>,
+    //GETDATA
+    getDataForActiveProperty: () -> Unit,
+    //SAVE DATA
+    saveDataForActiveProperty: () -> Unit,
+
     navigateTo: (Any?) -> Unit = {},
     offline: Boolean = false,
 ) {
     var loading by remember { mutableStateOf(true) }
     var tabItems = tabItemsList
-    if (propertyViewModel.propertyState.propertyType != "Apartment") {
+    if (propertyState.propertyType != "Apartment") {
         tabItems = tabItems.subList(0, tabItems.size - 1)
     }
-    when (propertyViewModel.uiState) {
+    when (uiState) {
         is UiState.Loading -> {
             loading = false
         }
@@ -140,7 +247,7 @@ fun Overview(
         }
     }
     SwipeRefresh(state = swipeRefreshState, onRefresh = {
-        propertyViewModel.getDataForActiveProperty()
+        getDataForActiveProperty()
     }) {
         Column {
             TabRow(
@@ -171,15 +278,45 @@ fun Overview(
             ) { index ->
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     if (index == 0) {
-                        PropertyDetailScreen(propertyViewModel, navigateTo, offline)
+                        PropertyDetailScreen(
+                            saveDataForActiveProperty,
+                            propertyState,
+                            handlePropertyEditName,
+                            handlePropertyEditType,
+                            handlePropertyEditStreet,
+                            handlePropertyEditStreetNumber,
+                            handlePropertyEditZipCode,
+                            handlePropertyEditCity,
+                            handlePropertyEditCountry,
+                            navigateTo,
+                            offline
+                        )
                     } else if (index == 1) {
-                        PropertyPhotosScreen(propertyViewModel, windowInfo, offline)
+                        PropertyPhotosScreen(
+                            getDataForActiveProperty,
+                            clearImage,
+                            uploadImage,
+                            propertyState,
+                            uiState,
+                            windowInfo,
+                            offline
+                        )
                     } else if (index == 2) {
                         PropertyDocumentsScreen(
-                            propertyViewModel, windowInfo, offline
+                            uiState,
+                            propertyDocuments,
+                            getDataForActiveProperty,
+                            handleDocumentDelete,
+                            downloadFile,
+                            handleAddDocumentDateEdit,
+                            handleAddDocumentTypeEdit,
+                            propertyDocumentState,
+                            uploadDocument,
+                            windowInfo,
+                            offline
                         )
                     } else {
-                        PremisesListScreen(propertyViewModel, windowInfo, offline)
+                        PremisesListScreen(propertyPremises, windowInfo, offline)
                     }
                 }
             }

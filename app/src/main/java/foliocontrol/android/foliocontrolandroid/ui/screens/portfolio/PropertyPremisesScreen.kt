@@ -31,7 +31,7 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
 
 @Composable
 fun PremisesListScreen(
-    propertyViewModel: PropertyViewModel, windowInfo: WindowInfo, offline: Boolean = false
+    propertyPremises: List<Premise>, windowInfo: WindowInfo, offline: Boolean = false
 ) {
     Box(
         modifier = Modifier
@@ -63,11 +63,11 @@ fun PremisesListScreen(
 
             when {
                 offline -> OfflineScreen()
-                propertyViewModel.propertyPremises.isEmpty() -> EmptyListScreen(
+                propertyPremises.isEmpty() -> EmptyListScreen(
                     "No premises available."
                 )
 
-                else -> PremisesList(propertyViewModel.propertyPremises)
+                else -> PremisesList(propertyPremises)
             }
             Button(
                 enabled = offline, onClick = {

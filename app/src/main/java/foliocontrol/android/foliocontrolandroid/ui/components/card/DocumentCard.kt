@@ -1,5 +1,6 @@
 package foliocontrol.android.foliocontrolandroid.ui.components.card
 
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,13 +31,13 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 @Composable
 fun DocumentCard(
-    document: PropertyDocument, propertyViewModel: PropertyViewModel, toggleDialog: (Int) -> Unit
+    document: PropertyDocument, downloadFile: (String) -> Long, toggleDialog: (Int) -> Unit
 ) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .clickable {
-                propertyViewModel.downloadFile(
+                downloadFile(
                     "$PROPERTYDOCUMENTS_URL/${document.documentName}"
                 ) > 0
             }, elevation = CardDefaults.cardElevation(

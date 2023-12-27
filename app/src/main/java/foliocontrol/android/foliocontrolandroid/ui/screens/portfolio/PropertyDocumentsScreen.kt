@@ -1,5 +1,6 @@
 package foliocontrol.android.foliocontrolandroid.ui.screens.portfolio
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.OpenableColumns
@@ -69,6 +70,7 @@ import androidx.compose.ui.unit.dp
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
+import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
 import foliocontrol.android.foliocontrolandroid.ui.components.OfflineScreen
 import foliocontrol.android.foliocontrolandroid.ui.components.card.DocumentCard
@@ -139,7 +141,26 @@ val documentTypes = listOf(
 
 @Composable
 fun PropertyDocumentsScreen(
-    propertyViewModel: PropertyViewModel, windowInfo: WindowInfo, offline: Boolean = false
+    //UI state
+    uiState: UiState,
+
+    //document
+    propertyDocuments: List<PropertyDocument>,
+
+
+    //data
+    getDataForActiveProperty: () -> Unit,
+
+    //Document functions
+    handleDocumentDelete: (Int) -> Unit,
+    downloadFile: (String) -> Long,
+    //handle document edit
+    handleAddDocumentDateEdit: (String) -> Unit,
+    handleAddDocumentTypeEdit: (String) -> Unit,
+    propertyDocumentState: PropertyDocument,
+    uploadDocument: (Context, Uri) -> Unit,
+    windowInfo: WindowInfo,
+    offline: Boolean = false
 ) {
     val pdfMimeType = "application/pdf"
     var selectedDocumentUri by remember {
@@ -185,20 +206,29 @@ fun PropertyDocumentsScreen(
 
             when {
                 offline -> OfflineScreen()
-                propertyViewModel.propertyDocuments.isEmpty() -> EmptyListScreen(
+                propertyDocuments.isEmpty() -> EmptyListScreen(
                     "No documents available."
                 )
 
                 selectedDocumentUri != null -> AddDocument(
-                    selectedDocumentUri, propertyViewModel
+                    selectedDocumentUri,
+                    handleAddDocumentDateEdit,
+                    handleAddDocumentTypeEdit,
+                    propertyDocumentState,
+                    uploadDocument,
 
-                ) {
+                    ) {
                     selectedDocumentUri = it
                 }
 
                 else -> {
                     DocumentsList(
-                        propertyViewModel.propertyDocuments, propertyViewModel, windowInfo
+                        propertyDocuments,
+                        uiState,
+                        getDataForActiveProperty,
+                        downloadFile,
+                        handleDocumentDelete,
+                        windowInfo
                     )
 
 
@@ -244,7 +274,10 @@ fun PropertyDocumentsScreen(
 @Composable
 fun AddDocument(
     selectedDocumentUri: Uri? = null,
-    propertyViewModel: PropertyViewModel,
+    handleAddDocumentDateEdit: (String) -> Unit,
+    handleAddDocumentTypeEdit: (String) -> Unit,
+    propertyDocumentState: PropertyDocument,
+    uploadDocument: (Context, Uri) -> Unit,
     changeSelectedDocumentUri: (Uri?) -> Unit
 ) {
     val context = LocalContext.current
@@ -267,8 +300,8 @@ fun AddDocument(
     CalendarDialog(
         state = calendarState,
         selection = CalendarSelection.Date {
-            propertyViewModel.handleAddDocumentEdit(
-                expiryDate = it.toString()
+            handleAddDocumentDateEdit(
+                it.toString()
             )
         },
     )
@@ -319,7 +352,7 @@ fun AddDocument(
 
                     OutlinedTextField(enabled = false,
                         value = "Expiry Date: ${
-                            propertyViewModel.propertyDocument.expiryDate ?: "Select Date"
+                            propertyDocumentState.expiryDate ?: "Select Date"
                         }",
                         onValueChange = {},
                         keyboardOptions = KeyboardOptions.Default.copy(
@@ -353,8 +386,8 @@ fun AddDocument(
                         label = "Type",
                         onItemSelect = { selectedItem ->
                             documentTypeState.value = selectedItem
-                            propertyViewModel.handleAddDocumentEdit(
-                                documentType = selectedItem
+                            handleAddDocumentTypeEdit(
+                                selectedItem
                             )
                         },
 
@@ -368,9 +401,9 @@ fun AddDocument(
                     Button(modifier = Modifier
                         .weight(1f)
                         .padding(end = 8.dp),
-                        enabled = propertyViewModel.propertyDocument.expiryDate.isNotBlank() && propertyViewModel.propertyDocument.documentType.isNotBlank(),
+                        enabled = propertyDocumentState.expiryDate.isNotBlank() && propertyDocumentState.documentType.isNotBlank(),
                         onClick = {
-                            propertyViewModel.uploadDocument(
+                            uploadDocument(
                                 context, selectedDocumentUri
                             )
                             changeSelectedDocumentUri(null)
@@ -394,7 +427,10 @@ fun AddDocument(
 @Composable
 fun DocumentsList(
     propertyDocuments: List<PropertyDocument>,
-    propertyViewModel: PropertyViewModel,
+    uiState: UiState,
+    getDataForActiveProperty: () -> Unit,
+    downloadFile: (String) -> Long,
+    handleDocumentDelete: (Int) -> Unit,
     windowInfo: WindowInfo
 ) {
     Box(
@@ -417,10 +453,10 @@ fun DocumentsList(
 
         when {
             openDeleteDialog.value -> {
-                if (propertyViewModel.uiState is UiState.Success) {
+                if (uiState is UiState.Success) {
                     DeleteDialog(onDismissRequest = { openDeleteDialog.value = false },
                         onConfirmation = {
-                            propertyViewModel.handleDocumentDelete(documentID)
+                            handleDocumentDelete(documentID)
                             openDeleteDialog.value = false
 
                         },
@@ -434,7 +470,7 @@ fun DocumentsList(
                     DeleteDialog(onDismissRequest = { openDeleteDialog.value = false },
                         onConfirmation = {
                             openDeleteDialog.value = false
-                            propertyViewModel.getDataForActiveProperty()
+                            getDataForActiveProperty()
                         },
                         confirmText = "Retry Connection",
                         dismissText = "Dismiss",
@@ -449,7 +485,7 @@ fun DocumentsList(
 
         LazyColumn {
             items(propertyDocuments) { document ->
-                DocumentCard(document, propertyViewModel) {
+                DocumentCard(document, downloadFile) {
                     documentID = it
                     openDeleteDialog.value = !openDeleteDialog.value
                 }
