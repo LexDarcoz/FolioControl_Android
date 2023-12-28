@@ -92,13 +92,9 @@ fun FolioControlApplication(
                                 partnershipList = propertyViewModel.partnershipListState,
                                 switchPartnership = { propertyViewModel.switchPartnership(it) },
                                 navigateTo = {
-                                    navController.navigate(it) {
-                                        popUpTo(navController.graph.startDestinationId) {
-                                            saveState = true
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
+                                    navController.navigate(
+                                        it
+                                    )
                                 },
                             )
                         }
@@ -112,7 +108,8 @@ fun FolioControlApplication(
 
             topBar = {
                 Navbar(scrollBehavior,
-                    authViewModel = authViewModel,
+                    authViewModel.loginUiState,
+                    logOut = { authViewModel.logOut() },
                     navController = navController,
                     toggleDrawer = {
                         scope.launch {
@@ -142,8 +139,6 @@ fun AppNavigator(
     propertyViewModel: PropertyViewModel,
     accountViewModel: AccountViewModel,
 ) {
-
-
     NavHost(navController = navController, startDestination = "Home") {
         // Auth
         composable("Home") {

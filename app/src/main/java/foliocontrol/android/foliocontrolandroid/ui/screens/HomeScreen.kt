@@ -49,7 +49,7 @@ enum class Identifier {
 
 @Composable
 fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit) {
-    DisposableEffect(propertyViewModel.partnershipListState) {
+    DisposableEffect(propertyViewModel.currentPartnership) {
         propertyViewModel.getData()
         onDispose {}
     }
@@ -110,8 +110,7 @@ fun Home(
 
     when {
         propertyViewModel.isAddPropertyDialogOpen -> {
-            AddPropertyDialog(
-                onDismissRequest = { propertyViewModel.togglePropertyAddDialog() },
+            AddPropertyDialog(onDismissRequest = { propertyViewModel.togglePropertyAddDialog() },
                 onConfirmation = {
                     propertyViewModel.handlePropertyAdd()
                     propertyViewModel.togglePropertyAddDialog()

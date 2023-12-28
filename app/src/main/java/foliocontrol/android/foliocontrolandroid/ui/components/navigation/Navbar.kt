@@ -24,7 +24,8 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.rememberWin
 @Composable
 fun Navbar(
     scrollBehavior: TopAppBarScrollBehavior,
-    authViewModel: AuthViewModel,
+    loginUiState: UiState,
+    logOut: () -> Unit,
     navController: NavHostController,
     toggleDrawer: () -> Unit
 ) {
@@ -60,10 +61,10 @@ fun Navbar(
     },
 
         actions = {
-            when (authViewModel.loginUiState) {
+            when (loginUiState) {
                 is UiState.Success -> {
                     IconButton(onClick = {
-                        authViewModel.logOut()
+                        logOut()
                         navController.navigate("Home")
                     }) {
                         Icon(
