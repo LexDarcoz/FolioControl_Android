@@ -54,6 +54,12 @@ fun FolioControlApplication(
             DrawerValue.Open -> drawerState.close()
         }
     }
+    fun navigateTo(route: String) {
+        navController.navigate(route)
+    }
+    fun navigateUp() {
+        navController.navigateUp()
+    }
 
     NavigationDrawer(
         drawerState = drawerState,
@@ -67,7 +73,7 @@ fun FolioControlApplication(
         partnershipList = propertyViewModel.partnershipListState,
         switchPartnership = { propertyViewModel.switchPartnership(it) },
         navigateTo = {
-            navController.navigate(it)
+            navigateTo(it)
         },
 
         ) {
@@ -86,7 +92,7 @@ fun FolioControlApplication(
                                 partnershipList = propertyViewModel.partnershipListState,
                                 switchPartnership = { propertyViewModel.switchPartnership(it) },
                                 navigateTo = {
-                                    navController.navigate(
+                                    navigateTo(
                                         it
                                     )
                                 },
@@ -105,12 +111,12 @@ fun FolioControlApplication(
                     authViewModel.loginUiState,
                     logOut = { authViewModel.logOut() },
                     navigateTo = {
-                        navController.navigate(
+                        navigateTo(
                             it
                         )
                     },
                     navigateUp = {
-                        navController.navigateUp()
+                        navigateUp()
                     },
                     toggleDrawer = {
                         scope.launch {
