@@ -42,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.DropDownMenuItem
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioDropdown
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioTextField
@@ -127,7 +128,15 @@ val items = listOf(
 fun AddPropertyDialog(
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
-    propertyViewModel: PropertyViewModel,
+    getData: () -> Unit = { },
+    addPropertyState: Property,
+    handlePropertyNameAddEdit: (String) -> Unit,
+    handlePropertyTypeAddEdit: (String) -> Unit,
+    handlePropertyStreetAddEdit: (String) -> Unit,
+    handlePropertyStreetNumberAddEdit: (String) -> Unit,
+    handlePropertyZipCodeAddEdit: (String) -> Unit,
+    handlePropertyCityAddEdit: (String) -> Unit,
+    handlePropertyCountryAddEdit: (String) -> Unit,
     offline: Boolean = false
 ) {
     Dialog(
@@ -182,10 +191,10 @@ fun AddPropertyDialog(
                             }
 
                             FolioTextField(
-                                true, "Name", propertyViewModel.addPropertyState.propertyName
+                                true, "Name", addPropertyState.propertyName
                             ) {
-                                propertyViewModel.handlePropertyAddEdit(
-                                    propertyName = it
+                                handlePropertyNameAddEdit(
+                                    it
                                 )
                             }
                             FolioDropdown(expanded = expanded,
@@ -193,8 +202,8 @@ fun AddPropertyDialog(
                                 items = items,
                                 label = "Type",
                                 onItemSelect = { selectedItem ->
-                                    propertyViewModel.handlePropertyAddEdit(
-                                        propertyType = selectedItem
+                                    handlePropertyTypeAddEdit(
+                                        selectedItem
                                     )
                                 })
 
@@ -204,21 +213,19 @@ fun AddPropertyDialog(
                             ) {
                                 Box(modifier = Modifier.weight(1f)) {
                                     FolioTextField(
-                                        true, "Street", propertyViewModel.addPropertyState.street
+                                        true, "Street", addPropertyState.street
                                     ) {
-                                        propertyViewModel.handlePropertyAddEdit(street = it)
+                                        handlePropertyStreetAddEdit(it)
                                     }
                                 }
 
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Box(modifier = Modifier.weight(1f)) {
                                     FolioTextField(
-                                        true,
-                                        "Street Number",
-                                        propertyViewModel.addPropertyState.streetNumber
+                                        true, "Street Number", addPropertyState.streetNumber
 
                                     ) {
-                                        propertyViewModel.handlePropertyAddEdit(streetNumber = it)
+                                        handlePropertyStreetNumberAddEdit(it)
                                     }
                                 }
                             }
@@ -229,28 +236,28 @@ fun AddPropertyDialog(
                             ) {
                                 Box(modifier = Modifier.weight(1f)) {
                                     FolioTextField(
-                                        true, "Zip Code", propertyViewModel.addPropertyState.zipCode
+                                        true, "Zip Code", addPropertyState.zipCode
                                     ) {
-                                        propertyViewModel.handlePropertyAddEdit(
-                                            zipCode = it
+                                        handlePropertyZipCodeAddEdit(
+                                            it
                                         )
                                     }
                                 }
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Box(modifier = Modifier.weight(1f)) {
                                     FolioTextField(
-                                        true, "City", propertyViewModel.addPropertyState.city
+                                        true, "City", addPropertyState.city
                                     ) {
-                                        propertyViewModel.handlePropertyAddEdit(city = it)
+                                        handlePropertyCityAddEdit(it)
                                     }
                                 }
                             }
 
                             FolioTextField(
-                                true, "Country", propertyViewModel.addPropertyState.country
+                                true, "Country", addPropertyState.country
                             ) {
-                                propertyViewModel.handlePropertyAddEdit(
-                                    country = it
+                                handlePropertyCountryAddEdit(
+                                    it
                                 )
                             }
                             Spacer(modifier = Modifier.weight(1f))
@@ -299,7 +306,7 @@ fun AddPropertyDialog(
                 // You must be online to add a property to your portfolio, make such screen
                 Card {
                     Text(text = "You must be online to add a property to your portfolio")
-                    Button(onClick = { propertyViewModel.getData() }) {
+                    Button(onClick = { getData() }) {
                         Text(text = "Retry Getting Data")
                     }
                 }

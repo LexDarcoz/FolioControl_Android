@@ -11,14 +11,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.ui.components.card.PartnershipCard
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 @Composable
 fun AccountPartnershipScreen(
-    propertyViewModel: PropertyViewModel
+    partnershipList: List<Partnership>,
 ) {
-    val partnerships = propertyViewModel.partnershipListState
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -30,7 +30,7 @@ fun AccountPartnershipScreen(
             )
 
             LazyColumn {
-                items(partnerships) { partnership ->
+                items(partnershipList) { partnership ->
                     PartnershipCard(partnership = partnership)
                 }
             }

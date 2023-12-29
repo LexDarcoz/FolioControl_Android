@@ -11,6 +11,7 @@ data class LoginCredentials(
 )
 
 data class User(
+    var userID: Int = 0,
     var name: String = "",
     var firstName: String = "",
     var lastName: String = "",

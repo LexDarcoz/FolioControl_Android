@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 @Composable
-fun SearchBar(propertyViewModel: PropertyViewModel) {
+fun SearchBar(toggleSearchBar: () -> Unit, filterProperties: (String) -> Unit) {
     var query by remember { mutableStateOf("") }
 
     val searchBarBackgroundColor = MaterialTheme.colorScheme.background
@@ -44,7 +44,10 @@ fun SearchBar(propertyViewModel: PropertyViewModel) {
     val searchIcon = Icons.Default.Search
 
     Box(
-        modifier = Modifier.fillMaxWidth().background(searchBarBackgroundColor).padding(16.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(searchBarBackgroundColor)
+            .padding(16.dp)
     ) {
         // Search bar with border
         TextField(
@@ -52,7 +55,10 @@ fun SearchBar(propertyViewModel: PropertyViewModel) {
             onValueChange = {
                 query = it
             },
-            modifier = Modifier.fillMaxWidth().height(56.dp).clip(RoundedCornerShape(cornerRadius))
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .clip(RoundedCornerShape(cornerRadius))
                 .border(
                     width = borderWidth,
                     color = borderColor,
@@ -61,32 +67,29 @@ fun SearchBar(propertyViewModel: PropertyViewModel) {
             textStyle = LocalTextStyle.current.copy(color = contentColor),
             placeholder = {
                 Text(
-                    text = "Search...",
-                    color = contentColor.copy(alpha = 0.8f)
+                    text = "Search...", color = contentColor.copy(alpha = 0.8f)
                 )
             },
             leadingIcon = {
                 Icon(
-                    imageVector = searchIcon,
-                    contentDescription = null,
-                    tint = iconTint
+                    imageVector = searchIcon, contentDescription = null, tint = iconTint
                 )
             },
             trailingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Close,
+                Icon(imageVector = Icons.Default.Close,
                     contentDescription = null,
                     tint = iconTint,
-                    modifier = Modifier.padding(end = 8.dp).clickable {
-                        propertyViewModel.toggleSearchBar()
-                    }
-                )
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .clickable {
+                            toggleSearchBar()
+                        })
             },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Search
             ),
             keyboardActions = KeyboardActions(onSearch = {
-                propertyViewModel.filterProperties(query)
+                filterProperties(query)
             })
         )
     }

@@ -26,7 +26,8 @@ fun Navbar(
     scrollBehavior: TopAppBarScrollBehavior,
     loginUiState: UiState,
     logOut: () -> Unit,
-    navController: NavHostController,
+    navigateTo: (String) -> Unit,
+    navigateUp: () -> Unit,
     toggleDrawer: () -> Unit
 ) {
     val windowInfo = rememberWindowInfo()
@@ -42,7 +43,7 @@ fun Navbar(
         )
     }, navigationIcon = {
         if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compact) {
-            IconButton(onClick = { navController.navigateUp() }) {
+            IconButton(onClick = { navigateUp() }) {
                 Icon(
                     tint = MaterialTheme.colorScheme.onPrimary,
                     imageVector = Icons.Filled.ArrowBack,
@@ -65,7 +66,7 @@ fun Navbar(
                 is UiState.Success -> {
                     IconButton(onClick = {
                         logOut()
-                        navController.navigate("Home")
+                        navigateTo("Home")
                     }) {
                         Icon(
                             imageVector = Icons.Filled.ExitToApp,

@@ -67,13 +67,7 @@ fun FolioControlApplication(
         partnershipList = propertyViewModel.partnershipListState,
         switchPartnership = { propertyViewModel.switchPartnership(it) },
         navigateTo = {
-            navController.navigate(it) {
-                popUpTo(navController.graph.startDestinationId) {
-                    saveState = true
-                }
-                launchSingleTop = true
-                restoreState = true
-            }
+            navController.navigate(it)
         },
 
         ) {
@@ -110,7 +104,14 @@ fun FolioControlApplication(
                 Navbar(scrollBehavior,
                     authViewModel.loginUiState,
                     logOut = { authViewModel.logOut() },
-                    navController = navController,
+                    navigateTo = {
+                        navController.navigate(
+                            it
+                        )
+                    },
+                    navigateUp = {
+                        navController.navigateUp()
+                    },
                     toggleDrawer = {
                         scope.launch {
                             toggleDrawer()
@@ -143,9 +144,36 @@ fun AppNavigator(
         // Auth
         composable("Home") {
             AuthScreen(
-                authViewModel = authViewModel,
-                authViewModel.loginUiState,
-                propertyViewModel = propertyViewModel
+                getData = { propertyViewModel.getData() },
+                loginUiState = authViewModel.loginUiState,
+                toggleSearchBar = { propertyViewModel.toggleSearchBar() },
+                isSearchBarEnabled = propertyViewModel.isSearchBarEnabled,
+                filteredList = propertyViewModel.filteredList,
+                filterProperties = { propertyViewModel.filterProperties(it) },
+                propertyListState = propertyViewModel.propertyListState,
+                uiState = propertyViewModel.uiState,
+                addPropertyState = propertyViewModel.addPropertyState,
+                handlePropertyNameEdit = { propertyViewModel.handlePropertyAddEdit(propertyName = it) },
+                handlePropertyTypeEdit = { propertyViewModel.handlePropertyAddEdit(propertyType = it) },
+                handlePropertyStreetAddEdit = { propertyViewModel.handlePropertyAddEdit(street = it) },
+                handlePropertyStreetNumberAddEdit = {
+                    propertyViewModel.handlePropertyAddEdit(
+                        streetNumber = it
+                    )
+                },
+                handlePropertyZipCodeAddEdit = { propertyViewModel.handlePropertyAddEdit(zipCode = it) },
+                handlePropertyCityAddEdit = { propertyViewModel.handlePropertyAddEdit(city = it) },
+                handlePropertyCountryAddEdit = { propertyViewModel.handlePropertyAddEdit(country = it) },
+                selectProperty = { propertyViewModel.selectProperty(it) },
+                deleteProperty = { propertyViewModel.handlePropertyDelete(it) },
+                togglePropertyAddDialog = { propertyViewModel.togglePropertyAddDialog() },
+                handlePropertyAdd = { propertyViewModel.handlePropertyAdd() },
+                currentPartnership = propertyViewModel.currentPartnership,
+                isAddPropertyDialogOpen = propertyViewModel.isAddPropertyDialogOpen,
+                loginCredentials = authViewModel.loginCredentials,
+                updateLoginStateEmail = { authViewModel.updateLoginState(email = it) },
+                updateLoginStatePassword = { authViewModel.updateLoginState(password = it) },
+                login = { authViewModel.login() },
             ) {
                 navController.navigate(
                     "$it"
@@ -153,7 +181,28 @@ fun AppNavigator(
             }
         }
         // Account
-        composable("Account") { AccountScreen(accountViewModel, propertyViewModel) }
+        composable("Account") {
+            AccountScreen(userState = accountViewModel.user,
+                handleUserSave = { accountViewModel.handleUserSave() },
+                handleUserNameEdit = { accountViewModel.handleUserEdit(name = it) },
+                handleUserLastNameEdit = { accountViewModel.handleUserEdit(lastName = it) },
+                handleUserEmailEdit = { accountViewModel.handleUserEdit(email = it) },
+                handleUserStreetEdit = { accountViewModel.handleUserEdit(street = it) },
+                handleUserStreetNumberEdit = { accountViewModel.handleUserEdit(streetNumber = it) },
+                handleUserZipCodeEdit = { accountViewModel.handleUserEdit(zipCode = it) },
+                handleUserCityEdit = { accountViewModel.handleUserEdit(city = it) },
+                handleUserCountryEdit = { accountViewModel.handleUserEdit(country = it) },
+                partnershipList = propertyViewModel.partnershipListState,
+                getData = { accountViewModel.getData() },
+                uiState = accountViewModel.uiState,
+                navigateTo = {
+                    navController.navigate(
+                        "$it"
+                    )
+                })
+        }
+
+
         // Portfolio
         composable("PropertyDetail") {
             PropertyOverviewScreen(uiState = propertyViewModel.uiState,

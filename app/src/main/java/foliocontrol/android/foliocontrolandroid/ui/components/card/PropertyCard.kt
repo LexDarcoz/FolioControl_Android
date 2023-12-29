@@ -43,19 +43,24 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun PropertyCard(
-    propertyViewModel: PropertyViewModel, property: Property, navigateTo: (Any?) -> Unit
+    property: Property,
+    uiState: UiState,
+    handlePropertyDelete: (Int) -> Unit,
+    getData: () -> Unit = { },
+    selectProperty: (Property) -> Unit,
+    navigateTo: (Any?) -> Unit
 
 ) {
     val imageUrl = Constants.PROPERTYPHOTOS_URL
     val openDeleteDialog = remember { mutableStateOf(false) }
     when {
         openDeleteDialog.value -> {
-            if (propertyViewModel.uiState is UiState.Success) {
+            if (uiState is UiState.Success) {
                 DeleteDialog(
                     onDismissRequest = { openDeleteDialog.value = false },
                     onConfirmation = {
                         openDeleteDialog.value = false
-                        propertyViewModel.handlePropertyDelete(property.propertyID)
+                        handlePropertyDelete(property.propertyID)
                     },
                     confirmText = "Confirm",
                     dismissText = "Dismiss",
@@ -68,7 +73,7 @@ fun PropertyCard(
                     onDismissRequest = { openDeleteDialog.value = false },
                     onConfirmation = {
                         openDeleteDialog.value = false
-                        propertyViewModel.getData()
+                        getData()
                     },
                     confirmText = "Retry Connection",
                     dismissText = "Dismiss",
@@ -162,7 +167,7 @@ fun PropertyCard(
             )
             Button(
                 onClick = {
-                    propertyViewModel.selectProperty(property)
+                    selectProperty(property)
                     navigateTo("PropertyDetail")
                 }, modifier = Modifier
                     .fillMaxWidth()

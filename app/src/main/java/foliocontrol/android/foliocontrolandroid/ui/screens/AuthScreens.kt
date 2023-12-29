@@ -29,6 +29,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.domain.LoginCredentials
+import foliocontrol.android.foliocontrolandroid.domain.Partnership
+import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.AuthViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
@@ -36,22 +38,75 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 @Composable
 fun AuthScreen(
-    authViewModel: AuthViewModel,
     loginUiState: UiState,
-    propertyViewModel: PropertyViewModel,
+    getData: () -> Unit = { },
+    getUserData: () -> Unit = {},
+    toggleSearchBar: () -> Unit = { },
+    isSearchBarEnabled: Boolean = false,
+    filteredList: List<Property>,
+    filterProperties: (String) -> Unit,
+    propertyListState: List<Property>,
+    uiState: UiState,
+    addPropertyState: Property,
+    handlePropertyNameEdit: (String) -> Unit,
+    handlePropertyTypeEdit: (String) -> Unit,
+    handlePropertyStreetAddEdit: (String) -> Unit,
+    handlePropertyStreetNumberAddEdit: (String) -> Unit,
+    handlePropertyZipCodeAddEdit: (String) -> Unit,
+    handlePropertyCityAddEdit: (String) -> Unit,
+    handlePropertyCountryAddEdit: (String) -> Unit,
+    selectProperty: (Property) -> Unit,
+    deleteProperty: (Int) -> Unit,
+    togglePropertyAddDialog: () -> Unit,
+    handlePropertyAdd: () -> Unit = {},
+    currentPartnership: Partnership,
+    isAddPropertyDialogOpen: Boolean,
+    //login
+    loginCredentials: LoginCredentials,
+    updateLoginStateEmail: (String) -> Unit,
+    updateLoginStatePassword: (String) -> Unit,
+    login: () -> Unit,
+
     navigateTo: (Any?) -> Unit = {}
 ) {
     when (loginUiState) {
         is UiState.LoggedOut -> {
-            LoginScreen(errorName = (authViewModel.loginUiState as UiState.LoggedOut).message,
-                authViewModel.loginCredentials,
-                { authViewModel.updateLoginState(email = it) },
-                { authViewModel.updateLoginState(password = it) },
-                { authViewModel.login() })
+            LoginScreen(errorName = (loginUiState as UiState.LoggedOut).message,
+                loginCredentials,
+                { updateLoginStateEmail(it) },
+                { updateLoginStatePassword(it) },
+                { login() })
         }
 
         is UiState.Success -> {
-            HomeScreen(propertyViewModel, navigateTo)
+            HomeScreen(getData = { getData() },
+                getUserData = { getUserData() },
+                toggleSearchBar = { toggleSearchBar() },
+                isSearchBarEnabled = isSearchBarEnabled,
+                filteredList = filteredList,
+                filterProperties = { filterProperties(it) },
+                propertyListState = propertyListState,
+                uiState = uiState,
+                addPropertyState = addPropertyState,
+                handlePropertyNameEdit = { handlePropertyNameEdit(it) },
+                handlePropertyTypeEdit = { handlePropertyTypeEdit(it) },
+                handlePropertyStreetAddEdit = { handlePropertyStreetAddEdit(it) },
+                handlePropertyStreetNumberAddEdit = {
+                    handlePropertyStreetNumberAddEdit(
+                        it
+                    )
+                },
+                handlePropertyZipCodeAddEdit = { handlePropertyZipCodeAddEdit(it) },
+                handlePropertyCityAddEdit = { handlePropertyCityAddEdit(it) },
+                handlePropertyCountryAddEdit = { handlePropertyCountryAddEdit(it) },
+                selectProperty = { selectProperty(it) },
+                deleteProperty = { deleteProperty(it) },
+                togglePropertyAddDialog = { togglePropertyAddDialog() },
+                handlePropertyAdd = { handlePropertyAdd() },
+                isAddPropertyDialogOpen = isAddPropertyDialogOpen,
+                currentPartnership = currentPartnership,
+                navigateTo = navigateTo
+            )
         }
 
         is UiState.Loading -> {

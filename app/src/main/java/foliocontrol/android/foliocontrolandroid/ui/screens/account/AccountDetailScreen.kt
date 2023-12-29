@@ -22,12 +22,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import foliocontrol.android.foliocontrolandroid.domain.User
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioTextField
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
 
 @Composable
 fun AccountDetailScreen(
-    accountViewModel: AccountViewModel, offline: Boolean, navigateTo: (Any?) -> Unit = {}
+    userState: User, handleUserSave: () -> Unit,
+    handleUserNameEdit: (String) -> Unit,
+    handleUserLastNameEdit: (String) -> Unit,
+    handleUserEmailEdit: (String) -> Unit,
+    handleUserStreetEdit: (String) -> Unit,
+    handleUserStreetNumberEdit: (String) -> Unit,
+    handleUserZipCodeEdit: (String) -> Unit,
+    handleUserCityEdit: (String) -> Unit,
+    handleUserCountryEdit: (String) -> Unit,
+    offline: Boolean, navigateTo: (Any?) -> Unit = {}
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -59,34 +69,34 @@ fun AccountDetailScreen(
                             .fillMaxSize()
                             .padding(16.dp)
                     ) {
-                        FolioTextField(!offline, "Name", accountViewModel.user.name) {
-                            accountViewModel.handleUserEdit(
-                                name = it
+                        FolioTextField(!offline, "Name", userState.name) {
+                            handleUserNameEdit(
+                                it
                             )
                         }
-                        FolioTextField(!offline, "Last Name", accountViewModel.user.lastName) {
-                            accountViewModel.handleUserEdit(
-                                lastName = it
+                        FolioTextField(!offline, "Last Name", userState.lastName) {
+                            handleUserLastNameEdit(
+                                it
                             )
                         }
-                        FolioTextField(!offline, "Email", accountViewModel.user.email) {
-                            accountViewModel.handleUserEdit(email = it)
+                        FolioTextField(!offline, "Email", userState.email) {
+                            handleUserEmailEdit(it)
                         }
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Box(modifier = Modifier.weight(1f)) {
-                                FolioTextField(!offline, "Street", accountViewModel.user.street) {
-                                    accountViewModel.handleUserEdit(street = it)
+                                FolioTextField(!offline, "Street", userState.street) {
+                                    handleUserStreetEdit(it)
                                 }
                             }
                             Spacer(modifier = Modifier.width(8.dp))
                             Box(modifier = Modifier.weight(1f)) {
                                 FolioTextField(
-                                    !offline, "Street Number", accountViewModel.user.streetNumber
+                                    !offline, "Street Number", userState.streetNumber
                                 ) {
-                                    accountViewModel.handleUserEdit(streetNumber = it)
+                                    handleUserStreetNumberEdit(it)
                                 }
                             }
                         }
@@ -97,29 +107,25 @@ fun AccountDetailScreen(
                         ) {
                             Box(modifier = Modifier.weight(1f)) {
                                 FolioTextField(
-                                    !offline, "Zip Code", accountViewModel.user.zipCode
+                                    !offline, "Zip Code", userState.zipCode
                                 ) {
-                                    accountViewModel.handleUserEdit(
-                                        zipCode = it
-                                    )
+                                    handleUserZipCodeEdit(it)
                                 }
                             }
                             Spacer(modifier = Modifier.width(8.dp))
                             Box(modifier = Modifier.weight(1f)) {
-                                FolioTextField(!offline, "City", accountViewModel.user.city) {
-                                    accountViewModel.handleUserEdit(city = it)
+                                FolioTextField(!offline, "City", userState.city) {
+                                    handleUserCityEdit(it)
                                 }
                             }
                         }
-                        FolioTextField(!offline, "Country", accountViewModel.user.country) {
-                            accountViewModel.handleUserEdit(
-                                country = it
-                            )
+                        FolioTextField(!offline, "Country", userState.country) {
+                            handleUserCountryEdit(it)
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         Button(
                             enabled = !offline, onClick = {
-                                accountViewModel.handleUserSave()
+                                handleUserSave()
                                 navigateTo("Home")
                             }, modifier = Modifier
                                 .fillMaxWidth()

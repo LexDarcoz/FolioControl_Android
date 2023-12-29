@@ -22,6 +22,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import foliocontrol.android.foliocontrolandroid.domain.Partnership
+import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.ui.components.InfoDialog
 import foliocontrol.android.foliocontrolandroid.ui.components.card.PropertyCard
 import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.AddPropertyDialog
@@ -48,23 +50,97 @@ enum class Identifier {
 }
 
 @Composable
-fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit) {
-    DisposableEffect(propertyViewModel.currentPartnership) {
-        propertyViewModel.getData()
+fun HomeScreen(
+    getData: () -> Unit = { },
+    getUserData: () -> Unit = {},
+    toggleSearchBar: () -> Unit = { },
+    isSearchBarEnabled: Boolean = false,
+    filteredList: List<Property>,
+    filterProperties: (String) -> Unit,
+    propertyListState: List<Property>,
+    uiState: UiState,
+    addPropertyState: Property,
+    handlePropertyNameEdit: (String) -> Unit,
+    handlePropertyTypeEdit: (String) -> Unit,
+    handlePropertyStreetAddEdit: (String) -> Unit,
+    handlePropertyStreetNumberAddEdit: (String) -> Unit,
+    handlePropertyZipCodeAddEdit: (String) -> Unit,
+    handlePropertyCityAddEdit: (String) -> Unit,
+    handlePropertyCountryAddEdit: (String) -> Unit,
+    selectProperty: (Property) -> Unit,
+    deleteProperty: (Int) -> Unit,
+    togglePropertyAddDialog: () -> Unit, handlePropertyAdd: () -> Unit = {},
+    currentPartnership: Partnership,
+    isAddPropertyDialogOpen: Boolean,
+    navigateTo: (Any?) -> Unit,
+) {
+    DisposableEffect(currentPartnership) {
+        getData()
         onDispose {}
     }
 
-    when (propertyViewModel.uiState) {
+    when (uiState) {
         is UiState.LoggedOut -> {
             navigateTo("home")
         }
 
         is UiState.Success -> {
-            Home(propertyViewModel, navigateTo)
+            Home(getData = { getData() },
+                toggleSearchBar = { toggleSearchBar() },
+                isSearchBarEnabled = isSearchBarEnabled,
+                filteredList = filteredList,
+                filterProperties = { filterProperties(it) },
+                propertyListState = propertyListState,
+                uiState = uiState,
+                addPropertyState = addPropertyState,
+                handlePropertyNameEdit = { handlePropertyNameEdit(it) },
+                handlePropertyTypeEdit = { handlePropertyTypeEdit(it) },
+                handlePropertyStreetAddEdit = { handlePropertyStreetAddEdit(it) },
+                handlePropertyStreetNumberAddEdit = {
+                    handlePropertyStreetNumberAddEdit(
+                        it
+                    )
+                },
+                handlePropertyZipCodeAddEdit = { handlePropertyZipCodeAddEdit(it) },
+                handlePropertyCityAddEdit = { handlePropertyCityAddEdit(it) },
+                handlePropertyCountryAddEdit = { handlePropertyCountryAddEdit(it) },
+                selectProperty = { selectProperty(it) },
+                deleteProperty = { deleteProperty(it) },
+                togglePropertyAddDialog = { togglePropertyAddDialog() },
+                handlePropertyAdd = { handlePropertyAdd() },
+                isAddPropertyDialogOpen = isAddPropertyDialogOpen,
+                navigateTo = navigateTo
+            )
         }
 
         is UiState.Offline -> {
-            Home(propertyViewModel, navigateTo, offline = true)
+            Home(getData = { getData() },
+                toggleSearchBar = { toggleSearchBar() },
+                isSearchBarEnabled = isSearchBarEnabled,
+                filteredList = filteredList,
+                filterProperties = { filterProperties(it) },
+                propertyListState = propertyListState,
+                uiState = uiState,
+                addPropertyState = addPropertyState,
+                handlePropertyNameEdit = { handlePropertyNameEdit(it) },
+                handlePropertyTypeEdit = { handlePropertyTypeEdit(it) },
+                handlePropertyStreetAddEdit = { handlePropertyStreetAddEdit(it) },
+                handlePropertyStreetNumberAddEdit = {
+                    handlePropertyStreetNumberAddEdit(
+                        it
+                    )
+                },
+                handlePropertyZipCodeAddEdit = { handlePropertyZipCodeAddEdit(it) },
+                handlePropertyCityAddEdit = { handlePropertyCityAddEdit(it) },
+                handlePropertyCountryAddEdit = { handlePropertyCountryAddEdit(it) },
+                selectProperty = { selectProperty(it) },
+                deleteProperty = { deleteProperty(it) },
+                togglePropertyAddDialog = { togglePropertyAddDialog() },
+                handlePropertyAdd = { handlePropertyAdd() },
+                isAddPropertyDialogOpen = isAddPropertyDialogOpen,
+                navigateTo = navigateTo,
+                offline = true
+            )
         }
 
         is UiState.Loading -> {
@@ -72,8 +148,7 @@ fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit)
         }
 
         else -> {
-            ErrorScreen(errorMessage = (propertyViewModel.uiState as UiState.Error).message,
-                onRetry = { propertyViewModel.getData() })
+            ErrorScreen(errorMessage = (uiState as UiState.Error).message, onRetry = { getData() })
         }
     }
 }
@@ -81,10 +156,30 @@ fun HomeScreen(propertyViewModel: PropertyViewModel, navigateTo: (Any?) -> Unit)
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun Home(
-    propertyViewModel: PropertyViewModel,
+    getData: () -> Unit = { },
+    toggleSearchBar: () -> Unit = { },
+    isSearchBarEnabled: Boolean = false,
+    filteredList: List<Property>,
+    filterProperties: (String) -> Unit,
+    propertyListState: List<Property>,
+    uiState: UiState,
+    addPropertyState: Property,
+    handlePropertyNameEdit: (String) -> Unit,
+    handlePropertyTypeEdit: (String) -> Unit,
+    handlePropertyStreetAddEdit: (String) -> Unit,
+    handlePropertyStreetNumberAddEdit: (String) -> Unit,
+    handlePropertyZipCodeAddEdit: (String) -> Unit,
+    handlePropertyCityAddEdit: (String) -> Unit,
+    handlePropertyCountryAddEdit: (String) -> Unit,
+
+    selectProperty: (Property) -> Unit,
+    deleteProperty: (Int) -> Unit,
+
+
+    togglePropertyAddDialog: () -> Unit, handlePropertyAdd: () -> Unit = {},
+
+    isAddPropertyDialogOpen: Boolean, offline: Boolean = false, loading: Boolean = false,
     navigateTo: (Any?) -> Unit,
-    offline: Boolean = false,
-    loading: Boolean = false
 ) {
     var multiFloatingState by remember {
         mutableStateOf(MultiFloatingState.Collapsed)
@@ -109,27 +204,35 @@ fun Home(
     )
 
     when {
-        propertyViewModel.isAddPropertyDialogOpen -> {
-            AddPropertyDialog(onDismissRequest = { propertyViewModel.togglePropertyAddDialog() },
+        isAddPropertyDialogOpen -> {
+            AddPropertyDialog(onDismissRequest = { togglePropertyAddDialog() },
                 onConfirmation = {
-                    propertyViewModel.handlePropertyAdd()
-                    propertyViewModel.togglePropertyAddDialog()
+                    handlePropertyAdd()
+                    togglePropertyAddDialog()
                 },
-                propertyViewModel = propertyViewModel,
+                getData = { getData() },
+                addPropertyState = addPropertyState,
+                handlePropertyNameAddEdit = handlePropertyNameEdit,
+                handlePropertyTypeAddEdit = handlePropertyTypeEdit,
+                handlePropertyStreetAddEdit = handlePropertyStreetAddEdit,
+                handlePropertyStreetNumberAddEdit = handlePropertyStreetNumberAddEdit,
+                handlePropertyZipCodeAddEdit = handlePropertyZipCodeAddEdit,
+                handlePropertyCityAddEdit = handlePropertyCityAddEdit,
+                handlePropertyCountryAddEdit = handlePropertyCountryAddEdit,
                 offline = offline
             )
         }
     }
-    SwipeRefresh(state = swipeRefreshState, onRefresh = { propertyViewModel.getData() }) {
+    SwipeRefresh(state = swipeRefreshState, onRefresh = { getData() }) {
         scope.launch {
-            if (propertyViewModel.uiState is UiState.Offline) {
+            if (uiState is UiState.Offline) {
                 var result = snackbarHostState.showSnackbar(
-                    message = (propertyViewModel.uiState as UiState.Offline).message,
+                    message = (uiState as UiState.Offline).message,
                     actionLabel = "Retry",
                     duration = SnackbarDuration.Indefinite
                 )
                 if (result == SnackbarResult.ActionPerformed) {
-                    propertyViewModel.getData()
+                    getData()
                 }
             }
         }
@@ -142,23 +245,28 @@ fun Home(
                     },
                     items = items,
                     toggleAddPropertyDialog = {
-                        propertyViewModel.togglePropertyAddDialog()
+                        togglePropertyAddDialog()
                     },
                     toggleSearchBar = {
-                        propertyViewModel.toggleSearchBar()
+                        toggleSearchBar()
                     })
             }
         }, snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         }) { values ->
             Column {
-                if (propertyViewModel.isSearchBarEnabled) {
-                    SearchBar(propertyViewModel)
+                if (isSearchBarEnabled) {
+                    SearchBar(toggleSearchBar = toggleSearchBar,
+                        filterProperties = { filterProperties(it) })
                     LazyColumn(contentPadding = values) {
-                        items(propertyViewModel.filteredList) { property ->
+                        items(filteredList) { property ->
                             PropertyCard(
-                                propertyViewModel = propertyViewModel,
                                 property = property,
+                                uiState = uiState,
+                                handlePropertyDelete = { deleteProperty(it) },
+
+                                getData = { getData() },
+                                selectProperty = { selectProperty(it) },
                                 navigateTo = navigateTo
 
                             )
@@ -166,10 +274,13 @@ fun Home(
                     }
                 } else {
                     LazyColumn(contentPadding = values) {
-                        items(propertyViewModel.propertyListState) { property ->
+                        items(propertyListState) { property ->
                             PropertyCard(
-                                propertyViewModel = propertyViewModel,
                                 property = property,
+                                uiState = uiState,
+                                handlePropertyDelete = { deleteProperty(it) },
+                                getData = { getData() },
+                                selectProperty = { selectProperty(it) },
                                 navigateTo = navigateTo
 
                             )

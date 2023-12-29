@@ -29,6 +29,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.zIndex
+import foliocontrol.android.foliocontrolandroid.domain.Partnership
+import foliocontrol.android.foliocontrolandroid.domain.User
 import foliocontrol.android.foliocontrolandroid.ui.screens.account.AccountDetailScreen
 import foliocontrol.android.foliocontrolandroid.ui.screens.account.AccountPartnershipScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
@@ -49,25 +51,64 @@ data class TabItem(
 
 @Composable
 fun AccountScreen(
-    accountViewModel: AccountViewModel,
-    propertyViewModel: PropertyViewModel,
+    userState: User,
+    handleUserSave: () -> Unit,
+    handleUserNameEdit: (String) -> Unit,
+    handleUserLastNameEdit: (String) -> Unit,
+    handleUserEmailEdit: (String) -> Unit,
+    handleUserStreetEdit: (String) -> Unit,
+    handleUserStreetNumberEdit: (String) -> Unit,
+    handleUserZipCodeEdit: (String) -> Unit,
+    handleUserCityEdit: (String) -> Unit,
+    handleUserCountryEdit: (String) -> Unit,
+    partnershipList: List<Partnership>,
+    getData: () -> Unit = { },
+    uiState: UiState,
     navigateTo: (Any?) -> Unit = {}
 ) {
-    DisposableEffect(accountViewModel.user) {
-        accountViewModel.getData()
+    DisposableEffect(userState.userID) {
+        getData()
         onDispose { }
     }
-    when (accountViewModel.uiState) {
+    when (uiState) {
         is UiState.LoggedOut -> {
-            navigateTo("home")
+
         }
 
         is UiState.Success -> {
-            AccountOverview(accountViewModel, propertyViewModel, offline = false, navigateTo)
+            AccountOverview(
+                userState = userState,
+                handleUserSave = handleUserSave,
+                handleUserNameEdit = handleUserNameEdit,
+                handleUserLastNameEdit = handleUserLastNameEdit,
+                handleUserEmailEdit = handleUserEmailEdit,
+                handleUserStreetEdit = handleUserStreetEdit,
+                handleUserStreetNumberEdit = handleUserStreetNumberEdit,
+                handleUserZipCodeEdit = handleUserZipCodeEdit,
+                handleUserCityEdit = handleUserCityEdit,
+                handleUserCountryEdit = handleUserCountryEdit,
+                offline = false,
+                partnershipList = partnershipList,
+                navigateTo = navigateTo
+            )
         }
 
         is UiState.Offline -> {
-            AccountOverview(accountViewModel, propertyViewModel, offline = true, navigateTo)
+            AccountOverview(
+                userState = userState,
+                handleUserSave = handleUserSave,
+                handleUserNameEdit = handleUserNameEdit,
+                handleUserLastNameEdit = handleUserLastNameEdit,
+                handleUserEmailEdit = handleUserEmailEdit,
+                handleUserStreetEdit = handleUserStreetEdit,
+                handleUserStreetNumberEdit = handleUserStreetNumberEdit,
+                handleUserZipCodeEdit = handleUserZipCodeEdit,
+                handleUserCityEdit = handleUserCityEdit,
+                handleUserCountryEdit = handleUserCountryEdit,
+                offline = true,
+                partnershipList = partnershipList,
+                navigateTo = navigateTo
+            )
         }
 
         is UiState.Loading -> {
@@ -75,8 +116,7 @@ fun AccountScreen(
         }
 
         else -> {
-            ErrorScreen(errorMessage = (accountViewModel.uiState as UiState.Error).message,
-                onRetry = { accountViewModel.getData() })
+            ErrorScreen(errorMessage = (uiState as UiState.Error).message, onRetry = { getData() })
         }
     }
 }
@@ -84,9 +124,18 @@ fun AccountScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AccountOverview(
-    accountViewModel: AccountViewModel,
-    propertyViewModel: PropertyViewModel,
-    offline: Boolean = false,
+    userState: User,
+    handleUserSave: () -> Unit,
+    handleUserNameEdit: (String) -> Unit,
+    handleUserLastNameEdit: (String) -> Unit,
+    handleUserEmailEdit: (String) -> Unit,
+    handleUserStreetEdit: (String) -> Unit,
+    handleUserStreetNumberEdit: (String) -> Unit,
+    handleUserZipCodeEdit: (String) -> Unit,
+    handleUserCityEdit: (String) -> Unit,
+    handleUserCountryEdit: (String) -> Unit,
+    partnershipList: List<Partnership>,
+    offline: Boolean,
     navigateTo: (Any?) -> Unit = {}
 ) {
     val pagerState = rememberPagerState {
@@ -131,10 +180,23 @@ fun AccountOverview(
         ) { index ->
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 if (index == 0) {
-                    AccountDetailScreen(accountViewModel, offline, navigateTo)
+                    AccountDetailScreen(
+                        userState = userState,
+                        handleUserSave = handleUserSave,
+                        handleUserNameEdit = handleUserNameEdit,
+                        handleUserLastNameEdit = handleUserLastNameEdit,
+                        handleUserEmailEdit = handleUserEmailEdit,
+                        handleUserStreetEdit = handleUserStreetEdit,
+                        handleUserStreetNumberEdit = handleUserStreetNumberEdit,
+                        handleUserZipCodeEdit = handleUserZipCodeEdit,
+                        handleUserCityEdit = handleUserCityEdit,
+                        handleUserCountryEdit = handleUserCountryEdit,
+                        offline,
+                        navigateTo
+                    )
                 } else if (index == 1) {
                     AccountPartnershipScreen(
-                        propertyViewModel
+                        partnershipList = partnershipList
                     )
                 }
             }
