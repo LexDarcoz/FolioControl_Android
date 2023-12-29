@@ -21,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import foliocontrol.android.foliocontrolandroid.components.BottomNavigation
 import foliocontrol.android.foliocontrolandroid.components.Navbar
@@ -54,9 +55,11 @@ fun FolioControlApplication(
             DrawerValue.Open -> drawerState.close()
         }
     }
+
     fun navigateTo(route: String) {
         navController.navigate(route)
     }
+
     fun navigateUp() {
         navController.navigateUp()
     }
@@ -96,6 +99,7 @@ fun FolioControlApplication(
                                         it
                                     )
                                 },
+                                navController.currentBackStackEntryAsState().value?.destination?.route ?: "",
                             )
                         }
                     }
@@ -107,7 +111,8 @@ fun FolioControlApplication(
 
 
             topBar = {
-                Navbar(scrollBehavior,
+                Navbar(
+                    scrollBehavior,
                     authViewModel.loginUiState,
                     logOut = { authViewModel.logOut() },
                     navigateTo = {
@@ -122,7 +127,12 @@ fun FolioControlApplication(
                         scope.launch {
                             toggleDrawer()
                         }
-                    })
+                    },
+                    navController.currentBackStackEntryAsState().value?.destination?.route ?: "",
+
+
+                    )
+
             }
 
         ) { innerPadding ->

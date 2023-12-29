@@ -14,6 +14,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 object Constants {
 
@@ -42,7 +43,7 @@ object Constants {
 
 fun <T> createRetrofit(apiClass: Class<T>): T {
     val retrofit = Retrofit.Builder().baseUrl(Constants.BASE_URL)
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType())).build()
+        .addConverterFactory(GsonConverterFactory.create()).build()
 
     return retrofit.create(apiClass)
 }

@@ -59,6 +59,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -170,7 +171,9 @@ fun PropertyDocumentsScreen(
         contract = ActivityResultContracts.OpenDocument(),
         onResult = { uri ->
             selectedDocumentUri = uri
+            Log.i("TEST", "PropertyDocumentsScreen: ${selectedDocumentUri.toString()}")
         })
+    Log.i("TEST", "PropertyDocumentsScreen: ${selectedDocumentUri.toString()}")
 
 
     Box(
@@ -206,10 +209,6 @@ fun PropertyDocumentsScreen(
 
             when {
                 offline -> OfflineScreen()
-                propertyDocuments.isEmpty() -> EmptyListScreen(
-                    "No documents available."
-                )
-
                 selectedDocumentUri != null -> AddDocument(
                     selectedDocumentUri,
                     handleAddDocumentDateEdit,
@@ -220,6 +219,11 @@ fun PropertyDocumentsScreen(
                     ) {
                     selectedDocumentUri = it
                 }
+
+                propertyDocuments.isEmpty() -> EmptyListScreen(
+                    "No documents available."
+                )
+
 
                 else -> {
                     DocumentsList(
@@ -484,7 +488,8 @@ fun DocumentsList(
 
 
         LazyColumn {
-            items(propertyDocuments) { document ->
+            items(items = propertyDocuments,
+                key = { propertyDocument -> propertyDocument.propertyDocumentID }) { document ->
                 DocumentCard(document, downloadFile) {
                     documentID = it
                     openDeleteDialog.value = !openDeleteDialog.value

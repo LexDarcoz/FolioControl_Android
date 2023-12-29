@@ -17,8 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 @Database(
     entities = [PartnershipRoomEntity::class, PropertyRoomEntity::class, UserRoomEntity::class],
     // change this to version+1 when you change the schema
-    version = 1,
-    exportSchema = false
+    version = 4, exportSchema = false
 )
 abstract class FolioRoomDatabase : RoomDatabase() {
     abstract fun partnershipDao(): PartnershipDao
@@ -33,11 +32,9 @@ abstract class FolioRoomDatabase : RoomDatabase() {
             Log.d("FolioRoomDB", "Creating database")
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(
-                    context,
-                    FolioRoomDatabase::class.java,
-                    "Folio_database"
-                ).addCallback(object : Callback() {
-                }).fallbackToDestructiveMigration().build().also { Instance = it }
+                    context, FolioRoomDatabase::class.java, "Folio_database"
+                ).addCallback(object : Callback() {}).fallbackToDestructiveMigration().build()
+                    .also { Instance = it }
             }
         }
     }

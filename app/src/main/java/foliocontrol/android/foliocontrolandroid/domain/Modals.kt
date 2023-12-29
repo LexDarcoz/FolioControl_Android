@@ -1,29 +1,51 @@
 package foliocontrol.android.foliocontrolandroid.domain
 
+import androidx.compose.runtime.Immutable
 import foliocontrol.android.foliocontrolandroid.data.local.schema.PartnershipRoomEntity
 import foliocontrol.android.foliocontrolandroid.data.local.schema.PropertyRoomEntity
 import foliocontrol.android.foliocontrolandroid.data.local.schema.UserRoomEntity
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import java.util.UUID
 
+@Serializable
 data class LoginCredentials(
-    var email: String = "", var password: String = ""
+    val email: String = "", val password: String = ""
 
-)
-
-data class User(
-    var userID: Int = 0,
-    var name: String = "",
-    var firstName: String = "",
-    var lastName: String = "",
-    var street: String = "",
-    var streetNumber: String = "",
-    var zipCode: String = "",
-    var city: String = "",
-    var country: String = "",
-    var email: String = ""
 )
 
 @Serializable
+@Immutable
+data class User(
+    val userID: Int = 0,
+    val name: String = "",
+    val firstName: String = "",
+    val lastName: String = "",
+    val street: String = "",
+    val streetNumber: String = "",
+    val zipCode: String = "",
+    val city: String = "",
+    val country: String = "",
+    val email: String = ""
+)
+
+
+@Serializable
+@Immutable
+data class UserDto(
+    val name: String = "",
+    val firstName: String = "",
+    val lastName: String = "",
+    val street: String = "",
+    val streetNumber: String = "",
+    val zipCode: String = "",
+    val city: String = "",
+    val country: String = "",
+    val email: String = ""
+)
+
+@Serializable
+@Immutable
 data class Property(
     val propertyID: Int = 0,
     val propertyName: String = "",
@@ -34,10 +56,14 @@ data class Property(
     val city: String = "",
     val zipCode: String = "",
     val country: String = "",
+    val propertySize: String = "",
+    val propertyPrice: String = "",
     val propertyDescription: String = "",
     val FK_partnershipID: Int = 0
 )
 
+@Serializable
+@Immutable
 data class Premise(
     val premiseID: Int = 0,
     val premisesName: String = "",
@@ -52,6 +78,8 @@ data class Premise(
     val FK_propertyID: Int = 0
 )
 
+@Serializable
+@Immutable
 data class PropertyDocument(
     val propertyDocumentID: Int = 0,
     val name: String = "",
@@ -76,6 +104,7 @@ fun Property.asPropertyRoomEntity() = PropertyRoomEntity(
 )
 
 fun User.asUserRoomEntity() = UserRoomEntity(
+    userID = userID,
     name = name,
     firstName = firstName,
     lastName = lastName,
@@ -87,17 +116,19 @@ fun User.asUserRoomEntity() = UserRoomEntity(
     email = email
 )
 
+@Serializable
+@Immutable
 data class Partnership(
-    var partnershipID: Int = 0,
-    var name: String = "",
-    var logoImg: String = "",
-    var countryCode: String = "",
-    var vatNumber: String = "",
-    var street: String = "",
-    var streetNumber: String = "",
-    var zipCode: String = "",
-    var city: String = "",
-    var country: String = ""
+    val partnershipID: Int = 0,
+    val name: String = "",
+    val logoImg: String = "",
+    val countryCode: String = "",
+    val vatNumber: String = "",
+    val street: String = "",
+    val streetNumber: String = "",
+    val zipCode: String = "",
+    val city: String = "",
+    val country: String = ""
 
 )
 
@@ -114,6 +145,7 @@ fun Partnership.asPartnershipRoomEntity() = PartnershipRoomEntity(
     country = country
 )
 
+@Serializable
 data class Token(
-    var token: String = ""
+    val token: String = "", val validated: Boolean = false
 )

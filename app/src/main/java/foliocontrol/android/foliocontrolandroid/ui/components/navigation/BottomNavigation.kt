@@ -37,7 +37,8 @@ fun BottomNavigation(
     currentPartnership: Partnership,
     partnershipList: List<Partnership>,
     switchPartnership: (Partnership) -> Unit,
-    navigateTo: (String) -> Unit
+    navigateTo: (String) -> Unit,
+    currentScreen: String,
 ) {
     data class BottomNavigationItem(
         val title: String,
@@ -80,7 +81,7 @@ fun BottomNavigation(
             clip = true
         }) {
         items.forEachIndexed { index, item ->
-            NavigationBarItem(selected = selectedIcon == index, onClick = {
+            NavigationBarItem(selected = (currentScreen == item.title), onClick = {
                 selectedIcon = index
                 if (item.title != currentPartnership.name) {
                     navigateTo(item.title)
@@ -89,7 +90,7 @@ fun BottomNavigation(
                 Text(text = item.title, color = MaterialTheme.colorScheme.onPrimary)
             }, alwaysShowLabel = item.title == currentPartnership.name, icon = {
                 Icon(
-                    imageVector = if (selectedIcon == index) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length
+                    imageVector = if (currentScreen == item.title) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length
                     contentDescription = item.title, tint = MaterialTheme.colorScheme.onPrimary
 
                 )

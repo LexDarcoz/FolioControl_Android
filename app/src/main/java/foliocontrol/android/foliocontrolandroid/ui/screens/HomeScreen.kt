@@ -171,13 +171,9 @@ fun Home(
     handlePropertyZipCodeAddEdit: (String) -> Unit,
     handlePropertyCityAddEdit: (String) -> Unit,
     handlePropertyCountryAddEdit: (String) -> Unit,
-
     selectProperty: (Property) -> Unit,
     deleteProperty: (Int) -> Unit,
-
-
     togglePropertyAddDialog: () -> Unit, handlePropertyAdd: () -> Unit = {},
-
     isAddPropertyDialogOpen: Boolean, offline: Boolean = false, loading: Boolean = false,
     navigateTo: (Any?) -> Unit,
 ) {
@@ -259,7 +255,8 @@ fun Home(
                     SearchBar(toggleSearchBar = toggleSearchBar,
                         filterProperties = { filterProperties(it) })
                     LazyColumn(contentPadding = values) {
-                        items(filteredList) { property ->
+                        items(items = filteredList,
+                            key = { property -> property.propertyID }) { property ->
                             PropertyCard(
                                 property = property,
                                 uiState = uiState,

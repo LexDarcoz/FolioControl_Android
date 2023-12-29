@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import foliocontrol.android.foliocontrolandroid.data.local.database.AccountDatabase
-import foliocontrol.android.foliocontrolandroid.data.local.database.PropertyDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.local.schema.asDomainModel
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl

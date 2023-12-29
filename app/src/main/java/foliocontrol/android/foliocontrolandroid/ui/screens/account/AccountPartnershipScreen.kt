@@ -30,7 +30,9 @@ fun AccountPartnershipScreen(
             )
 
             LazyColumn {
-                items(partnershipList) { partnership ->
+                items(
+                    items = partnershipList,
+                    key = { partnership -> partnership.partnershipID }) { partnership ->
                     PartnershipCard(partnership = partnership)
                 }
             }

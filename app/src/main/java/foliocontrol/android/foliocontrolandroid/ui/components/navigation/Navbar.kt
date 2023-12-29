@@ -28,7 +28,8 @@ fun Navbar(
     logOut: () -> Unit,
     navigateTo: (String) -> Unit,
     navigateUp: () -> Unit,
-    toggleDrawer: () -> Unit
+    toggleDrawer: () -> Unit,
+    currentScreen: String
 ) {
     val windowInfo = rememberWindowInfo()
     CenterAlignedTopAppBar(colors = TopAppBarDefaults.largeTopAppBarColors(
@@ -43,12 +44,14 @@ fun Navbar(
         )
     }, navigationIcon = {
         if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compact) {
-            IconButton(onClick = { navigateUp() }) {
-                Icon(
-                    tint = MaterialTheme.colorScheme.onPrimary,
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Back"
-                )
+            if (currentScreen != "Home") {
+                IconButton(onClick = { navigateUp() }) {
+                    Icon(
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
             }
         } else {
             IconButton(onClick = { toggleDrawer() }) {
