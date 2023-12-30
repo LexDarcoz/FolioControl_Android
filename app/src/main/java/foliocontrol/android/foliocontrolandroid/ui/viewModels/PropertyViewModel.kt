@@ -7,12 +7,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import foliocontrol.android.foliocontrolandroid.data.document.AndroidDownloader
+import foliocontrol.android.foliocontrolandroid.data.document.Downloader
+import foliocontrol.android.foliocontrolandroid.data.local.auth.TokenRepo
 import foliocontrol.android.foliocontrolandroid.data.local.database.PartnershipDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.database.PropertyDatabase
-import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreference
+
 import foliocontrol.android.foliocontrolandroid.data.local.schema.asDomainModel
+import foliocontrol.android.foliocontrolandroid.data.repository.AuthService
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
+import foliocontrol.android.foliocontrolandroid.data.repository.PropertyService
 import foliocontrol.android.foliocontrolandroid.data.repository.PropertyServiceImpl
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.Premise
@@ -34,20 +37,21 @@ import java.io.IOException
  *
  * @property propertyRepo The local database representing the property repository.
  * @property partnershipRepo The local database representing the partnership repository.
- * @property downloader An instance of [AndroidDownloader] for handling file downloads.
+ * @property downloader An instance of [Downloader] for handling file downloads.
  */
 class PropertyViewModel(
     private val propertyRepo: PropertyDatabase,
     private val partnershipRepo: PartnershipDatabase,
-    private val downloader: AndroidDownloader,
+    private val tokenRepo: TokenRepo,
+    private val downloader: Downloader,
 ) : ViewModel() {
     var uiState: UiState by mutableStateOf(
         UiState.LoggedOut("You are not logged in"),
     )
         private set
 
-    private val authService = AuthServiceImpl()
-    private val propertyService = PropertyServiceImpl()
+    var authService: AuthService = AuthServiceImpl()
+    var propertyService: PropertyService = PropertyServiceImpl()
     var currentPartnership by mutableStateOf(Partnership())
         private set
 
@@ -88,6 +92,11 @@ class PropertyViewModel(
     var isSearchBarEnabled by mutableStateOf(false)
     var addPropertyState by mutableStateOf(Property())
         private set
+
+
+    fun getToken(): String {
+        return tokenRepo.getToken()
+    }
 
     fun getData() {
         uiState = UiState.Loading
@@ -156,7 +165,7 @@ class PropertyViewModel(
     suspend fun getPropertyListForPartnership() {
         try {
             propertyListState = propertyService.getProperties(
-                getEncryptedPreference("token"), currentPartnership,
+                getToken(), currentPartnership,
             )
             if (propertyListState.isNotEmpty()) {
                 propertyRepo.dropTable(currentPartnership.partnershipID)
@@ -175,7 +184,7 @@ class PropertyViewModel(
      */
     suspend fun getPartnershipListForLoggedInUser() {
         partnershipListState =
-            authService.getPartnershipsForLoggedInUser(getEncryptedPreference("token"))
+            authService.getPartnershipsForLoggedInUser(getToken())
         partnershipRepo.insertAllPartnerships(
             partnershipListState.map {
                 it.asPartnershipRoomEntity()
@@ -192,6 +201,7 @@ class PropertyViewModel(
     fun downloadFile(url: String): Long {
         return downloader.downloadFile(url)
     }
+
 
     /**
      * Switches the active partnership, updating the [propertyListState] and [currentPartnership].
@@ -253,7 +263,7 @@ class PropertyViewModel(
         viewModelScope.launch {
             try {
                 propertyService.uploadDocument(
-                    getEncryptedPreference("token"),
+                    getToken(),
                     propertyDocumentState,
                     propertyDocument,
                 )
@@ -313,19 +323,19 @@ class PropertyViewModel(
 
     suspend fun getPremisesForProperty(property: Property) {
         propertyPremises = propertyService.getPremisesForProperty(
-            getEncryptedPreference("token"), property,
+            getToken(), property,
         )
     }
 
     suspend fun getDetailsForProperty(property: Property) {
         propertyState = propertyService.getDetailsForProperty(
-            getEncryptedPreference("token"), property,
+            getToken(), property,
         )
     }
 
     suspend fun getDocumentsForProperty(property: Property) {
         propertyDocuments = propertyService.getDocumentsForProperty(
-            getEncryptedPreference("token"), property,
+            getToken(), property,
         )
     }
 
@@ -421,7 +431,7 @@ class PropertyViewModel(
         viewModelScope.launch {
             try {
                 propertyService.savePropertyByPropertyID(
-                    getEncryptedPreference("token"),
+                    getToken(),
                     propertyState,
                     propertyImageState,
                 )
@@ -443,7 +453,7 @@ class PropertyViewModel(
         viewModelScope.launch {
             try {
                 propertyService.deletePropertyByPropertyID(
-                    getEncryptedPreference("token"),
+                    getToken(),
                     propertyId,
                 )
                 getData()
@@ -465,7 +475,7 @@ class PropertyViewModel(
         viewModelScope.launch {
             try {
                 propertyService.deleteDocumentByPropertyID(
-                    getEncryptedPreference("token"),
+                    getToken(),
                     selectedDocumentID,
                 )
                 getDataForActiveProperty()
@@ -545,7 +555,7 @@ class PropertyViewModel(
         viewModelScope.launch {
             try {
                 propertyService.addProperty(
-                    getEncryptedPreference("token"),
+                    getToken(),
                     addPropertyState,
                 )
                 getData()

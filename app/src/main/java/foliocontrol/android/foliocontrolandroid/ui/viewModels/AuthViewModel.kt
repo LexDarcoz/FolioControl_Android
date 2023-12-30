@@ -5,10 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import foliocontrol.android.foliocontrolandroid.data.local.auth.TokenRepo
 import foliocontrol.android.foliocontrolandroid.data.local.database.AccountDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.database.PartnershipDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.database.PropertyDatabase
-import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.local.removeEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.local.saveEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
@@ -27,6 +27,7 @@ class AuthViewModel(
     private val propertyRepo: PropertyDatabase,
     private val partnershipRepo: PartnershipDatabase,
     private val accountRepo: AccountDatabase,
+    private val tokenRepo: TokenRepo,
 ) : ViewModel() {
     private val authService = AuthServiceImpl()
 
@@ -62,7 +63,7 @@ class AuthViewModel(
      * @return The user token.
      */
     fun getToken(): String {
-        return getEncryptedPreference("token")
+        return tokenRepo.getToken()
     }
 
     /**

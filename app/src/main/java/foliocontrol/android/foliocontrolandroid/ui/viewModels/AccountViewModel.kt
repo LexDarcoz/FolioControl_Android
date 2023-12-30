@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import foliocontrol.android.foliocontrolandroid.data.local.auth.TokenRepo
 import foliocontrol.android.foliocontrolandroid.data.local.database.AccountDatabase
-import foliocontrol.android.foliocontrolandroid.data.local.getEncryptedPreference
 import foliocontrol.android.foliocontrolandroid.data.local.schema.asDomainModel
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.domain.User
@@ -23,6 +23,7 @@ import java.io.IOException
  */
 class AccountViewModel(
     private val accountRepo: AccountDatabase,
+    private val tokenRepo: TokenRepo,
 ) : ViewModel() {
     private val authService = AuthServiceImpl()
     var user: User by mutableStateOf(User())
@@ -53,7 +54,7 @@ class AccountViewModel(
      * @return The user token.
      */
     fun getToken(): String {
-        return getEncryptedPreference("token")
+        return tokenRepo.getToken()
     }
 
     suspend fun getUserData() {
@@ -128,7 +129,7 @@ class AccountViewModel(
         viewModelScope.launch {
             try {
                 authService.saveUserByToken(
-                    getEncryptedPreference("token"),
+                    tokenRepo.getToken(),
                     user,
                 )
             } catch (e: Exception) {

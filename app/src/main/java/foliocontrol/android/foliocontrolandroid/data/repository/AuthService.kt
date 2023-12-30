@@ -26,7 +26,7 @@ interface AuthService {
      * @param token The authentication token.
      * @return List of [Partnership] objects associated with the logged-in user.
      */
-    suspend fun getPartnershipsForLoggedInUser(token: String): List<Partnership>
+    suspend fun getPartnershipsForLoggedInUser(token: String = ""): List<Partnership>
 
     /**
      * Suspended function to retrieve user information using the provided token.
@@ -34,7 +34,7 @@ interface AuthService {
      * @param token The authentication token.
      * @return [User] object representing the logged-in user.
      */
-    suspend fun getUserWithToken(token: String): User
+    suspend fun getUserWithToken(token: String = ""): User
 
     /**
      * Suspended function to save user information using the provided token.
@@ -43,7 +43,7 @@ interface AuthService {
      * @param user The [User] object to be saved.
      */
     suspend fun saveUserByToken(
-        token: String,
+        token: String = "",
         user: User,
     )
 }
