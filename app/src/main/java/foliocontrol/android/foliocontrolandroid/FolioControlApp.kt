@@ -27,7 +27,6 @@ class FolioControlApp : Application() {
      * [downloader] components.
      */
     override fun onCreate() {
-
         super.onCreate()
 
         // Create a CoroutineScope with a SupervisorJob to manage coroutine lifecycles.
