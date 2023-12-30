@@ -43,12 +43,13 @@ fun FolioControlApplication(
     authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory),
     propertyViewModel: PropertyViewModel = viewModel(factory = AppViewModelProvider.Factory),
     accountViewModel: AccountViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val windowInfo = rememberWindowInfo()
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
+
     suspend fun toggleDrawer() {
         when (drawerState.currentValue) {
             DrawerValue.Closed -> drawerState.open()
@@ -78,14 +79,17 @@ fun FolioControlApplication(
         navigateTo = {
             navigateTo(it)
         },
-
-        ) {
-        Scaffold(modifier = Modifier.fillMaxWidth(),
+    ) {
+        Scaffold(
+            modifier = Modifier.fillMaxWidth(),
             contentColor = MaterialTheme.colorScheme.primary,
-            contentWindowInsets = WindowInsets(
-                left = 0.dp, top = 0.dp, right = 0.dp, bottom = 0.dp
-            ),
-
+            contentWindowInsets =
+                WindowInsets(
+                    left = 0.dp,
+                    top = 0.dp,
+                    right = 0.dp,
+                    bottom = 0.dp,
+                ),
             bottomBar = {
                 when (authViewModel.loginUiState) {
                     is UiState.Success -> {
@@ -96,7 +100,7 @@ fun FolioControlApplication(
                                 switchPartnership = { propertyViewModel.switchPartnership(it) },
                                 navigateTo = {
                                     navigateTo(
-                                        it
+                                        it,
                                     )
                                 },
                                 navController.currentBackStackEntryAsState().value?.destination?.route
@@ -109,8 +113,6 @@ fun FolioControlApplication(
                     }
                 }
             },
-
-
             topBar = {
                 Navbar(
                     scrollBehavior,
@@ -118,7 +120,7 @@ fun FolioControlApplication(
                     logOut = { authViewModel.logOut() },
                     navigateTo = {
                         navigateTo(
-                            it
+                            it,
                         )
                     },
                     navigateUp = {
@@ -130,12 +132,8 @@ fun FolioControlApplication(
                         }
                     },
                     navController.currentBackStackEntryAsState().value?.destination?.route ?: "",
-
-
-                    )
-
-            }
-
+                )
+            },
         ) { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
                 AppNavigator(
@@ -147,7 +145,6 @@ fun FolioControlApplication(
             }
         }
     }
-
 }
 
 @Composable
@@ -175,7 +172,7 @@ fun AppNavigator(
                 handlePropertyStreetAddEdit = { propertyViewModel.handlePropertyAddEdit(street = it) },
                 handlePropertyStreetNumberAddEdit = {
                     propertyViewModel.handlePropertyAddEdit(
-                        streetNumber = it
+                        streetNumber = it,
                     )
                 },
                 handlePropertyZipCodeAddEdit = { propertyViewModel.handlePropertyAddEdit(zipCode = it) },
@@ -193,13 +190,14 @@ fun AppNavigator(
                 login = { authViewModel.login() },
             ) {
                 navController.navigate(
-                    "$it"
+                    "$it",
                 )
             }
         }
         // Account
         composable("Account") {
-            AccountScreen(userState = accountViewModel.user,
+            AccountScreen(
+                userState = accountViewModel.user,
                 handleUserSave = { accountViewModel.handleUserSave() },
                 handleUserNameEdit = { accountViewModel.handleUserEdit(name = it) },
                 handleUserLastNameEdit = { accountViewModel.handleUserEdit(lastName = it) },
@@ -214,15 +212,16 @@ fun AppNavigator(
                 uiState = accountViewModel.uiState,
                 navigateTo = {
                     navController.navigate(
-                        "$it"
+                        "$it",
                     )
-                })
+                },
+            )
         }
-
 
         // Portfolio
         composable("PropertyDetail") {
-            PropertyOverviewScreen(uiState = propertyViewModel.uiState,
+            PropertyOverviewScreen(
+                uiState = propertyViewModel.uiState,
                 propertyState = propertyViewModel.propertyState,
                 handlePropertyEditName = { propertyViewModel.handlePropertyEdit(propertyName = it) },
                 handlePropertyEditType = { propertyViewModel.handlePropertyEdit(propertyType = it) },
@@ -249,11 +248,10 @@ fun AppNavigator(
                 saveDataForActiveProperty = { propertyViewModel.handlePropertySave() },
                 navigateTo = {
                     navController.navigate(
-                        "$it"
+                        "$it",
                     )
-                })
-
-
+                },
+            )
         }
     }
 }

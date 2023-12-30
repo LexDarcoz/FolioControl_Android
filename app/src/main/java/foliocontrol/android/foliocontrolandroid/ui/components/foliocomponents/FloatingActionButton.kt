@@ -55,7 +55,7 @@ fun MultiFloatingButton(
     onMultiFabStateChange: (MultiFloatingState) -> Unit,
     items: List<MinFabItem>,
     toggleAddPropertyDialog: () -> Unit,
-    toggleSearchBar: () -> Unit
+    toggleSearchBar: () -> Unit,
 ) {
     var offsetY by remember {
         mutableFloatStateOf(0f)
@@ -67,7 +67,7 @@ fun MultiFloatingButton(
     }
     val alpha by transition.animateFloat(
         label = "alpha",
-        transitionSpec = { tween(durationMillis = 100) }
+        transitionSpec = { tween(durationMillis = 100) },
     ) {
         if (it == MultiFloatingState.Expanded) 1f else 0f
     }
@@ -78,31 +78,33 @@ fun MultiFloatingButton(
                 MultiFloatingState.Collapsed
             } else {
                 MultiFloatingState.Expanded
-            }
+            },
         )
     }
 
     Column(
-        horizontalAlignment = Alignment.End
+        horizontalAlignment = Alignment.End,
     ) {
         if (transition.currentState == MultiFloatingState.Expanded) {
             Card(
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.onTertiary
-                ),
-                modifier = Modifier
-                    .offset { IntOffset(0, offsetY.roundToInt()) }
-                    .padding(bottom = 16.dp)
-                    .alpha(
-                        animateFloatAsState(
-                            targetValue = alpha,
-                            animationSpec = tween(100),
-                            label = ""
-                        ).value
-                    )
-                    .width(190.dp),
-                elevation = CardDefaults.cardElevation(8.dp)
+                colors =
+                    CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.onTertiary,
+                    ),
+                modifier =
+                    Modifier
+                        .offset { IntOffset(0, offsetY.roundToInt()) }
+                        .padding(bottom = 16.dp)
+                        .alpha(
+                            animateFloatAsState(
+                                targetValue = alpha,
+                                animationSpec = tween(100),
+                                label = "",
+                            ).value,
+                        )
+                        .width(190.dp),
+                elevation = CardDefaults.cardElevation(8.dp),
             ) {
                 items.forEach {
                     MinFab(
@@ -120,14 +122,15 @@ fun MultiFloatingButton(
                                 }
                             }
                         },
-                        alpha = alpha
+                        alpha = alpha,
                     )
                     if (it != items.last()) {
                         Divider(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(1.dp),
-                            color = MaterialTheme.colorScheme.primary
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(1.dp),
+                            color = MaterialTheme.colorScheme.primary,
                         )
                     }
                 }
@@ -135,29 +138,31 @@ fun MultiFloatingButton(
         }
 
         FloatingActionButton(
-            modifier = Modifier
-                .height(70.dp)
-                .width(70.dp)
-                .offset { IntOffset(0, offsetY.roundToInt()) }
-                .draggable(
-                    orientation = Orientation.Vertical,
-                    state = rememberDraggableState { delta ->
-                        if (offsetY + delta < 0 && offsetY + delta > -configuration.screenHeightDp) {
-                            offsetY += delta
-                        }
-                    }
-                ),
-
+            modifier =
+                Modifier
+                    .height(70.dp)
+                    .width(70.dp)
+                    .offset { IntOffset(0, offsetY.roundToInt()) }
+                    .draggable(
+                        orientation = Orientation.Vertical,
+                        state =
+                            rememberDraggableState { delta ->
+                                if (offsetY + delta < 0 && offsetY + delta > -configuration.screenHeightDp) {
+                                    offsetY += delta
+                                }
+                            },
+                    ),
             onClick = {
                 toggleFab()
-            }
+            },
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = null,
-                modifier = Modifier
-                    .rotate(rotate)
-                    .fillMaxSize(0.6f)
+                modifier =
+                    Modifier
+                        .rotate(rotate)
+                        .fillMaxSize(0.6f),
             )
         }
     }
@@ -169,41 +174,45 @@ fun MinFab(
     item: MinFabItem,
     alpha: Float,
     showLabel: Boolean = true,
-    onMinFabItemClick: (MinFabItem) -> Unit
+    onMinFabItemClick: (MinFabItem) -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                onClick = {
-                    onMinFabItemClick.invoke(item)
-                },
-                indication = rememberRipple(
-                    bounded = true,
-                    radius = 252.dp,
-                    color = MaterialTheme.colorScheme.surface
+        modifier =
+            Modifier
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick = {
+                        onMinFabItemClick.invoke(item)
+                    },
+                    indication =
+                        rememberRipple(
+                            bounded = true,
+                            radius = 252.dp,
+                            color = MaterialTheme.colorScheme.surface,
+                        ),
                 )
-            )
-            .alpha(
-                animateFloatAsState(
-                    targetValue = alpha,
-                    animationSpec = tween(100),
-                    label = ""
-                ).value
-            )
+                .alpha(
+                    animateFloatAsState(
+                        targetValue = alpha,
+                        animationSpec = tween(100),
+                        label = "",
+                    ).value,
+                ),
     ) {
         Row(
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth()
+            modifier =
+                Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth(),
         ) {
             Icon(
                 imageVector = item.icon,
                 contentDescription = null,
-                modifier = Modifier
-                    .size(32.dp)
-                    .fillMaxSize()
-                    .alpha(alpha)
+                modifier =
+                    Modifier
+                        .size(32.dp)
+                        .fillMaxSize()
+                        .alpha(alpha),
             )
 
             if (showLabel) {
@@ -212,10 +221,11 @@ fun MinFab(
                     color = MaterialTheme.colorScheme.primary,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .alpha(alpha)
-                        .padding(start = 12.dp)
-                        .fillMaxWidth()
+                    modifier =
+                        Modifier
+                            .alpha(alpha)
+                            .padding(start = 12.dp)
+                            .fillMaxWidth(),
                 )
             }
         }

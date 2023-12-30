@@ -27,41 +27,44 @@ fun Navbar(
     navigateTo: (String) -> Unit,
     navigateUp: () -> Unit,
     toggleDrawer: () -> Unit,
-    currentScreen: String
+    currentScreen: String,
 ) {
     val windowInfo = rememberWindowInfo()
-    CenterAlignedTopAppBar(colors = TopAppBarDefaults.largeTopAppBarColors(
-        containerColor = MaterialTheme.colorScheme.primary,
-        titleContentColor = MaterialTheme.colorScheme.secondary
-    ), title = {
-        Text(
-            "FolioControl",
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colorScheme.onPrimary
-        )
-    }, navigationIcon = {
-        if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compact) {
-            if (currentScreen != "Home") {
-                IconButton(onClick = { navigateUp() }) {
+    CenterAlignedTopAppBar(
+        colors =
+            TopAppBarDefaults.largeTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                titleContentColor = MaterialTheme.colorScheme.secondary,
+            ),
+        title = {
+            Text(
+                "FolioControl",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.onPrimary,
+            )
+        },
+        navigationIcon = {
+            if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compact) {
+                if (currentScreen != "Home") {
+                    IconButton(onClick = { navigateUp() }) {
+                        Icon(
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back",
+                        )
+                    }
+                }
+            } else {
+                IconButton(onClick = { toggleDrawer() }) {
                     Icon(
                         tint = MaterialTheme.colorScheme.onPrimary,
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back"
+                        imageVector = Icons.Filled.Menu,
+                        contentDescription = "Open Navigation Menu",
                     )
                 }
             }
-        } else {
-            IconButton(onClick = { toggleDrawer() }) {
-                Icon(
-                    tint = MaterialTheme.colorScheme.onPrimary,
-                    imageVector = Icons.Filled.Menu,
-                    contentDescription = "Open Navigation Menu"
-                )
-            }
-        }
-    },
-
+        },
         actions = {
             when (loginUiState) {
                 is UiState.Success -> {
@@ -72,7 +75,7 @@ fun Navbar(
                         Icon(
                             imageVector = Icons.Filled.ExitToApp,
                             contentDescription = "Log out",
-                            tint = MaterialTheme.colorScheme.onPrimary
+                            tint = MaterialTheme.colorScheme.onPrimary,
                         )
                     }
                 }
@@ -81,7 +84,6 @@ fun Navbar(
                 }
             }
         },
-
-        scrollBehavior = scrollBehavior
+        scrollBehavior = scrollBehavior,
     )
 }

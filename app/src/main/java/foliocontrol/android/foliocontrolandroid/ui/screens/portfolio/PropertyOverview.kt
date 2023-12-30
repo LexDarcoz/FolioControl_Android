@@ -45,24 +45,27 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.rememberWindowInfo
 
-val tabItemsList = listOf(
-    TabItem("Details", Icons.Outlined.HomeWork, Icons.Filled.HomeWork),
-    TabItem("Photos", Icons.Outlined.PictureInPicture, Icons.Filled.PictureInPicture),
-    TabItem("Document", Icons.Outlined.FileCopy, Icons.Filled.FileCopy),
-    TabItem("Premises", Icons.Outlined.Room, Icons.Filled.Room)
-)
+val tabItemsList =
+    listOf(
+        TabItem("Details", Icons.Outlined.HomeWork, Icons.Filled.HomeWork),
+        TabItem("Photos", Icons.Outlined.PictureInPicture, Icons.Filled.PictureInPicture),
+        TabItem("Document", Icons.Outlined.FileCopy, Icons.Filled.FileCopy),
+        TabItem("Premises", Icons.Outlined.Room, Icons.Filled.Room),
+    )
 
 data class TabItem(
-    val title: String, val unselectedIcon: ImageVector, val selectedIcon: ImageVector
+    val title: String,
+    val unselectedIcon: ImageVector,
+    val selectedIcon: ImageVector,
 )
 
 @Composable
 fun PropertyOverviewScreen(
-    //UISTATE
+    // UISTATE
     uiState: UiState,
-    //PROPERTY STATE
+    // PROPERTY STATE
     propertyState: Property,
-    //Edit Detail Data
+    // Edit Detail Data
     handlePropertyEditName: (String) -> Unit = {},
     handlePropertyEditType: (String) -> Unit = {},
     handlePropertyEditStreet: (String) -> Unit = {},
@@ -70,9 +73,10 @@ fun PropertyOverviewScreen(
     handlePropertyEditZipCode: (String) -> Unit = {},
     handlePropertyEditCity: (String) -> Unit = {},
     handlePropertyEditCountry: (String) -> Unit = {},
-    //Image Functions
-    clearImage: () -> Unit, uploadImage: (Context, Uri?) -> Unit,
-    //Document Functions
+    // Image Functions
+    clearImage: () -> Unit,
+    uploadImage: (Context, Uri?) -> Unit,
+    // Document Functions
     propertyDocuments: List<PropertyDocument>,
     handleDocumentDelete: (Int) -> Unit,
     downloadFile: (String) -> Long,
@@ -80,19 +84,15 @@ fun PropertyOverviewScreen(
     handleAddDocumentTypeEdit: (String) -> Unit,
     propertyDocumentState: PropertyDocument,
     uploadDocument: (Context, Uri) -> Unit,
-    //Premises
+    // Premises
     propertyPremises: List<Premise>,
-    //GETDATA
+    // GETDATA
     getDataForActiveProperty: () -> Unit,
-    //SAVE DATA
+    // SAVE DATA
     saveDataForActiveProperty: () -> Unit,
-
     navigateTo: (Any?) -> Unit,
 ) {
-
-
     DisposableEffect(propertyState.propertyID) {
-
         getDataForActiveProperty()
 
         onDispose {}
@@ -127,8 +127,7 @@ fun PropertyOverviewScreen(
                 saveDataForActiveProperty = saveDataForActiveProperty,
                 getDataForActiveProperty = getDataForActiveProperty,
                 navigateTo = navigateTo,
-
-                )
+            )
         }
 
         is UiState.Offline -> {
@@ -155,18 +154,18 @@ fun PropertyOverviewScreen(
                 saveDataForActiveProperty = saveDataForActiveProperty,
                 getDataForActiveProperty = getDataForActiveProperty,
                 navigateTo = navigateTo,
-                offline = true
+                offline = true,
             )
         }
 
         is UiState.Loading -> {
-
         }
 
-
         else -> {
-            ErrorScreen(errorMessage = (uiState as UiState.Error).message,
-                onRetry = { getDataForActiveProperty() })
+            ErrorScreen(
+                errorMessage = (uiState as UiState.Error).message,
+                onRetry = { getDataForActiveProperty() },
+            )
         }
     }
 }
@@ -175,11 +174,11 @@ fun PropertyOverviewScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Overview(
-    //UISTATE
+    // UISTATE
     uiState: UiState,
-    //PROPERTY STATE
+    // PROPERTY STATE
     propertyState: Property,
-    //Edit Detail Data
+    // Edit Detail Data
     handlePropertyEditName: (String) -> Unit = {},
     handlePropertyEditType: (String) -> Unit = {},
     handlePropertyEditStreet: (String) -> Unit = {},
@@ -187,9 +186,10 @@ fun Overview(
     handlePropertyEditZipCode: (String) -> Unit = {},
     handlePropertyEditCity: (String) -> Unit = {},
     handlePropertyEditCountry: (String) -> Unit = {},
-    //Image Functions
-    clearImage: () -> Unit, uploadImage: (Context, Uri?) -> Unit,
-    //Document Functions
+    // Image Functions
+    clearImage: () -> Unit,
+    uploadImage: (Context, Uri?) -> Unit,
+    // Document Functions
     propertyDocuments: List<PropertyDocument>,
     handleDocumentDelete: (Int) -> Unit,
     downloadFile: (String) -> Long,
@@ -197,13 +197,12 @@ fun Overview(
     handleAddDocumentTypeEdit: (String) -> Unit,
     propertyDocumentState: PropertyDocument,
     uploadDocument: (Context, Uri) -> Unit,
-    //Premises
+    // Premises
     propertyPremises: List<Premise>,
-    //GETDATA
+    // GETDATA
     getDataForActiveProperty: () -> Unit,
-    //SAVE DATA
+    // SAVE DATA
     saveDataForActiveProperty: () -> Unit,
-
     navigateTo: (Any?) -> Unit,
     offline: Boolean = false,
 ) {
@@ -225,9 +224,10 @@ fun Overview(
     }
 
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = loading)
-    val pagerState = rememberPagerState {
-        tabItems.size
-    }
+    val pagerState =
+        rememberPagerState {
+            tabItems.size
+        }
     var selectedTabIndex by remember {
         mutableStateOf(0)
     }
@@ -254,7 +254,7 @@ fun Overview(
         Column {
             TabRow(
                 selectedTabIndex = selectedTabIndex,
-                containerColor = MaterialTheme.colorScheme.onPrimary
+                containerColor = MaterialTheme.colorScheme.onPrimary,
             ) {
                 tabItems.forEachIndexed { index, item ->
                     Tab(selected = selectedTabIndex == index, onClick = {
@@ -262,11 +262,12 @@ fun Overview(
                     }, text = {
                         Text(text = item.title, color = MaterialTheme.colorScheme.primary)
                     }, icon = {
-                        (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary).let { // ktlint-disable max-line-length
+                        @Suppress("ktlint:standard:max-line-length")
+                        (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary).let {
                             Icon(
                                 tint = it,
                                 imageVector = if (selectedTabIndex == index) item.selectedIcon else item.unselectedIcon,
-                                contentDescription = item.title
+                                contentDescription = item.title,
                             )
                         }
                     })
@@ -276,7 +277,7 @@ fun Overview(
                 state = pagerState,
                 Modifier
                     .fillMaxSize()
-                    .zIndex(1f)
+                    .zIndex(1f),
             ) { index ->
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     if (index == 0) {
@@ -291,7 +292,7 @@ fun Overview(
                             handlePropertyEditCity,
                             handlePropertyEditCountry,
                             navigateTo = navigateTo,
-                            offline
+                            offline,
                         )
                     } else if (index == 1) {
                         PropertyPhotosScreen(
@@ -301,7 +302,7 @@ fun Overview(
                             propertyState,
                             uiState,
                             windowInfo,
-                            offline
+                            offline,
                         )
                     } else if (index == 2) {
                         PropertyDocumentsScreen(
@@ -315,7 +316,7 @@ fun Overview(
                             propertyDocumentState,
                             uploadDocument,
                             windowInfo,
-                            offline
+                            offline,
                         )
                     } else {
                         PremisesListScreen(propertyPremises, windowInfo, offline)

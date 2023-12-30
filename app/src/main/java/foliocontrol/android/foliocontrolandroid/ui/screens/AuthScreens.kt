@@ -59,21 +59,22 @@ fun AuthScreen(
     handlePropertyAdd: () -> Unit = {},
     currentPartnership: Partnership,
     isAddPropertyDialogOpen: Boolean,
-    //login
+    // login
     loginCredentials: LoginCredentials,
     updateLoginStateEmail: (String) -> Unit,
     updateLoginStatePassword: (String) -> Unit,
     login: () -> Unit,
-
-    navigateTo: (Any?) -> Unit = {}
+    navigateTo: (Any?) -> Unit = {},
 ) {
     when (loginUiState) {
         is UiState.LoggedOut -> {
-            LoginScreen(errorName = loginUiState.message,
+            LoginScreen(
+                errorName = loginUiState.message,
                 loginCredentials,
                 { updateLoginStateEmail(it) },
                 { updateLoginStatePassword(it) },
-                { login() })
+                { login() },
+            )
         }
 
         is UiState.Success -> {
@@ -91,7 +92,7 @@ fun AuthScreen(
                 handlePropertyStreetAddEdit = { handlePropertyStreetAddEdit(it) },
                 handlePropertyStreetNumberAddEdit = {
                     handlePropertyStreetNumberAddEdit(
-                        it
+                        it,
                     )
                 },
                 handlePropertyZipCodeAddEdit = { handlePropertyZipCodeAddEdit(it) },
@@ -103,7 +104,7 @@ fun AuthScreen(
                 handlePropertyAdd = { handlePropertyAdd() },
                 isAddPropertyDialogOpen = isAddPropertyDialogOpen,
                 currentPartnership = currentPartnership,
-                navigateTo = navigateTo
+                navigateTo = navigateTo,
             )
         }
 
@@ -123,77 +124,88 @@ fun LoginScreen(
     loginCredentials: LoginCredentials,
     updateLoginStateEmail: (String) -> Unit,
     updateLoginStatePassword: (String) -> Unit,
-    login: () -> Unit
+    login: () -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.8f), contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.8f),
+        contentAlignment = Alignment.Center,
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
         ) {
             Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                 Text(
                     text = "Sign In",
                     style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(bottom = 6.dp)
-
+                    modifier = Modifier.padding(bottom = 6.dp),
                 )
                 Icon(imageVector = Icons.Default.ExitToApp, contentDescription = null)
             }
 
             Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier =
+                    Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                OutlinedTextField(value = loginCredentials.email,
+                OutlinedTextField(
+                    value = loginCredentials.email,
                     onValueChange = { updateLoginStateEmail(it) },
                     label = { Text("Email") },
                     singleLine = true,
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Email
-                    ),
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Email,
+                        ),
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.Email, contentDescription = null)
-                    })
+                    },
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                OutlinedTextField(value = loginCredentials.password,
+                OutlinedTextField(
+                    value = loginCredentials.password,
                     onValueChange = { updateLoginStatePassword(it) },
                     label = { Text("Password") },
                     visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Password
-                    ),
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Password,
+                        ),
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.Lock, contentDescription = null)
-                    })
+                    },
+                )
 
                 Text(
                     text = errorName,
                     color = Color.Red,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(top = 8.dp)
+                    modifier = Modifier.padding(top = 8.dp),
                 )
 
                 Button(
                     onClick = {
                         login()
-                    }, modifier = Modifier
-                        .height(64.dp)
-                        .width(200.dp)
-                        .padding(top = 16.dp)
+                    },
+                    modifier =
+                        Modifier
+                            .height(64.dp)
+                            .width(200.dp)
+                            .padding(top = 16.dp),
                 ) {
                     Text(
-                        "Login", style = MaterialTheme.typography.titleMedium
-
+                        "Login",
+                        style = MaterialTheme.typography.titleMedium,
                     )
                 }
             }

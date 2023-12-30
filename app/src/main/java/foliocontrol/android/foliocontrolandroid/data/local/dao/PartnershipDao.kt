@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PartnershipDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllPartnerships(partnership: List<PartnershipRoomEntity>)
 

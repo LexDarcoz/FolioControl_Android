@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
 
-
 data class NavigationItem(
     val title: String,
     val selectedIcon: ImageVector,
@@ -49,28 +48,30 @@ fun NavigationDrawer(
     partnershipList: List<Partnership>,
     switchPartnership: (Partnership) -> Unit,
     navigateTo: (String) -> Unit,
-    content: @Composable (Modifier) -> Unit
+    content: @Composable (Modifier) -> Unit,
 ) {
-    val items = listOf(
-        NavigationItem(
-            title = "Home",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home,
-        ),
-        NavigationItem(
-            title = "Account",
-            selectedIcon = Icons.Filled.AccountCircle,
-            unselectedIcon = Icons.Outlined.AccountCircle,
-        ),
-        NavigationItem(
-            title = currentPartnership.name,
-            selectedIcon = Icons.Filled.Apartment,
-            unselectedIcon = Icons.Outlined.Apartment,
-        ),
-    )
+    val items =
+        listOf(
+            NavigationItem(
+                title = "Home",
+                selectedIcon = Icons.Filled.Home,
+                unselectedIcon = Icons.Outlined.Home,
+            ),
+            NavigationItem(
+                title = "Account",
+                selectedIcon = Icons.Filled.AccountCircle,
+                unselectedIcon = Icons.Outlined.AccountCircle,
+            ),
+            NavigationItem(
+                title = currentPartnership.name,
+                selectedIcon = Icons.Filled.Apartment,
+                unselectedIcon = Icons.Outlined.Apartment,
+            ),
+        )
 
     Surface(
-        modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background,
     ) {
         var selectedItemIndex by rememberSaveable {
             mutableStateOf(0)
@@ -80,7 +81,6 @@ fun NavigationDrawer(
 
         ModalNavigationDrawer(
             drawerContent = {
-
                 ModalDrawerSheet(
                     drawerContentColor = MaterialTheme.colorScheme.primary,
                     drawerContainerColor = MaterialTheme.colorScheme.primary,
@@ -98,22 +98,24 @@ fun NavigationDrawer(
                                     navController.navigate(item.title)
                                     toggleDrawer()
                                 }
-
                             },
                             icon = {
                                 Icon(
-                                    imageVector = if (index == selectedItemIndex) {
-                                        item.selectedIcon
-                                    } else item.unselectedIcon,
+                                    imageVector =
+                                        if (index == selectedItemIndex) {
+                                            item.selectedIcon
+                                        } else {
+                                            item.unselectedIcon
+                                        },
                                     contentDescription = item.title,
-                                    tint = MaterialTheme.colorScheme.primary
+                                    tint = MaterialTheme.colorScheme.primary,
                                 )
                             },
                             modifier = Modifier.padding(8.dp),
-
-                            )
-                        if (index == 1)
+                        )
+                        if (index == 1) {
                             Divider()
+                        }
                     }
                     if (isPartnershipsSelected) {
                         DropdownMenu(
@@ -122,57 +124,60 @@ fun NavigationDrawer(
                             onDismissRequest = {
                                 selectedItemIndex = -1
                             },
-                            offset = DpOffset(x = 256.dp, y = (-50).dp)
+                            offset = DpOffset(x = 256.dp, y = (-50).dp),
                         ) {
                             partnershipList.forEach { partnership ->
                                 if (partnership.name == currentPartnership.name) {
-                                    DropdownMenuItem(leadingIcon = {
-                                        Icon(
-                                            imageVector = Icons.Filled.Apartment,
-                                            contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.primary
-                                        )
-                                    },
-
+                                    DropdownMenuItem(
+                                        leadingIcon = {
+                                            Icon(
+                                                imageVector = Icons.Filled.Apartment,
+                                                contentDescription = null,
+                                                tint = MaterialTheme.colorScheme.primary,
+                                            )
+                                        },
                                         text = {
                                             Text(
                                                 text = partnership.name,
                                                 style = MaterialTheme.typography.titleMedium,
-                                                color = MaterialTheme.colorScheme.primary
+                                                color = MaterialTheme.colorScheme.primary,
                                             )
-                                        }, onClick = {
+                                        },
+                                        onClick = {
                                             selectedItemIndex = 0
-                                        })
+                                        },
+                                    )
                                 } else {
-                                    DropdownMenuItem(leadingIcon = {
-                                        Icon(
-                                            imageVector = Icons.Outlined.Apartment,
-                                            contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.primary
-                                        )
-                                    },
-
+                                    DropdownMenuItem(
+                                        leadingIcon = {
+                                            Icon(
+                                                imageVector = Icons.Outlined.Apartment,
+                                                contentDescription = null,
+                                                tint = MaterialTheme.colorScheme.primary,
+                                            )
+                                        },
                                         text = {
                                             Text(
                                                 text = partnership.name,
                                                 style = MaterialTheme.typography.titleMedium,
-                                                color = MaterialTheme.colorScheme.onSurface
+                                                color = MaterialTheme.colorScheme.onSurface,
                                             )
-                                        }, onClick = {
+                                        },
+                                        onClick = {
                                             switchPartnership(partnership)
                                             navigateTo("Home")
                                             selectedItemIndex = 0
-                                        })
+                                        },
+                                    )
                                 }
                             }
                         }
                     }
                 }
-            }, drawerState = drawerState
+            },
+            drawerState = drawerState,
         ) {
             content(Modifier.fillMaxSize())
         }
     }
 }
-
-

@@ -29,7 +29,7 @@ data class PropertyRoomEntity(
     @ColumnInfo(name = "property_description")
     val propertyDescription: String = "",
     @ColumnInfo(name = "FK_partnership_id")
-    val FK_partnershipID: Int = 0
+    val FK_partnershipID: Int = 0,
 )
 
 fun PropertyRoomEntity.asDomainModel() =
@@ -44,5 +44,5 @@ fun PropertyRoomEntity.asDomainModel() =
         zipCode = zipCode,
         country = country,
         propertyDescription = propertyDescription,
-        FK_partnershipID = FK_partnershipID
+        FK_partnershipID = FK_partnershipID,
     )

@@ -23,32 +23,34 @@ import foliocontrol.android.foliocontrolandroid.domain.Partnership
 @Composable
 fun PartnershipCard(partnership: Partnership) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
         shape = MaterialTheme.shapes.small,
-        colors = CardDefaults.cardColors(
-            contentColor = MaterialTheme.colorScheme.primary,
-            containerColor = MaterialTheme.colorScheme.secondary
-        ),
-        elevation = CardDefaults.cardElevation(8.dp)
+        colors =
+            CardDefaults.cardColors(
+                contentColor = MaterialTheme.colorScheme.primary,
+                containerColor = MaterialTheme.colorScheme.secondary,
+            ),
+        elevation = CardDefaults.cardElevation(8.dp),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
         ) {
             Row {
                 Icon(
                     imageVector = Icons.Default.Apartment,
                     contentDescription = "Partnerships",
-                    Modifier.padding(end = 8.dp)
+                    Modifier.padding(end = 8.dp),
                 )
                 Text(
                     text = partnership.name,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
-
+                    fontSize = 18.sp,
                 )
             }
 
@@ -56,20 +58,20 @@ fun PartnershipCard(partnership: Partnership) {
 
             Text(
                 text = "Country: ${partnership.country}",
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Text(text = "City: ${partnership.city}", color = MaterialTheme.colorScheme.onSurface)
             Text(
                 text = "Street: ${partnership.street} ${partnership.streetNumber}",
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
                 text = "ZIP Code: ${partnership.zipCode}",
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
                 text = "VAT: ${partnership.vatNumber}",
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
         }
     }

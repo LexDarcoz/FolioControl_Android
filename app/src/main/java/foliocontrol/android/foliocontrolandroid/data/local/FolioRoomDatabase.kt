@@ -16,22 +16,28 @@ import kotlinx.coroutines.CoroutineScope
 @Database(
     entities = [PartnershipRoomEntity::class, PropertyRoomEntity::class, UserRoomEntity::class],
     // change this to version+1 when you change the schema
-    version = 4, exportSchema = false
+    version = 4,
+    exportSchema = false,
 )
 abstract class FolioRoomDatabase : RoomDatabase() {
     abstract fun partnershipDao(): PartnershipDao
+
     abstract fun propertyDao(): PropertyDao
+
     abstract fun userDao(): UserDao
 
     companion object {
         @Volatile
         private var Instance: FolioRoomDatabase? = null
 
-        fun getDatabase(context: Context, scope: CoroutineScope): FolioRoomDatabase {
+        fun getDatabase(
+            context: Context,
+            scope: CoroutineScope,
+        ): FolioRoomDatabase {
             Log.d("FolioRoomDB", "Creating database")
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(
-                    context, FolioRoomDatabase::class.java, "Folio_database"
+                    context, FolioRoomDatabase::class.java, "Folio_database",
                 ).addCallback(object : Callback() {}).fallbackToDestructiveMigration().build()
                     .also { Instance = it }
             }

@@ -27,12 +27,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 data class DropDownMenuItem(
-    val text: String, val icon: @Composable () -> Unit, val description: String
+    val text: String,
+    val icon: @Composable () -> Unit,
+    val description: String,
 )
 
 @Composable
 fun FolioDropdown(
-
     expanded: Boolean,
     toggleExpanded: () -> Unit,
     items: List<DropDownMenuItem>,
@@ -43,53 +44,58 @@ fun FolioDropdown(
     var selected by remember { mutableStateOf(initialValue) }
     Column {
         Text(
-            text = label, style = MaterialTheme.typography.bodyLarge.copy(
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.primary
-            ), modifier = Modifier.padding(bottom = 4.dp)
+            text = label,
+            style =
+                MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.primary,
+                ),
+            modifier = Modifier.padding(bottom = 4.dp),
         )
 
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.secondary)
-                .height(50.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.secondary)
+                    .height(50.dp),
         ) {
             OutlinedTextField(
                 value = selected,
                 onValueChange = { },
                 enabled = false,
-                textStyle = MaterialTheme.typography.bodySmall.copy(
-                    color = MaterialTheme.colorScheme.onSurface
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { toggleExpanded() },
-
+                textStyle =
+                    MaterialTheme.typography.bodySmall.copy(
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { toggleExpanded() },
                 leadingIcon = {
                     Icon(
-                        Icons.Default.MoreVert, contentDescription = "Localized description"
+                        Icons.Default.MoreVert,
+                        contentDescription = "Localized description",
                     )
                 },
-
-
                 trailingIcon = {
                     Icon(
-                        Icons.Default.MoreVert, contentDescription = "Localized description"
+                        Icons.Default.MoreVert,
+                        contentDescription = "Localized description",
                     )
                 },
-                colors = OutlinedTextFieldDefaults.colors(
-                    disabledTextColor = MaterialTheme.colorScheme.onSurface, // Set the text color for disabled state
-                    disabledBorderColor = MaterialTheme.colorScheme.onSurface // Set the border color for disabled state
-                )
-
+                colors =
+                    OutlinedTextFieldDefaults.colors(
+                        disabledTextColor = MaterialTheme.colorScheme.onSurface, // Set the text color for disabled state
+                        disabledBorderColor = MaterialTheme.colorScheme.onSurface, // Set the border color for disabled state
+                    ),
             )
 
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { toggleExpanded() },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 items.forEach { item ->
                     DropdownMenuItem(
@@ -100,7 +106,7 @@ fun FolioDropdown(
                             selected = item.text
                             toggleExpanded()
                         },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
             }

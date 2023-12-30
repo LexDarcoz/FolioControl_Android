@@ -45,49 +45,56 @@ import kotlin.math.sin
 @Composable
 fun ImageDialog(
     onDismissRequest: () -> Unit,
-    imageUrl: String
+    imageUrl: String,
 ) {
     Dialog(
         onDismissRequest = { onDismissRequest() },
-        properties = DialogProperties(usePlatformDefaultWidth = false)
+        properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         Column(
-            modifier = Modifier
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color.Black.copy(),
-                            Color.Black
-                        )
+            modifier =
+                Modifier
+                    .background(
+                        brush =
+                            Brush.verticalGradient(
+                                colors =
+                                    listOf(
+                                        Color.Black.copy(),
+                                        Color.Black,
+                                    ),
+                            ),
                     )
-                )
-                .fillMaxSize()
+                    .fillMaxSize(),
         ) {
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .clip(RoundedCornerShape(8.dp))
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(8.dp)),
             ) {
                 ZoomableImage(imageUrl)
 
                 // Close button with icon
                 IconButton(
                     onClick = { onDismissRequest() },
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .width(80.dp)
-                        .height(80.dp),
-                    colors = IconButtonDefaults.iconButtonColors(
-                        contentColor = MaterialTheme.colorScheme.onPrimary
-                    )
+                    modifier =
+                        Modifier
+                            .align(Alignment.TopEnd)
+                            .width(80.dp)
+                            .height(80.dp),
+                    colors =
+                        IconButtonDefaults.iconButtonColors(
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                        ),
                 ) {
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = null,
                         tint = Color.White,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(8.dp) // Adjust padding as needed
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .padding(8.dp), // Adjust padding as needed
                     )
                 }
             }
@@ -97,7 +104,10 @@ fun ImageDialog(
 
 @ExperimentalGlideComposeApi
 @Composable
-fun ZoomableImage(model: Any, contentDescription: String? = null) {
+fun ZoomableImage(
+    model: Any,
+    contentDescription: String? = null,
+) {
     val angle by remember { mutableStateOf(0f) }
     var zoom by remember { mutableStateOf(1f) }
     var offsetX by remember { mutableStateOf(0f) }
@@ -110,35 +120,36 @@ fun ZoomableImage(model: Any, contentDescription: String? = null) {
         model,
         contentDescription = contentDescription,
         contentScale = ContentScale.Fit,
-        modifier = Modifier
-            .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
-            .graphicsLayer(
-                scaleX = zoom,
-                scaleY = zoom,
-                rotationZ = angle
-            )
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                detectTransformGestures(onGesture = { _, pan, gestureZoom, _ ->
-                    zoom = (zoom * gestureZoom).coerceIn(1F..4F)
-                    if (zoom > 1) {
-                        val x = (pan.x * zoom)
-                        val y = (pan.y * zoom)
-                        val angleRad = angle * PI / 180.0
+        modifier =
+            Modifier
+                .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
+                .graphicsLayer(
+                    scaleX = zoom,
+                    scaleY = zoom,
+                    rotationZ = angle,
+                )
+                .fillMaxSize()
+                .pointerInput(Unit) {
+                    detectTransformGestures(onGesture = { _, pan, gestureZoom, _ ->
+                        zoom = (zoom * gestureZoom).coerceIn(1F..4F)
+                        if (zoom > 1) {
+                            val x = (pan.x * zoom)
+                            val y = (pan.y * zoom)
+                            val angleRad = angle * PI / 180.0
 
-                        offsetX =
-                            (offsetX + (x * cos(angleRad) - y * sin(angleRad)).toFloat()).coerceIn(
-                                -(screenWidth * zoom)..(screenWidth * zoom)
-                            )
-                        offsetY =
-                            (offsetY + (x * sin(angleRad) + y * cos(angleRad)).toFloat()).coerceIn(
-                                -(screenHeight * zoom)..(screenHeight * zoom)
-                            )
-                    } else {
-                        offsetX = 0F
-                        offsetY = 0F
-                    }
-                })
-            }
+                            offsetX =
+                                (offsetX + (x * cos(angleRad) - y * sin(angleRad)).toFloat()).coerceIn(
+                                    -(screenWidth * zoom)..(screenWidth * zoom),
+                                )
+                            offsetY =
+                                (offsetY + (x * sin(angleRad) + y * cos(angleRad)).toFloat()).coerceIn(
+                                    -(screenHeight * zoom)..(screenHeight * zoom),
+                                )
+                        } else {
+                            offsetX = 0F
+                            offsetY = 0F
+                        }
+                    })
+                },
     )
 }

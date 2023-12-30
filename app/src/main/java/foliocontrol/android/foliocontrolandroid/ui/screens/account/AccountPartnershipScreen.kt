@@ -15,23 +15,22 @@ import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.ui.components.card.PartnershipCard
 
 @Composable
-fun AccountPartnershipScreen(
-    partnershipList: List<Partnership>,
-) {
+fun AccountPartnershipScreen(partnershipList: List<Partnership>) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Column {
             Text(
                 text = "Partnerships:",
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(8.dp),
             )
 
             LazyColumn {
                 items(
                     items = partnershipList,
-                    key = { partnership -> partnership.partnershipID }) { partnership ->
+                    key = { partnership -> partnership.partnershipID },
+                ) { partnership ->
                     PartnershipCard(partnership = partnership)
                 }
             }

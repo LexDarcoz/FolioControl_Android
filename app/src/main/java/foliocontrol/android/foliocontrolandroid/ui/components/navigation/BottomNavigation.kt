@@ -42,58 +42,65 @@ fun BottomNavigation(
         val title: String,
         val selectedIcon: ImageVector,
         val unselectedIcon: ImageVector,
-        val onClick: () -> Unit
-
+        val onClick: () -> Unit,
     )
 
     var selectedIcon by rememberSaveable {
         mutableStateOf(0)
     }
 
-    val items = listOf(BottomNavigationItem(title = "Home",
-        selectedIcon = Icons.Filled.Domain,
-        unselectedIcon = Icons.Outlined.Domain,
-        onClick = { }),
-
-        BottomNavigationItem(title = "Account",
+    val items = listOf(
+        BottomNavigationItem(
+            title = "Home",
+            selectedIcon = Icons.Filled.Domain,
+            unselectedIcon = Icons.Outlined.Domain,
+            onClick = { },
+        ),
+        BottomNavigationItem(
+            title = "Account",
             selectedIcon = Icons.Filled.AccountCircle,
             unselectedIcon = Icons.Outlined.AccountCircle,
-            onClick = { }
-
-        ), BottomNavigationItem(title = currentPartnership.name,
+            onClick = { },
+        ),
+        BottomNavigationItem(
+            title = currentPartnership.name,
             selectedIcon = Icons.Filled.Apartment,
             unselectedIcon = Icons.Outlined.Apartment,
-            onClick = { }
-
-        )
-
+            onClick = { },
+        ),
     )
 
     val isPartnershipsSelected =
         selectedIcon == items.indexOfFirst { it.title == currentPartnership.name }
 
-    NavigationBar(contentColor = MaterialTheme.colorScheme.onPrimary,
+    NavigationBar(
+        contentColor = MaterialTheme.colorScheme.onPrimary,
         containerColor = MaterialTheme.colorScheme.primary,
         modifier = Modifier.graphicsLayer {
             shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
             clip = true
-        }) {
+        },
+    ) {
         items.forEachIndexed { index, item ->
-            NavigationBarItem(selected = (currentScreen == item.title), onClick = {
-                selectedIcon = index
-                if (item.title != currentPartnership.name) {
-                    navigateTo(item.title)
-                }
-            }, label = {
-                Text(text = item.title, color = MaterialTheme.colorScheme.onPrimary)
-            }, alwaysShowLabel = item.title == currentPartnership.name, icon = {
-                Icon(
-                    imageVector = if (currentScreen == item.title) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length
-                    contentDescription = item.title, tint = MaterialTheme.colorScheme.onPrimary
-
-                )
-            }
-
+            NavigationBarItem(
+                selected = (currentScreen == item.title),
+                onClick = {
+                    selectedIcon = index
+                    if (item.title != currentPartnership.name) {
+                        navigateTo(item.title)
+                    }
+                },
+                label = {
+                    Text(text = item.title, color = MaterialTheme.colorScheme.onPrimary)
+                },
+                alwaysShowLabel = item.title == currentPartnership.name,
+                icon = {
+                    Icon(
+                        imageVector = if (currentScreen == item.title) item.selectedIcon else item.unselectedIcon,
+                        contentDescription = item.title,
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                    )
+                },
             )
         }
         if (isPartnershipsSelected) {
@@ -103,47 +110,51 @@ fun BottomNavigation(
                 onDismissRequest = {
                     selectedIcon = -1
                 },
-                offset = DpOffset(x = 256.dp, y = (-50).dp)
+                offset = DpOffset(x = 256.dp, y = (-50).dp),
             ) {
                 partnershipList.forEach { partnership ->
                     if (partnership.name == currentPartnership.name) {
-                        DropdownMenuItem(leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Filled.Apartment,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                        },
-
+                        DropdownMenuItem(
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Filled.Apartment,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                )
+                            },
                             text = {
                                 Text(
                                     text = partnership.name,
                                     style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.primary
+                                    color = MaterialTheme.colorScheme.primary,
                                 )
-                            }, onClick = {
+                            },
+                            onClick = {
                                 selectedIcon = 0
-                            })
+                            },
+                        )
                     } else {
-                        DropdownMenuItem(leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Outlined.Apartment,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                        },
-
+                        DropdownMenuItem(
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Outlined.Apartment,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                )
+                            },
                             text = {
                                 Text(
                                     text = partnership.name,
                                     style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.onSurface
+                                    color = MaterialTheme.colorScheme.onSurface,
                                 )
-                            }, onClick = {
+                            },
+                            onClick = {
                                 switchPartnership(partnership)
                                 navigateTo("Home")
                                 selectedIcon = 0
-                            })
+                            },
+                        )
                     }
                 }
             }

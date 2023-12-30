@@ -19,35 +19,36 @@ fun FolioTextField(
     enabled: Boolean = true,
     label: String,
     value: String,
-    onValueChange: (String) -> Unit
-
+    onValueChange: (String) -> Unit,
 ) {
     Column {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.primary,
         )
         OutlinedTextField(
             enabled = enabled,
             value = value,
             onValueChange = onValueChange,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
-            ),
-
-            keyboardActions = KeyboardActions(onDone = {
-                // Handle done action
-            }),
-            textStyle = MaterialTheme.typography.bodySmall.copy(
-                color = MaterialTheme.colorScheme.onSurface
-            ),
+            keyboardOptions =
+                KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done,
+                ),
+            keyboardActions =
+                KeyboardActions(onDone = {
+                    // Handle done action
+                }),
+            textStyle =
+                MaterialTheme.typography.bodySmall.copy(
+                    color = MaterialTheme.colorScheme.onSurface,
+                ),
             singleLine = true,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.secondary)
-                .height(50.dp)
-
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.secondary)
+                    .height(50.dp),
         )
     }
 }

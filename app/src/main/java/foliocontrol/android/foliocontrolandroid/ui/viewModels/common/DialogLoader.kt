@@ -24,29 +24,33 @@ fun DialogLoader(
     backgroundColor: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = Color.White.copy(alpha = 0.9f),
     progressBarColor: Color = MaterialTheme.colorScheme.primary,
-    loadingText: String = "Loading..."
+    loadingText: String = "Loading...",
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .then(modifier)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .then(modifier),
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .padding(16.dp)
-                .clip(RoundedCornerShape(8.dp))
+            modifier =
+                Modifier
+                    .padding(16.dp)
+                    .clip(RoundedCornerShape(8.dp)),
         ) {
             CircularProgressIndicator(
-                modifier = Modifier
-                    .size(150.dp)
-                    .padding(16.dp), color = progressBarColor
+                modifier =
+                    Modifier
+                        .size(150.dp)
+                        .padding(16.dp),
+                color = progressBarColor,
             )
             Text(
                 text = loadingText,
                 color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         }
     }

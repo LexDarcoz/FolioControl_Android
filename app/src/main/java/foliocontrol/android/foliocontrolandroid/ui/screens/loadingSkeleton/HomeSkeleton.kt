@@ -10,33 +10,25 @@ import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.Mu
 
 @Composable
 fun HomeSkeleton() {
-
     Scaffold(floatingActionButton = {
-        MultiFloatingButton(multiFloatingState = MultiFloatingState.Collapsed,
+        MultiFloatingButton(
+            multiFloatingState = MultiFloatingState.Collapsed,
             onMultiFabStateChange = {
                 MultiFloatingState.Collapsed
             },
-
             toggleAddPropertyDialog = {
-
             },
             items = listOf(),
             toggleSearchBar = {
-
-            })
-
+            },
+        )
     }) { values ->
         Column {
             LazyColumn(contentPadding = values) {
                 items(3) { property ->
-                    PropertyCardSkeleton(
-
-
-                    )
+                    PropertyCardSkeleton()
                 }
             }
-
         }
-
     }
 }

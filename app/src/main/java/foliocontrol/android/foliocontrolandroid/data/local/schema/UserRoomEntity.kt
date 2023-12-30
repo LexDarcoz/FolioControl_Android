@@ -16,19 +16,19 @@ data class UserRoomEntity(
     @ColumnInfo(name = "city") val city: String = "",
     @ColumnInfo(name = "zip_code") val zipCode: String = "",
     @ColumnInfo(name = "country") val country: String = "",
-    @ColumnInfo(name = "email") val email: String = ""
+    @ColumnInfo(name = "email") val email: String = "",
 )
 
-fun UserRoomEntity.asDomainModel() = User(
-    userID = userID,
-    name = name,
-    firstName = firstName,
-    lastName = lastName,
-    street = street,
-    streetNumber = streetNumber,
-    city = city,
-    zipCode = zipCode,
-    country = country,
-    email = email,
-
+fun UserRoomEntity.asDomainModel() =
+    User(
+        userID = userID,
+        name = name,
+        firstName = firstName,
+        lastName = lastName,
+        street = street,
+        streetNumber = streetNumber,
+        city = city,
+        zipCode = zipCode,
+        country = country,
+        email = email,
     )

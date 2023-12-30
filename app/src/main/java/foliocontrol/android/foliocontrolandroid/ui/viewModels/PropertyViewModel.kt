@@ -32,11 +32,10 @@ import java.io.IOException
 class PropertyViewModel(
     private val propertyRepo: PropertyDatabase,
     private val partnershipRepo: PartnershipDatabase,
-    private val downloader: AndroidDownloader
+    private val downloader: AndroidDownloader,
 ) : ViewModel() {
-
     var uiState: UiState by mutableStateOf(
-        UiState.LoggedOut("You are not logged in")
+        UiState.LoggedOut("You are not logged in"),
     )
         private set
 
@@ -53,7 +52,6 @@ class PropertyViewModel(
     var propertyPremises by mutableStateOf(emptyList<Premise>())
         private set
 
-
     var partnershipListState by mutableStateOf(emptyList<Partnership>())
         private set
     var propertyListState by mutableStateOf(emptyList<Property>())
@@ -66,15 +64,17 @@ class PropertyViewModel(
 
     var propertyImageState by mutableStateOf(
         MultipartBody.Part.createFormData(
-            "propertyImage", "null"
-        )
+            "propertyImage",
+            "null",
+        ),
     )
         private set
 
     var propertyDocumentState by mutableStateOf(
         MultipartBody.Part.createFormData(
-            "document", "null"
-        )
+            "document",
+            "null",
+        ),
     )
         private set
     var isAddPropertyDialogOpen by mutableStateOf(false)
@@ -119,11 +119,13 @@ class PropertyViewModel(
     }
 
     fun filterProperties(query: String) {
-        filteredList = propertyListState.filter {
-            it.propertyName.contains(query, ignoreCase = true) || it.propertyType.contains(
-                query, ignoreCase = true
-            ) || it.country.contains(query, ignoreCase = true)
-        }
+        filteredList =
+            propertyListState.filter {
+                it.propertyName.contains(query, ignoreCase = true) ||
+                    it.propertyType.contains(
+                        query, ignoreCase = true,
+                    ) || it.country.contains(query, ignoreCase = true)
+            }
     }
 
     fun selectProperty(property: Property) {
@@ -134,9 +136,10 @@ class PropertyViewModel(
 
     suspend fun getPropertyListForPartnership() {
         try {
-            propertyListState = propertyService.getProperties(
-                getEncryptedPreference("token"), currentPartnership
-            )
+            propertyListState =
+                propertyService.getProperties(
+                    getEncryptedPreference("token"), currentPartnership,
+                )
             if (propertyListState.isNotEmpty()) {
                 propertyRepo.dropTable(currentPartnership.partnershipID)
             }
@@ -151,9 +154,11 @@ class PropertyViewModel(
     suspend fun getPartnershipListForLoggedInUser() {
         partnershipListState =
             authService.getPartnershipsForLoggedInUser(getEncryptedPreference("token"))
-        partnershipRepo.insertAllPartnerships(partnershipListState.map {
-            it.asPartnershipRoomEntity()
-        })
+        partnershipRepo.insertAllPartnerships(
+            partnershipListState.map {
+                it.asPartnershipRoomEntity()
+            },
+        )
     }
 
     fun downloadFile(url: String): Long {
@@ -185,7 +190,10 @@ class PropertyViewModel(
         }
     }
 
-    fun uploadImage(context: Context, uri: Uri) {
+    fun uploadImage(
+        context: Context,
+        uri: Uri,
+    ) {
         val file = uriToFile(context, uri)
         val requestFile = file?.asRequestBody("image/*".toMediaTypeOrNull())
 
@@ -202,7 +210,9 @@ class PropertyViewModel(
         viewModelScope.launch {
             try {
                 propertyService.uploadDocument(
-                    getEncryptedPreference("token"), propertyDocumentState, propertyDocument
+                    getEncryptedPreference("token"),
+                    propertyDocumentState,
+                    propertyDocument,
                 )
                 getDataForActiveProperty()
             } catch (e: Exception) {
@@ -213,7 +223,10 @@ class PropertyViewModel(
         }
     }
 
-    fun uploadDocument(context: Context, uri: Uri) {
+    fun uploadDocument(
+        context: Context,
+        uri: Uri,
+    ) {
         val file = uriToFile(context, uri)
         val name = file?.name
         val requestFile = file?.asRequestBody("pdf/*".toMediaTypeOrNull())
@@ -226,13 +239,17 @@ class PropertyViewModel(
         }
 
         handleAddDocumentEdit(
-            FK_propertyID = propertyState.propertyID, name = name
+            FK_propertyID = propertyState.propertyID,
+            name = name,
         )
         handleDocumentUpload()
         clearDocument()
     }
 
-    private fun uriToFile(context: Context, uri: Uri): File? {
+    private fun uriToFile(
+        context: Context,
+        uri: Uri,
+    ): File? {
         val inputStream = context.contentResolver.openInputStream(uri)
         val tempFile = kotlin.io.path.createTempFile()
 
@@ -246,21 +263,24 @@ class PropertyViewModel(
     }
 
     suspend fun getPremisesForProperty(property: Property) {
-        propertyPremises = propertyService.getPremisesForProperty(
-            getEncryptedPreference("token"), property
-        )
+        propertyPremises =
+            propertyService.getPremisesForProperty(
+                getEncryptedPreference("token"), property,
+            )
     }
 
     suspend fun getDetailsForProperty(property: Property) {
-        propertyState = propertyService.getDetailsForProperty(
-            getEncryptedPreference("token"), property
-        )
+        propertyState =
+            propertyService.getDetailsForProperty(
+                getEncryptedPreference("token"), property,
+            )
     }
 
     suspend fun getDocumentsForProperty(property: Property) {
-        propertyDocuments = propertyService.getDocumentsForProperty(
-            getEncryptedPreference("token"), property
-        )
+        propertyDocuments =
+            propertyService.getDocumentsForProperty(
+                getEncryptedPreference("token"), property,
+            )
     }
 
     fun handlePropertyEdit(
@@ -271,7 +291,7 @@ class PropertyViewModel(
         streetNumber: String? = null,
         city: String? = null,
         zipCode: String? = null,
-        country: String? = null
+        country: String? = null,
     ) {
         propertyName?.let {
             propertyState = propertyState.copy(propertyName = it)
@@ -303,7 +323,7 @@ class PropertyViewModel(
         name: String? = null,
         documentType: String? = null,
         expiryDate: String? = null,
-        FK_propertyID: Int? = null
+        FK_propertyID: Int? = null,
     ) {
         name?.let {
             propertyDocument = propertyDocument.copy(name = it)
@@ -317,36 +337,40 @@ class PropertyViewModel(
         expiryDate?.let {
             propertyDocument = propertyDocument.copy(expiryDate = it)
         }
-
     }
-
 
     fun clearImage() {
         handlePropertyEdit(
             propertyImg = "null",
         )
-        propertyImageState = MultipartBody.Part.createFormData(
-            "propertyImage", "null"
-        )
+        propertyImageState =
+            MultipartBody.Part.createFormData(
+                "propertyImage", "null",
+            )
 
         handlePropertySave()
     }
 
     fun clearDocument() {
-        propertyDocumentState = MultipartBody.Part.createFormData(
-            "document", "null"
-        )
+        propertyDocumentState =
+            MultipartBody.Part.createFormData(
+                "document", "null",
+            )
         handleAddDocumentEdit(
-            name = " ", documentType = " ", expiryDate = " ", FK_propertyID = null
+            name = " ",
+            documentType = " ",
+            expiryDate = " ",
+            FK_propertyID = null,
         )
     }
-
 
     fun handlePropertySave() {
         viewModelScope.launch {
             try {
                 propertyService.savePropertyByPropertyID(
-                    getEncryptedPreference("token"), propertyState, propertyImageState
+                    getEncryptedPreference("token"),
+                    propertyState,
+                    propertyImageState,
                 )
                 getDataForActiveProperty()
             } catch (e: Exception) {
@@ -361,8 +385,8 @@ class PropertyViewModel(
         viewModelScope.launch {
             try {
                 propertyService.deletePropertyByPropertyID(
-                    getEncryptedPreference("token"), propertyId
-
+                    getEncryptedPreference("token"),
+                    propertyId,
                 )
                 getData()
                 // pop from list and delete in db
@@ -378,7 +402,8 @@ class PropertyViewModel(
         viewModelScope.launch {
             try {
                 propertyService.deleteDocumentByPropertyID(
-                    getEncryptedPreference("token"), selectedDocumentID
+                    getEncryptedPreference("token"),
+                    selectedDocumentID,
                 )
                 getDataForActiveProperty()
                 // pop from list and delete in db
@@ -406,7 +431,7 @@ class PropertyViewModel(
         streetNumber: String? = null,
         city: String? = null,
         zipCode: String? = null,
-        country: String? = null
+        country: String? = null,
     ) {
         propertyName?.let {
             addPropertyState = addPropertyState.copy(propertyName = it)
@@ -437,7 +462,8 @@ class PropertyViewModel(
         viewModelScope.launch {
             try {
                 propertyService.addProperty(
-                    getEncryptedPreference("token"), addPropertyState
+                    getEncryptedPreference("token"),
+                    addPropertyState,
                 )
                 getData()
             } catch (e: Exception) {

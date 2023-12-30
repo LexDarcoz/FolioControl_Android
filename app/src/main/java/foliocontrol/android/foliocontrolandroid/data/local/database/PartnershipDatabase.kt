@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface PartnershipDatabase {
     fun getPartnerships(): Flow<List<PartnershipRoomEntity>>
+
     suspend fun insertAllPartnerships(partnerships: List<PartnershipRoomEntity>)
 
     suspend fun clearAllTables()

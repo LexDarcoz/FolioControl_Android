@@ -16,13 +16,13 @@ fun DeleteDialog(
     confirmText: String,
     dismissText: String,
     dialogText: String,
-    icon: ImageVector
+    icon: ImageVector,
 ) {
     AlertDialog(containerColor = MaterialTheme.colorScheme.primary, icon = {
         Icon(
             icon,
             contentDescription = "Error Icon",
-            tint = MaterialTheme.colorScheme.error
+            tint = MaterialTheme.colorScheme.error,
         )
     }, title = {
         Text(text = dialogTitle, color = MaterialTheme.colorScheme.secondary)

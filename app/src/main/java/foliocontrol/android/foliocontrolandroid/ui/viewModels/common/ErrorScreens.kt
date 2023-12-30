@@ -27,35 +27,39 @@ import foliocontrol.android.foliocontrol_android.R
 @Composable
 fun EmptyListScreen(text: String = "No data available.") {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.8f)
-            .padding(top = 32.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.8f)
+                .padding(top = 32.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = text, color = MaterialTheme.colorScheme.onSurface
+            text = text,
+            color = MaterialTheme.colorScheme.onSurface,
         )
     }
 }
 
 @Composable
 fun ErrorScreen(
-    errorMessage: String, onRetry: () -> Unit
+    errorMessage: String,
+    onRetry: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
             painter = rememberAsyncImagePainter(model = R.drawable.errorimg),
             contentDescription = null,
             Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.4f)
+                .fillMaxHeight(0.4f),
         )
 
         Text(
@@ -64,20 +68,22 @@ fun ErrorScreen(
             color = MaterialTheme.colorScheme.error,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 16.dp),
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
 
         Button(
             onClick = onRetry,
-            modifier = Modifier
-                .padding(8.dp)
-                .height(48.dp)
-                .fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.errorContainer,
-                contentColor = MaterialTheme.colorScheme.error
-            ),
-            shape = RoundedCornerShape(8.dp)
+            modifier =
+                Modifier
+                    .padding(8.dp)
+                    .height(48.dp)
+                    .fillMaxWidth(),
+            colors =
+                ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.error,
+                ),
+            shape = RoundedCornerShape(8.dp),
         ) {
             Text(text = "Retry")
         }

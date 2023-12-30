@@ -55,42 +55,43 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun PropertyPhotosScreen(
-    //GET DATA
+    // GET DATA
     getDataForActiveProperty: () -> Unit,
-    //IMAGE FUNCTIONS
-    clearImage: () -> Unit, uploadImage: (Context, Uri?) -> Unit,
-    //Property state
+    // IMAGE FUNCTIONS
+    clearImage: () -> Unit,
+    uploadImage: (Context, Uri?) -> Unit,
+    // Property state
     propertyState: Property,
-    //EDITTING
-
-
-    //UISTATE
+    // EDITTING
+    // UISTATE
     uiState: UiState,
-
-
-    windowInfo: WindowInfo, offline: Boolean = false
+    windowInfo: WindowInfo,
+    offline: Boolean = false,
 ) {
     val imageUrl = Constants.PROPERTYPHOTOS_URL
     val defaultImage = "$imageUrl/default.avif"
     val propertyImg = propertyState.propertyImg.ifEmpty { "null" }
     val openDeleteDialog = remember { mutableStateOf(false) }
     var imageFullScreen by remember { mutableStateOf(false) }
-    //get the context
+    // get the context
     val context = LocalContext.current
-    val image = when (propertyImg) {
-        "null" -> defaultImage
-        else -> "$imageUrl/$propertyImg"
-    }
+    val image =
+        when (propertyImg) {
+            "null" -> defaultImage
+            else -> "$imageUrl/$propertyImg"
+        }
 
     var selectedImageUri by remember {
         mutableStateOf<Uri?>(null)
     }
 
     val singlePhotoPickerLauncher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia(),
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.PickVisualMedia(),
             onResult = { uri ->
                 selectedImageUri = uri
-            })
+            },
+        )
     when {
         openDeleteDialog.value -> {
             if (uiState is UiState.Success) {
@@ -105,7 +106,7 @@ fun PropertyPhotosScreen(
                         dismissText = "Dismiss",
                         dialogTitle = "Clear Image",
                         dialogText = "Are you sure you want to delete this image?",
-                        icon = Icons.Default.Warning
+                        icon = Icons.Default.Warning,
                     )
                 } else {
                     DeleteDialog(
@@ -118,7 +119,7 @@ fun PropertyPhotosScreen(
                         dismissText = "Dismiss",
                         dialogTitle = "Clear Image",
                         dialogText = "Are you sure you want to revert to default?",
-                        icon = Icons.Default.Warning
+                        icon = Icons.Default.Warning,
                     )
                 }
             } else {
@@ -132,136 +133,158 @@ fun PropertyPhotosScreen(
                     dismissText = "Dismiss",
                     dialogTitle = "Network Error",
                     dialogText = "You need to be online in order to delete images.",
-                    icon = Icons.Default.Info
+                    icon = Icons.Default.Info,
                 )
             }
         }
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
-                    16.dp
-                } else {
-                    4.dp
-                }
-            )
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(
+                    if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+                        16.dp
+                    } else {
+                        4.dp
+                    },
+                ),
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
-
-
+            modifier = Modifier.fillMaxSize(),
         ) {
-            Text(text = "Photos:",
-                style = windowInfo.screenWidthInfo.let { windowType ->
-                    if (windowType == WindowInfo.WindowType.Compact) MaterialTheme.typography.titleLarge
-                    else MaterialTheme.typography.bodySmall
-                },
+            Text(
+                text = "Photos:",
+                style =
+                    windowInfo.screenWidthInfo.let { windowType ->
+                        if (windowType == WindowInfo.WindowType.Compact) {
+                            MaterialTheme.typography.titleLarge
+                        } else {
+                            MaterialTheme.typography.bodySmall
+                        }
+                    },
                 fontWeight = FontWeight.Bold,
-                modifier = windowInfo.screenWidthInfo.let { windowType ->
-                    if (windowType == WindowInfo.WindowType.Compact) Modifier.padding(8.dp)
-                    else Modifier.padding(4.dp)
-                })
+                modifier =
+                    windowInfo.screenWidthInfo.let { windowType ->
+                        if (windowType == WindowInfo.WindowType.Compact) {
+                            Modifier.padding(8.dp)
+                        } else {
+                            Modifier.padding(4.dp)
+                        }
+                    },
+            )
 
             Card(
-
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.8f)
-                    .padding(
-                        top = if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
-                            32.dp
-                        } else {
-                            8.dp
-                        }
-                    ), elevation = CardDefaults.cardElevation(
-                    defaultElevation = 6.dp
-                ), shape = MaterialTheme.shapes.small, colors = CardDefaults.cardColors(
-                    contentColor = MaterialTheme.colorScheme.primary,
-                    containerColor = MaterialTheme.colorScheme.secondary
-                )
-
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.8f)
+                        .padding(
+                            top =
+                                if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+                                    32.dp
+                                } else {
+                                    8.dp
+                                },
+                        ),
+                elevation =
+                    CardDefaults.cardElevation(
+                        defaultElevation = 6.dp,
+                    ),
+                shape = MaterialTheme.shapes.small,
+                colors =
+                    CardDefaults.cardColors(
+                        contentColor = MaterialTheme.colorScheme.primary,
+                        containerColor = MaterialTheme.colorScheme.secondary,
+                    ),
             ) {
                 Box {
                     if (selectedImageUri != null) {
-                        GlideImage(model = selectedImageUri,
+                        GlideImage(
+                            model = selectedImageUri,
                             contentDescription = "Property Image",
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clickable {
-                                    imageFullScreen = true
-
-                                }
-
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .clickable {
+                                        imageFullScreen = true
+                                    },
                         )
                     } else {
-                        GlideImage(model = image,
+                        GlideImage(
+                            model = image,
                             contentDescription = "Property Image",
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .width(100.dp)
-                                .clickable {
-                                    imageFullScreen = true
-                                })
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .width(100.dp)
+                                    .clickable {
+                                        imageFullScreen = true
+                                    },
+                        )
                     }
                     Icon(
-                        imageVector = Constants.propertyTypesIcons[propertyState.propertyType]
-                            ?: Icons.Default.Home,
+                        imageVector =
+                            Constants.propertyTypesIcons[propertyState.propertyType]
+                                ?: Icons.Default.Home,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier
-                            .size(40.dp)
-                            .align(Alignment.BottomStart)
-                            .padding(8.dp)
+                        modifier =
+                            Modifier
+                                .size(40.dp)
+                                .align(Alignment.BottomStart)
+                                .padding(8.dp),
                     )
                     IconButton(
                         onClick = { openDeleteDialog.value = true },
                         modifier = Modifier.align(Alignment.TopEnd),
-                        colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = MaterialTheme.colorScheme.onPrimary,
-                            containerColor = MaterialTheme.colorScheme.primary
-                        )
+                        colors =
+                            IconButtonDefaults.iconButtonColors(
+                                contentColor = MaterialTheme.colorScheme.onPrimary,
+                                containerColor = MaterialTheme.colorScheme.primary,
+                            ),
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onPrimary,
-                            modifier = Modifier
-                                .size(40.dp)
-                                .padding(8.dp)
+                            modifier =
+                                Modifier
+                                    .size(40.dp)
+                                    .padding(8.dp),
                         )
                     }
                 }
             }
 
             Button(
-                enabled = !offline, onClick = {
-
+                enabled = !offline,
+                onClick = {
                     if (selectedImageUri != null) {
                         uploadImage(context, selectedImageUri!!)
                         selectedImageUri = null
                     } else {
                         singlePhotoPickerLauncher.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
                         )
                     }
 
-                    Log.i("TEST", "PropertyPhotosScreen: ${selectedImageUri.toString()}")
-
-                }, modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp)
+                    Log.i("TEST", "PropertyPhotosScreen: $selectedImageUri")
+                },
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
             ) {
                 if (offline) {
                     Row {
                         Icon(
                             Icons.Default.WifiOff,
                             contentDescription = null,
-                            modifier = Modifier.padding(end = 8.dp)
+                            modifier = Modifier.padding(end = 8.dp),
                         )
                         Text(text = "Offline preview")
                     }
@@ -271,7 +294,7 @@ fun PropertyPhotosScreen(
                             Icon(
                                 Icons.Default.Upload,
                                 contentDescription = null,
-                                modifier = Modifier.padding(end = 8.dp)
+                                modifier = Modifier.padding(end = 8.dp),
                             )
                             Text(text = "Upload Image")
                         }
@@ -280,7 +303,7 @@ fun PropertyPhotosScreen(
                             Icon(
                                 Icons.Default.Image,
                                 contentDescription = null,
-                                modifier = Modifier.padding(end = 8.dp)
+                                modifier = Modifier.padding(end = 8.dp),
                             )
                             Text(text = "Select Image")
                         }
@@ -295,11 +318,13 @@ fun PropertyPhotosScreen(
             ImageDialog(
                 onDismissRequest = {
                     imageFullScreen = false
-                }, imageUrl = if (selectedImageUri != null) {
-                    selectedImageUri.toString()
-                } else {
-                    image
-                }
+                },
+                imageUrl =
+                    if (selectedImageUri != null) {
+                        selectedImageUri.toString()
+                    } else {
+                        image
+                    },
             )
         }
     }

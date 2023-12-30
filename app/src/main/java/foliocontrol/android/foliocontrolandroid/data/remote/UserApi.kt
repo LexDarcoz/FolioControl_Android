@@ -13,24 +13,30 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface UserApi {
-
     @Headers("Accept: application/json")
     @POST("api/user/login")
-    suspend fun login(@Body userState: LoginCredentials): Token
+    suspend fun login(
+        @Body userState: LoginCredentials,
+    ): Token
 
     @GET("api/user")
-    suspend fun getUser(@Header("Authorization") token: String): User
+    suspend fun getUser(
+        @Header("Authorization") token: String,
+    ): User
 
     @Headers("Accept: application/json")
     @POST("api/user/update")
     suspend fun saveUser(
-        @Header("Authorization") token: String, @Body userState: UserDto
+        @Header("Authorization") token: String,
+        @Body userState: UserDto,
     )
 }
 
 private val userApi = createRetrofit(UserApi::class.java)
+
 suspend fun UserLoginRequest(
-    loginCredentials: LoginCredentials, updateTokenState: (String) -> Unit
+    loginCredentials: LoginCredentials,
+    updateTokenState: (String) -> Unit,
 ): Boolean {
     var token: String? = null
     try {
@@ -48,24 +54,26 @@ suspend fun UserLoginRequest(
 }
 
 suspend fun getUser(token: String): User {
-
-
     return userApi.getUser(token = token)
 }
 
-suspend fun saveUser(token: String, user: User) {
+suspend fun saveUser(
+    token: String,
+    user: User,
+) {
     try {
-        val userDto = UserDto(
-            name = user.name,
-            firstName = user.firstName,
-            lastName = user.lastName,
-            street = user.street,
-            streetNumber = user.streetNumber,
-            zipCode = user.zipCode,
-            city = user.city,
-            country = user.country,
-            email = user.email
-        )
+        val userDto =
+            UserDto(
+                name = user.name,
+                firstName = user.firstName,
+                lastName = user.lastName,
+                street = user.street,
+                streetNumber = user.streetNumber,
+                zipCode = user.zipCode,
+                city = user.city,
+                country = user.country,
+                email = user.email,
+            )
 
         val call = userApi.saveUser(token, userDto)
     } catch (e: Exception) {

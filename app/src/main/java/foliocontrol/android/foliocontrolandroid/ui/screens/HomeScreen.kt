@@ -35,15 +35,19 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import kotlinx.coroutines.launch
 
 enum class MultiFloatingState {
-    Expanded, Collapsed
+    Expanded,
+    Collapsed,
 }
 
 class MinFabItem(
-    val icon: ImageVector, val label: String, val identifier: String
+    val icon: ImageVector,
+    val label: String,
+    val identifier: String,
 )
 
 enum class Identifier {
-    SearchFab, AddPropertyFab
+    SearchFab,
+    AddPropertyFab,
 }
 
 @Composable
@@ -65,7 +69,8 @@ fun HomeScreen(
     handlePropertyCountryAddEdit: (String) -> Unit,
     selectProperty: (Property) -> Unit,
     deleteProperty: (Int) -> Unit,
-    togglePropertyAddDialog: () -> Unit, handlePropertyAdd: () -> Unit = {},
+    togglePropertyAddDialog: () -> Unit,
+    handlePropertyAdd: () -> Unit = {},
     currentPartnership: Partnership,
     isAddPropertyDialogOpen: Boolean,
     navigateTo: (Any?) -> Unit,
@@ -95,7 +100,7 @@ fun HomeScreen(
                 handlePropertyStreetAddEdit = { handlePropertyStreetAddEdit(it) },
                 handlePropertyStreetNumberAddEdit = {
                     handlePropertyStreetNumberAddEdit(
-                        it
+                        it,
                     )
                 },
                 handlePropertyZipCodeAddEdit = { handlePropertyZipCodeAddEdit(it) },
@@ -106,7 +111,7 @@ fun HomeScreen(
                 togglePropertyAddDialog = { togglePropertyAddDialog() },
                 handlePropertyAdd = { handlePropertyAdd() },
                 isAddPropertyDialogOpen = isAddPropertyDialogOpen,
-                navigateTo = navigateTo
+                navigateTo = navigateTo,
             )
         }
 
@@ -125,7 +130,7 @@ fun HomeScreen(
                 handlePropertyStreetAddEdit = { handlePropertyStreetAddEdit(it) },
                 handlePropertyStreetNumberAddEdit = {
                     handlePropertyStreetNumberAddEdit(
-                        it
+                        it,
                     )
                 },
                 handlePropertyZipCodeAddEdit = { handlePropertyZipCodeAddEdit(it) },
@@ -137,7 +142,7 @@ fun HomeScreen(
                 handlePropertyAdd = { handlePropertyAdd() },
                 isAddPropertyDialogOpen = isAddPropertyDialogOpen,
                 navigateTo = navigateTo,
-                offline = true
+                offline = true,
             )
         }
 
@@ -171,8 +176,11 @@ fun Home(
     handlePropertyCountryAddEdit: (String) -> Unit,
     selectProperty: (Property) -> Unit,
     deleteProperty: (Int) -> Unit,
-    togglePropertyAddDialog: () -> Unit, handlePropertyAdd: () -> Unit = {},
-    isAddPropertyDialogOpen: Boolean, offline: Boolean = false, loading: Boolean = false,
+    togglePropertyAddDialog: () -> Unit,
+    handlePropertyAdd: () -> Unit = {},
+    isAddPropertyDialogOpen: Boolean,
+    offline: Boolean = false,
+    loading: Boolean = false,
     navigateTo: (Any?) -> Unit,
 ) {
     var multiFloatingState by remember {
@@ -183,19 +191,19 @@ fun Home(
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = loading)
     val infoDialog = remember { mutableStateOf(offline) }
 
-    val items = listOf(
-        MinFabItem(
-            icon = Icons.Filled.Search, label = "Search", identifier = Identifier.SearchFab.name
-        ),
-
-        MinFabItem(
-            icon = Icons.Filled.DomainAdd,
-            label = "Add Property",
-            identifier = Identifier.AddPropertyFab.name
-
+    val items =
+        listOf(
+            MinFabItem(
+                icon = Icons.Filled.Search,
+                label = "Search",
+                identifier = Identifier.SearchFab.name,
+            ),
+            MinFabItem(
+                icon = Icons.Filled.DomainAdd,
+                label = "Add Property",
+                identifier = Identifier.AddPropertyFab.name,
+            ),
         )
-
-    )
 
     when {
         isAddPropertyDialogOpen -> {
@@ -214,18 +222,19 @@ fun Home(
                 handlePropertyZipCodeAddEdit = handlePropertyZipCodeAddEdit,
                 handlePropertyCityAddEdit = handlePropertyCityAddEdit,
                 handlePropertyCountryAddEdit = handlePropertyCountryAddEdit,
-                offline = offline
+                offline = offline,
             )
         }
     }
     SwipeRefresh(state = swipeRefreshState, onRefresh = { getData() }) {
         scope.launch {
             if (uiState is UiState.Offline) {
-                var result = snackbarHostState.showSnackbar(
-                    message = uiState.message,
-                    actionLabel = "Retry",
-                    duration = SnackbarDuration.Indefinite
-                )
+                var result =
+                    snackbarHostState.showSnackbar(
+                        message = uiState.message,
+                        actionLabel = "Retry",
+                        duration = SnackbarDuration.Indefinite,
+                    )
                 if (result == SnackbarResult.ActionPerformed) {
                     getData()
                 }
@@ -234,7 +243,8 @@ fun Home(
 
         Scaffold(floatingActionButton = {
             if (!offline) {
-                MultiFloatingButton(multiFloatingState = multiFloatingState,
+                MultiFloatingButton(
+                    multiFloatingState = multiFloatingState,
                     onMultiFabStateChange = {
                         multiFloatingState = it
                     },
@@ -244,28 +254,30 @@ fun Home(
                     },
                     toggleSearchBar = {
                         toggleSearchBar()
-                    })
+                    },
+                )
             }
         }, snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         }) { values ->
             Column {
                 if (isSearchBarEnabled) {
-                    SearchBar(toggleSearchBar = toggleSearchBar,
-                        filterProperties = { filterProperties(it) })
+                    SearchBar(
+                        toggleSearchBar = toggleSearchBar,
+                        filterProperties = { filterProperties(it) },
+                    )
                     LazyColumn(contentPadding = values) {
                         items(
                             items = filteredList,
-                            key = { property -> property.propertyID }) { property ->
+                            key = { property -> property.propertyID },
+                        ) { property ->
                             PropertyCard(
                                 property = property,
                                 uiState = uiState,
                                 handlePropertyDelete = { deleteProperty(it) },
-
                                 getData = { getData() },
                                 selectProperty = { selectProperty(it) },
-                                navigateTo = navigateTo
-
+                                navigateTo = navigateTo,
                             )
                         }
                     }
@@ -278,8 +290,7 @@ fun Home(
                                 handlePropertyDelete = { deleteProperty(it) },
                                 getData = { getData() },
                                 selectProperty = { selectProperty(it) },
-                                navigateTo = navigateTo
-
+                                navigateTo = navigateTo,
                             )
                         }
                     }
@@ -287,11 +298,13 @@ fun Home(
             }
 
             if (infoDialog.value) {
-                InfoDialog(title = "Whoops!",
+                InfoDialog(
+                    title = "Whoops!",
                     desc = "No Internet Connection found.\n" + "Check your connection or try again.",
                     onDismiss = {
                         infoDialog.value = false
-                    })
+                    },
+                )
             }
         }
     }

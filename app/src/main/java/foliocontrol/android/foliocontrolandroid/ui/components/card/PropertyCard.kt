@@ -46,8 +46,7 @@ fun PropertyCard(
     handlePropertyDelete: (Int) -> Unit,
     getData: () -> Unit = { },
     selectProperty: (Property) -> Unit,
-    navigateTo: (Any?) -> Unit
-
+    navigateTo: (Any?) -> Unit,
 ) {
     val imageUrl = Constants.PROPERTYPHOTOS_URL
     val openDeleteDialog = remember { mutableStateOf(false) }
@@ -64,7 +63,7 @@ fun PropertyCard(
                     dismissText = "Dismiss",
                     dialogTitle = "Delete Property",
                     dialogText = "Are you sure you want to delete ${property.propertyName}.",
-                    icon = Icons.Default.Warning
+                    icon = Icons.Default.Warning,
                 )
             } else {
                 DeleteDialog(
@@ -77,25 +76,30 @@ fun PropertyCard(
                     dismissText = "Dismiss",
                     dialogTitle = "Network Error",
                     dialogText = "You need to be online in order to delete properties.",
-                    icon = Icons.Default.Info
+                    icon = Icons.Default.Info,
                 )
             }
         }
     }
 
     Card(
-        modifier = Modifier.padding(8.dp), elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
-        ), shape = MaterialTheme.shapes.small, colors = CardDefaults.cardColors(
-            contentColor = MaterialTheme.colorScheme.primary,
-            containerColor = MaterialTheme.colorScheme.secondary
-        )
-
+        modifier = Modifier.padding(8.dp),
+        elevation =
+            CardDefaults.cardElevation(
+                defaultElevation = 6.dp,
+            ),
+        shape = MaterialTheme.shapes.small,
+        colors =
+            CardDefaults.cardColors(
+                contentColor = MaterialTheme.colorScheme.primary,
+                containerColor = MaterialTheme.colorScheme.secondary,
+            ),
     ) {
         Box(
-            modifier = Modifier
-                .height(165.dp)
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .height(165.dp)
+                    .fillMaxSize(),
         ) {
             // Load property image here
 
@@ -104,72 +108,81 @@ fun PropertyCard(
                     painter = painterResource(id = R.drawable.ic_default),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .width(200.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .width(200.dp),
                 )
             } else {
                 GlideImage(
                     model = "$imageUrl/${property.propertyImg}",
                     contentDescription = "${property.propertyName} image",
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 
             // Rounded icon
             Icon(
-                imageVector = Constants.propertyTypesIcons[property.propertyType]
-                    ?: Icons.Default.Home,
+                imageVector =
+                    Constants.propertyTypesIcons[property.propertyType]
+                        ?: Icons.Default.Home,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier
-                    .size(40.dp)
-                    .align(Alignment.BottomStart)
-                    .padding(8.dp)
+                modifier =
+                    Modifier
+                        .size(40.dp)
+                        .align(Alignment.BottomStart)
+                        .padding(8.dp),
             )
             IconButton(
                 onClick = { openDeleteDialog.value = true },
                 modifier = Modifier.align(Alignment.TopEnd),
-                colors = IconButtonDefaults.iconButtonColors(
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
+                colors =
+                    IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                        containerColor = MaterialTheme.colorScheme.primary,
+                    ),
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier
-                        .size(40.dp)
-                        .padding(8.dp)
+                    modifier =
+                        Modifier
+                            .size(40.dp)
+                            .padding(8.dp),
                 )
             }
         }
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         ) {
             Text(
                 text = property.propertyName,
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = 8.dp),
             )
             Text(
-                text = "${property.street} ${property.streetNumber}, ${property.city} ${property.zipCode}", // ktlint-disable max-line-length
-                style = MaterialTheme.typography.bodySmall
+                text = "${property.street} ${property.streetNumber}, ${property.city} ${property.zipCode}",
+                style
+                    =
+                    MaterialTheme.typography.bodySmall,
             )
             Text(
                 text = property.propertyType,
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 8.dp),
             )
             Button(
                 onClick = {
                     selectProperty(property)
                     navigateTo("PropertyDetail")
-                }, modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp)
+                },
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 4.dp),
             ) {
                 Text(text = "View Property")
             }

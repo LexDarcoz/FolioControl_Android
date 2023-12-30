@@ -29,35 +29,44 @@ import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
 
 @Composable
 fun DocumentCard(
-    document: PropertyDocument, downloadFile: (String) -> Long, toggleDialog: (Int) -> Unit
+    document: PropertyDocument,
+    downloadFile: (String) -> Long,
+    toggleDialog: (Int) -> Unit,
 ) {
     Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .clickable {
-                downloadFile(
-                    "$PROPERTYDOCUMENTS_URL/${document.documentName}"
-                ) > 0
-            }, elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
-        ), shape = MaterialTheme.shapes.small, colors = CardDefaults.cardColors(
-            contentColor = MaterialTheme.colorScheme.primary,
-            containerColor = MaterialTheme.colorScheme.secondary
-        )
+        modifier =
+            Modifier
+                .padding(8.dp)
+                .clickable {
+                    downloadFile(
+                        "$PROPERTYDOCUMENTS_URL/${document.documentName}",
+                    ) > 0
+                },
+        elevation =
+            CardDefaults.cardElevation(
+                defaultElevation = 6.dp,
+            ),
+        shape = MaterialTheme.shapes.small,
+        colors =
+            CardDefaults.cardColors(
+                contentColor = MaterialTheme.colorScheme.primary,
+                containerColor = MaterialTheme.colorScheme.secondary,
+            ),
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
                     imageVector = Icons.Default.FileCopy,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = MaterialTheme.colorScheme.primary,
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -67,7 +76,7 @@ fun DocumentCard(
                     maxLines = 2,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
 
@@ -77,22 +86,24 @@ fun DocumentCard(
                 text = "Type: ${document.documentType}",
                 color = Color.Gray,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
 
             Text(
                 text = "Expiry Date: ${document.expiryDate}",
                 color = Color.Gray,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
 
             Button(
                 onClick = {
                     toggleDialog(document.propertyDocumentID)
-                }, modifier = Modifier
-                    .align(Alignment.End)
-                    .padding(top = 8.dp)
+                },
+                modifier =
+                    Modifier
+                        .align(Alignment.End)
+                        .padding(top = 8.dp),
             ) {
                 Text("Delete")
             }

@@ -11,7 +11,7 @@ import foliocontrol.android.foliocontrolandroid.domain.User
 class AuthServiceImpl : AuthService {
     override suspend fun login(
         loginCredentials: LoginCredentials,
-        updateTokenState: (String) -> Unit
+        updateTokenState: (String) -> Unit,
     ): Boolean {
         return if (UserLoginRequest(loginCredentials, updateTokenState)) {
             println("User succesfully logged in")
@@ -30,7 +30,10 @@ class AuthServiceImpl : AuthService {
         return getUser(token)
     }
 
-    override suspend fun saveUserByToken(token: String, user: User) {
+    override suspend fun saveUserByToken(
+        token: String,
+        user: User,
+    ) {
         return saveUser(token, user)
     }
 }

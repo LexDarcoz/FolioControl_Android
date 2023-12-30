@@ -27,7 +27,8 @@ import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.Fo
 
 @Composable
 fun AccountDetailScreen(
-    userState: User, handleUserSave: () -> Unit,
+    userState: User,
+    handleUserSave: () -> Unit,
     handleUserNameEdit: (String) -> Unit,
     handleUserLastNameEdit: (String) -> Unit,
     handleUserEmailEdit: (String) -> Unit,
@@ -36,46 +37,49 @@ fun AccountDetailScreen(
     handleUserZipCodeEdit: (String) -> Unit,
     handleUserCityEdit: (String) -> Unit,
     handleUserCountryEdit: (String) -> Unit,
-    offline: Boolean, navigateTo: (Any?) -> Unit = {}
+    offline: Boolean,
+    navigateTo: (Any?) -> Unit = {},
 ) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Column {
             Text(
                 text = "Details:",
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(8.dp),
             )
 
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
             ) {
                 Surface(
                     color = MaterialTheme.colorScheme.secondary,
                     contentColor = MaterialTheme.colorScheme.primary,
                     shape = MaterialTheme.shapes.small,
                     shadowElevation = 4.dp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
                 ) {
                     Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp)
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .padding(16.dp),
                     ) {
                         FolioTextField(!offline, "Name", userState.name) {
                             handleUserNameEdit(
-                                it
+                                it,
                             )
                         }
                         FolioTextField(!offline, "Last Name", userState.lastName) {
                             handleUserLastNameEdit(
-                                it
+                                it,
                             )
                         }
                         FolioTextField(!offline, "Email", userState.email) {
@@ -83,7 +87,7 @@ fun AccountDetailScreen(
                         }
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Box(modifier = Modifier.weight(1f)) {
                                 FolioTextField(!offline, "Street", userState.street) {
@@ -93,7 +97,9 @@ fun AccountDetailScreen(
                             Spacer(modifier = Modifier.width(8.dp))
                             Box(modifier = Modifier.weight(1f)) {
                                 FolioTextField(
-                                    !offline, "Street Number", userState.streetNumber
+                                    !offline,
+                                    "Street Number",
+                                    userState.streetNumber,
                                 ) {
                                     handleUserStreetNumberEdit(it)
                                 }
@@ -102,11 +108,13 @@ fun AccountDetailScreen(
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Box(modifier = Modifier.weight(1f)) {
                                 FolioTextField(
-                                    !offline, "Zip Code", userState.zipCode
+                                    !offline,
+                                    "Zip Code",
+                                    userState.zipCode,
                                 ) {
                                     handleUserZipCodeEdit(it)
                                 }
@@ -123,19 +131,22 @@ fun AccountDetailScreen(
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         Button(
-                            enabled = !offline, onClick = {
+                            enabled = !offline,
+                            onClick = {
                                 handleUserSave()
                                 navigateTo("Home")
-                            }, modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 16.dp)
+                            },
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 16.dp),
                         ) {
                             if (offline) {
                                 Row {
                                     Icon(
                                         Icons.Default.WifiOff,
                                         contentDescription = null,
-                                        modifier = Modifier.padding(end = 8.dp)
+                                        modifier = Modifier.padding(end = 8.dp),
                                     )
                                     Text(text = "Offline preview")
                                 }
@@ -144,7 +155,7 @@ fun AccountDetailScreen(
                                     Icon(
                                         Icons.Default.Save,
                                         contentDescription = null,
-                                        modifier = Modifier.padding(end = 8.dp)
+                                        modifier = Modifier.padding(end = 8.dp),
                                     )
                                     Text(text = "Save")
                                 }

@@ -21,30 +21,33 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun LoadingScreen() {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background.copy(alpha = 0.9f))
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.9f))
+                .padding(16.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.9f))
-                .padding(16.dp)
-                .clip(RoundedCornerShape(8.dp))
+            modifier =
+                Modifier
+                    .background(MaterialTheme.colorScheme.background.copy(alpha = 0.9f))
+                    .padding(16.dp)
+                    .clip(RoundedCornerShape(8.dp)),
         ) {
             CircularProgressIndicator(
-                modifier = Modifier
-                    .size(150.dp)
-                    .padding(16.dp),
-                color = MaterialTheme.colorScheme.primary
+                modifier =
+                    Modifier
+                        .size(150.dp)
+                        .padding(16.dp),
+                color = MaterialTheme.colorScheme.primary,
             )
             Text(
                 text = "Loading...",
                 color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         }
     }

@@ -11,7 +11,10 @@ fun getEncryptedPreference(key: String): String {
     return getSharedPreferences().getString(key, "") ?: ""
 }
 
-fun saveEncryptedPreference(key: String, preference: String) {
+fun saveEncryptedPreference(
+    key: String,
+    preference: String,
+) {
     getSharedPreferences().edit().putString(key, preference).apply()
 }
 
@@ -25,6 +28,6 @@ private fun getSharedPreferences(): SharedPreferences {
         masterKeyAlias,
         MainActivity.appContext,
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
     )
 }

@@ -8,8 +8,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LoginCredentials(
-    val email: String = "", val password: String = ""
-
+    val email: String = "",
+    val password: String = "",
 )
 
 @Serializable
@@ -24,9 +24,8 @@ data class User(
     val zipCode: String = "",
     val city: String = "",
     val country: String = "",
-    val email: String = ""
+    val email: String = "",
 )
-
 
 @Serializable
 @Immutable
@@ -39,7 +38,7 @@ data class UserDto(
     val zipCode: String = "",
     val city: String = "",
     val country: String = "",
-    val email: String = ""
+    val email: String = "",
 )
 
 @Serializable
@@ -57,7 +56,7 @@ data class Property(
     val propertySize: String = "",
     val propertyPrice: String = "",
     val propertyDescription: String = "",
-    val FK_partnershipID: Int = 0
+    val FK_partnershipID: Int = 0,
 )
 
 @Serializable
@@ -73,7 +72,7 @@ data class Premise(
     val isActive: Int = 0,
     val isRented: Int = 0,
     val tenant: String = "",
-    val FK_propertyID: Int = 0
+    val FK_propertyID: Int = 0,
 )
 
 @Serializable
@@ -84,35 +83,37 @@ data class PropertyDocument(
     val documentName: String = "",
     val documentType: String = "",
     val expiryDate: String = "",
-    val propertyId: Int = 0
+    val propertyId: Int = 0,
 )
 
-fun Property.asPropertyRoomEntity() = PropertyRoomEntity(
-    propertyID = propertyID,
-    propertyName = propertyName,
-    propertyType = propertyType,
-    propertyImg = propertyImg,
-    street = street,
-    streetNumber = streetNumber,
-    city = city,
-    zipCode = zipCode,
-    country = country,
-    propertyDescription = propertyDescription,
-    FK_partnershipID = FK_partnershipID
-)
+fun Property.asPropertyRoomEntity() =
+    PropertyRoomEntity(
+        propertyID = propertyID,
+        propertyName = propertyName,
+        propertyType = propertyType,
+        propertyImg = propertyImg,
+        street = street,
+        streetNumber = streetNumber,
+        city = city,
+        zipCode = zipCode,
+        country = country,
+        propertyDescription = propertyDescription,
+        FK_partnershipID = FK_partnershipID,
+    )
 
-fun User.asUserRoomEntity() = UserRoomEntity(
-    userID = userID,
-    name = name,
-    firstName = firstName,
-    lastName = lastName,
-    street = street,
-    streetNumber = streetNumber,
-    zipCode = zipCode,
-    city = city,
-    country = country,
-    email = email
-)
+fun User.asUserRoomEntity() =
+    UserRoomEntity(
+        userID = userID,
+        name = name,
+        firstName = firstName,
+        lastName = lastName,
+        street = street,
+        streetNumber = streetNumber,
+        zipCode = zipCode,
+        city = city,
+        country = country,
+        email = email,
+    )
 
 @Serializable
 @Immutable
@@ -126,24 +127,25 @@ data class Partnership(
     val streetNumber: String = "",
     val zipCode: String = "",
     val city: String = "",
-    val country: String = ""
-
+    val country: String = "",
 )
 
-fun Partnership.asPartnershipRoomEntity() = PartnershipRoomEntity(
-    partnershipID = partnershipID,
-    name = name,
-    logoImg = logoImg,
-    countryCode = countryCode,
-    vatNumber = vatNumber,
-    street = street,
-    streetNumber = streetNumber,
-    zipCode = zipCode,
-    city = city,
-    country = country
-)
+fun Partnership.asPartnershipRoomEntity() =
+    PartnershipRoomEntity(
+        partnershipID = partnershipID,
+        name = name,
+        logoImg = logoImg,
+        countryCode = countryCode,
+        vatNumber = vatNumber,
+        street = street,
+        streetNumber = streetNumber,
+        zipCode = zipCode,
+        city = city,
+        country = country,
+    )
 
 @Serializable
 data class Token(
-    val token: String = "", val validated: Boolean = false
+    val token: String = "",
+    val validated: Boolean = false,
 )

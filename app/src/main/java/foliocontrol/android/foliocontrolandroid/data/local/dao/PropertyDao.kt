@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PropertyDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(property: PropertyRoomEntity)
 

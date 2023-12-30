@@ -15,8 +15,9 @@ interface RoomContainer {
     val accountDatabase: AccountDatabase
 }
 
+@Suppress("ktlint:standard:max-line-length")
 class RoomContainerImpl(private val context: Context, private val scope: CoroutineScope) :
-    RoomContainer { // ktlint-disable max-line-length
+    RoomContainer {
     override val partnershipDatabase: PartnershipDatabase by lazy {
         PartnershipDatabaseImpl(FolioRoomDatabase.getDatabase(context, scope).partnershipDao())
     }

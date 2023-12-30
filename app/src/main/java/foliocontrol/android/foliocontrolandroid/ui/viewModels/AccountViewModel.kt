@@ -17,9 +17,8 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 class AccountViewModel(
-    private val accountRepo: AccountDatabase
+    private val accountRepo: AccountDatabase,
 ) : ViewModel() {
-
     private val authService = AuthServiceImpl()
     var user: User by mutableStateOf(User())
         private set
@@ -65,7 +64,7 @@ class AccountViewModel(
         streetNumber: String? = null,
         city: String? = null,
         zipCode: String? = null,
-        country: String? = null
+        country: String? = null,
     ) {
         name?.let {
             user = user.copy(name = it)
@@ -100,7 +99,8 @@ class AccountViewModel(
         viewModelScope.launch {
             try {
                 authService.saveUserByToken(
-                    getEncryptedPreference("token"), user
+                    getEncryptedPreference("token"),
+                    user,
                 )
             } catch (e: Exception) {
                 println("Error: ${e.message}")

@@ -10,15 +10,13 @@ import androidx.compose.ui.Modifier
 import foliocontrol.android.foliocontrolandroid.ui.theme.FolioControlAndroidTheme
 
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         appContext = applicationContext
         setContent {
             FolioControlAndroidTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize()
-
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     FolioControlApplication()
                 }
@@ -27,7 +25,6 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-
         lateinit var appContext: Context
     }
 }

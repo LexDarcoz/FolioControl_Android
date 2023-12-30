@@ -19,12 +19,12 @@ import kotlinx.coroutines.launch
 class AuthViewModel(
     private val propertyRepo: PropertyDatabase,
     private val partnershipRepo: PartnershipDatabase,
-    private val accountRepo: AccountDatabase
+    private val accountRepo: AccountDatabase,
 ) : ViewModel() {
     private val authService = AuthServiceImpl()
 
     var loginUiState: UiState by mutableStateOf(
-        UiState.LoggedOut("You are not logged in")
+        UiState.LoggedOut("You are not logged in"),
     )
         private set
     var loginCredentials by mutableStateOf(LoginCredentials())
@@ -43,9 +43,7 @@ class AuthViewModel(
         }
     }
 
-    fun updateTokenState(
-        token: String? = null
-    ) {
+    fun updateTokenState(token: String? = null) {
         token?.let {
             userToken = it
         }
@@ -60,7 +58,8 @@ class AuthViewModel(
     }
 
     fun updateLoginState(
-        email: String? = null, password: String? = null
+        email: String? = null,
+        password: String? = null,
     ) {
         email?.let {
             loginCredentials = loginCredentials.copy(email = it)
@@ -75,17 +74,19 @@ class AuthViewModel(
             loginUiState = UiState.Loading
 
             try {
-                var auth = authService.login(loginCredentials, updateTokenState = { token ->
-                    updateTokenState(token)
-                })
+                var auth =
+                    authService.login(loginCredentials, updateTokenState = { token ->
+                        updateTokenState(token)
+                    })
 
                 if (auth) {
                     saveEncryptedPreference("token", userToken)
                     loginUiState = UiState.Success("You have logged in")
                 } else {
-                    loginUiState = UiState.LoggedOut(
-                        "Something went wrong logging in, check credentials"
-                    )
+                    loginUiState =
+                        UiState.LoggedOut(
+                            "Something went wrong logging in, check credentials",
+                        )
                 }
             } catch (e: Exception) {
                 loginUiState = UiState.LoggedOut(e.localizedMessage ?: "You logged out")

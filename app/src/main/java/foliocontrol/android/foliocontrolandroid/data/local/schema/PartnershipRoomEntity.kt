@@ -27,8 +27,7 @@ data class PartnershipRoomEntity(
     @ColumnInfo(name = "city")
     val city: String = "",
     @ColumnInfo(name = "country")
-    val country: String = ""
-
+    val country: String = "",
 )
 
 fun PartnershipRoomEntity.asDomainModel() =
@@ -42,5 +41,5 @@ fun PartnershipRoomEntity.asDomainModel() =
         streetNumber = streetNumber,
         zipCode = zipCode,
         city = city,
-        country = country
+        country = country,
     )

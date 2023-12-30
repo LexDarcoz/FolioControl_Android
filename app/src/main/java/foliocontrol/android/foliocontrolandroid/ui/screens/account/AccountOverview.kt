@@ -37,13 +37,18 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScre
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 val tabItems = listOf(
-    TabItem("Details", Icons.Outlined.AccountBox, Icons.Filled.AccountBox), TabItem(
-        "Partnerships", Icons.Outlined.Apartment, Icons.Filled.Apartment
-    )
+    TabItem("Details", Icons.Outlined.AccountBox, Icons.Filled.AccountBox),
+    TabItem(
+        "Partnerships",
+        Icons.Outlined.Apartment,
+        Icons.Filled.Apartment,
+    ),
 )
 
 data class TabItem(
-    val title: String, val unselectedIcon: ImageVector, val selectedIcon: ImageVector
+    val title: String,
+    val unselectedIcon: ImageVector,
+    val selectedIcon: ImageVector,
 )
 
 @Composable
@@ -61,7 +66,7 @@ fun AccountScreen(
     partnershipList: List<Partnership>,
     getData: () -> Unit = { },
     uiState: UiState,
-    navigateTo: (Any?) -> Unit = {}
+    navigateTo: (Any?) -> Unit = {},
 ) {
     DisposableEffect(userState.userID) {
         getData()
@@ -69,7 +74,6 @@ fun AccountScreen(
     }
     when (uiState) {
         is UiState.LoggedOut -> {
-
         }
 
         is UiState.Success -> {
@@ -86,7 +90,7 @@ fun AccountScreen(
                 handleUserCountryEdit = handleUserCountryEdit,
                 offline = false,
                 partnershipList = partnershipList,
-                navigateTo = navigateTo
+                navigateTo = navigateTo,
             )
         }
 
@@ -104,7 +108,7 @@ fun AccountScreen(
                 handleUserCountryEdit = handleUserCountryEdit,
                 offline = true,
                 partnershipList = partnershipList,
-                navigateTo = navigateTo
+                navigateTo = navigateTo,
             )
         }
 
@@ -133,7 +137,7 @@ fun AccountOverview(
     handleUserCountryEdit: (String) -> Unit,
     partnershipList: List<Partnership>,
     offline: Boolean,
-    navigateTo: (Any?) -> Unit = {}
+    navigateTo: (Any?) -> Unit = {},
 ) {
     val pagerState = rememberPagerState {
         tabItems.size
@@ -151,7 +155,7 @@ fun AccountOverview(
     Column {
         TabRow(
             selectedTabIndex = selectedTabIndex,
-            containerColor = MaterialTheme.colorScheme.onPrimary
+            containerColor = MaterialTheme.colorScheme.onPrimary,
         ) {
             tabItems.forEachIndexed { index, item ->
                 Tab(selected = selectedTabIndex == index, onClick = {
@@ -159,11 +163,11 @@ fun AccountOverview(
                 }, text = {
                     Text(text = item.title, color = MaterialTheme.colorScheme.primary)
                 }, icon = {
-                    (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary).let { // ktlint-disable max-line-length
+                    @Suppress("ktlint:standard:max-line-length") (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary).let {
                         Icon(
                             tint = it,
-                            imageVector = if (selectedTabIndex == index) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length
-                            contentDescription = item.title
+                            imageVector = if (selectedTabIndex == index) item.selectedIcon else item.unselectedIcon,
+                            contentDescription = item.title,
                         )
                     }
                 })
@@ -173,7 +177,7 @@ fun AccountOverview(
             state = pagerState,
             Modifier
                 .fillMaxWidth()
-                .zIndex(1f)
+                .zIndex(1f),
         ) { index ->
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 if (index == 0) {
@@ -189,11 +193,11 @@ fun AccountOverview(
                         handleUserCityEdit = handleUserCityEdit,
                         handleUserCountryEdit = handleUserCountryEdit,
                         offline,
-                        navigateTo
+                        navigateTo,
                     )
                 } else if (index == 1) {
                     AccountPartnershipScreen(
-                        partnershipList = partnershipList
+                        partnershipList = partnershipList,
                     )
                 }
             }

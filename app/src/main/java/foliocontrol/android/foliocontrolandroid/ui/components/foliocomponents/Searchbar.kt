@@ -29,7 +29,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SearchBar(toggleSearchBar: () -> Unit, filterProperties: (String) -> Unit) {
+fun SearchBar(
+    toggleSearchBar: () -> Unit,
+    filterProperties: (String) -> Unit,
+) {
     var query by remember { mutableStateOf("") }
 
     val searchBarBackgroundColor = MaterialTheme.colorScheme.background
@@ -43,10 +46,11 @@ fun SearchBar(toggleSearchBar: () -> Unit, filterProperties: (String) -> Unit) {
     val searchIcon = Icons.Default.Search
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(searchBarBackgroundColor)
-            .padding(16.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(searchBarBackgroundColor)
+                .padding(16.dp),
     ) {
         // Search bar with border
         TextField(
@@ -54,42 +58,51 @@ fun SearchBar(toggleSearchBar: () -> Unit, filterProperties: (String) -> Unit) {
             onValueChange = {
                 query = it
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .clip(RoundedCornerShape(cornerRadius))
-                .border(
-                    width = borderWidth,
-                    color = borderColor,
-                    shape = RoundedCornerShape(cornerRadius)
-                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .clip(RoundedCornerShape(cornerRadius))
+                    .border(
+                        width = borderWidth,
+                        color = borderColor,
+                        shape = RoundedCornerShape(cornerRadius),
+                    ),
             textStyle = LocalTextStyle.current.copy(color = contentColor),
             placeholder = {
                 Text(
-                    text = "Search...", color = contentColor.copy(alpha = 0.8f)
+                    text = "Search...",
+                    color = contentColor.copy(alpha = 0.8f),
                 )
             },
             leadingIcon = {
                 Icon(
-                    imageVector = searchIcon, contentDescription = null, tint = iconTint
+                    imageVector = searchIcon,
+                    contentDescription = null,
+                    tint = iconTint,
                 )
             },
             trailingIcon = {
-                Icon(imageVector = Icons.Default.Close,
+                Icon(
+                    imageVector = Icons.Default.Close,
                     contentDescription = null,
                     tint = iconTint,
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .clickable {
-                            toggleSearchBar()
-                        })
+                    modifier =
+                        Modifier
+                            .padding(end = 8.dp)
+                            .clickable {
+                                toggleSearchBar()
+                            },
+                )
             },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Search
-            ),
-            keyboardActions = KeyboardActions(onSearch = {
-                filterProperties(query)
-            })
+            keyboardOptions =
+                KeyboardOptions(
+                    imeAction = ImeAction.Search,
+                ),
+            keyboardActions =
+                KeyboardActions(onSearch = {
+                    filterProperties(query)
+                }),
         )
     }
 }
