@@ -1,6 +1,5 @@
 package foliocontrol.android.foliocontrolandroid.ui.components.card
 
-import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import foliocontrol.android.foliocontrolandroid.data.remote.common.Constants.PROPERTYDOCUMENTS_URL
 import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 @Composable
 fun DocumentCard(

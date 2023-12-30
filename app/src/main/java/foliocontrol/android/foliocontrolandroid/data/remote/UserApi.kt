@@ -6,11 +6,6 @@ import foliocontrol.android.foliocontrolandroid.domain.LoginCredentials
 import foliocontrol.android.foliocontrolandroid.domain.Token
 import foliocontrol.android.foliocontrolandroid.domain.User
 import foliocontrol.android.foliocontrolandroid.domain.UserDto
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header

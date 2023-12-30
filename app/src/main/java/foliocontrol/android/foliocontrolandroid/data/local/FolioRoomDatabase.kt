@@ -11,7 +11,6 @@ import foliocontrol.android.foliocontrolandroid.data.local.dao.UserDao
 import foliocontrol.android.foliocontrolandroid.data.local.schema.PartnershipRoomEntity
 import foliocontrol.android.foliocontrolandroid.data.local.schema.PropertyRoomEntity
 import foliocontrol.android.foliocontrolandroid.data.local.schema.UserRoomEntity
-import kotlin.jvm.Volatile
 import kotlinx.coroutines.CoroutineScope
 
 @Database(

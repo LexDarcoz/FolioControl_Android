@@ -1,6 +1,5 @@
 package foliocontrol.android.foliocontrolandroid.screens
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,8 +32,6 @@ import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.User
 import foliocontrol.android.foliocontrolandroid.ui.screens.account.AccountDetailScreen
 import foliocontrol.android.foliocontrolandroid.ui.screens.account.AccountPartnershipScreen
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
@@ -162,7 +159,7 @@ fun AccountOverview(
                 }, text = {
                     Text(text = item.title, color = MaterialTheme.colorScheme.primary)
                 }, icon = {
-                    (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary)?.let { // ktlint-disable max-line-length
+                    (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary).let { // ktlint-disable max-line-length
                         Icon(
                             tint = it,
                             imageVector = if (selectedTabIndex == index) item.selectedIcon else item.unselectedIcon, // ktlint-disable max-line-length

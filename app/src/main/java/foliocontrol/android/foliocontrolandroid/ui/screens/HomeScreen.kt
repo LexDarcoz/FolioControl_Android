@@ -30,10 +30,7 @@ import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.AddPropert
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.MultiFloatingButton
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.SearchBar
 import foliocontrol.android.foliocontrolandroid.ui.screens.loadingSkeleton.HomeSkeleton
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.DialogLoader
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import kotlinx.coroutines.launch
 
@@ -84,7 +81,8 @@ fun HomeScreen(
         }
 
         is UiState.Success -> {
-            Home(getData = { getData() },
+            Home(
+                getData = { getData() },
                 toggleSearchBar = { toggleSearchBar() },
                 isSearchBarEnabled = isSearchBarEnabled,
                 filteredList = filteredList,
@@ -113,7 +111,8 @@ fun HomeScreen(
         }
 
         is UiState.Offline -> {
-            Home(getData = { getData() },
+            Home(
+                getData = { getData() },
                 toggleSearchBar = { toggleSearchBar() },
                 isSearchBarEnabled = isSearchBarEnabled,
                 filteredList = filteredList,
@@ -200,7 +199,8 @@ fun Home(
 
     when {
         isAddPropertyDialogOpen -> {
-            AddPropertyDialog(onDismissRequest = { togglePropertyAddDialog() },
+            AddPropertyDialog(
+                onDismissRequest = { togglePropertyAddDialog() },
                 onConfirmation = {
                     handlePropertyAdd()
                     togglePropertyAddDialog()
@@ -222,7 +222,7 @@ fun Home(
         scope.launch {
             if (uiState is UiState.Offline) {
                 var result = snackbarHostState.showSnackbar(
-                    message = (uiState as UiState.Offline).message,
+                    message = uiState.message,
                     actionLabel = "Retry",
                     duration = SnackbarDuration.Indefinite
                 )

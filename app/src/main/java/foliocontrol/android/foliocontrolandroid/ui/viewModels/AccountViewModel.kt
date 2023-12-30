@@ -12,9 +12,9 @@ import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.domain.User
 import foliocontrol.android.foliocontrolandroid.domain.asUserRoomEntity
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
-import java.io.IOException
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 class AccountViewModel(
     private val accountRepo: AccountDatabase

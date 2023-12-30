@@ -46,7 +46,6 @@ import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.DropDownMenuItem
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioDropdown
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioTextField
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 val items = listOf(
     DropDownMenuItem(

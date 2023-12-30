@@ -4,9 +4,7 @@ import androidx.compose.runtime.Immutable
 import foliocontrol.android.foliocontrolandroid.data.local.schema.PartnershipRoomEntity
 import foliocontrol.android.foliocontrolandroid.data.local.schema.PropertyRoomEntity
 import foliocontrol.android.foliocontrolandroid.data.local.schema.UserRoomEntity
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import java.util.UUID
 
 @Serializable
 data class LoginCredentials(

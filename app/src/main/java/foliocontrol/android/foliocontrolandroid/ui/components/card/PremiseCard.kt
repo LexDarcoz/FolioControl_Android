@@ -19,7 +19,9 @@ import foliocontrol.android.foliocontrolandroid.domain.Premise
 @Composable
 fun PremiseCard(premise: Premise) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
         elevation = CardDefaults.elevatedCardElevation(4.dp),
         shape = MaterialTheme.shapes.small,
         colors = CardDefaults.cardColors(
@@ -28,7 +30,9 @@ fun PremiseCard(premise: Premise) {
         )
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(16.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
         ) {
             Text(
                 text = premise.premisesName,

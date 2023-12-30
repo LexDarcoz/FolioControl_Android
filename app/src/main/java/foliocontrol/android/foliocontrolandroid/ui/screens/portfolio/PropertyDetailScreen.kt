@@ -37,8 +37,6 @@ import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.items
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioDropdown
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioTextField
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable

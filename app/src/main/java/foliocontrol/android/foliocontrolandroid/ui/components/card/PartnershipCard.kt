@@ -23,7 +23,9 @@ import foliocontrol.android.foliocontrolandroid.domain.Partnership
 @Composable
 fun PartnershipCard(partnership: Partnership) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
         shape = MaterialTheme.shapes.small,
         colors = CardDefaults.cardColors(
             contentColor = MaterialTheme.colorScheme.primary,
@@ -32,7 +34,9 @@ fun PartnershipCard(partnership: Partnership) {
         elevation = CardDefaults.cardElevation(8.dp)
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(16.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
         ) {
             Row {
                 Icon(

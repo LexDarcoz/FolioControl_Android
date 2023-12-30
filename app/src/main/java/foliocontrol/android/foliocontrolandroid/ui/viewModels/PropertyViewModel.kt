@@ -2,7 +2,6 @@ package foliocontrol.android.foliocontrolandroid.ui.viewModels
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -22,14 +21,13 @@ import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
 import foliocontrol.android.foliocontrolandroid.domain.asPartnershipRoomEntity
 import foliocontrol.android.foliocontrolandroid.domain.asPropertyRoomEntity
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
-import java.io.IOException
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
-import java.io.FileOutputStream
+import java.io.IOException
 
 class PropertyViewModel(
     private val propertyRepo: PropertyDatabase,

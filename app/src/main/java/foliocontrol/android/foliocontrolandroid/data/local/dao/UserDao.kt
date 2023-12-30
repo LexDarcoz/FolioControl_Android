@@ -17,7 +17,6 @@ interface UserDao {
     fun getUser(): Flow<UserRoomEntity>
 
 
-
     @Query("DELETE FROM user_table")
     suspend fun clearAllTables()
 

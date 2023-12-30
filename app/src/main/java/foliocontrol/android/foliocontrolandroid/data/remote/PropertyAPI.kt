@@ -6,12 +6,6 @@ import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.Premise
 import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.int
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE

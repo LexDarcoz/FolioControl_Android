@@ -4,7 +4,6 @@ import PropertyDetailScreen
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -263,7 +262,7 @@ fun Overview(
                     }, text = {
                         Text(text = item.title, color = MaterialTheme.colorScheme.primary)
                     }, icon = {
-                        (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary)?.let { // ktlint-disable max-line-length
+                        (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary).let { // ktlint-disable max-line-length
                             Icon(
                                 tint = it,
                                 imageVector = if (selectedTabIndex == index) item.selectedIcon else item.unselectedIcon,

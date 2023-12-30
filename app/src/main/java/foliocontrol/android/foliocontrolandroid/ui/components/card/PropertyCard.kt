@@ -1,6 +1,5 @@
 package foliocontrol.android.foliocontrolandroid.ui.components.card
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,7 +36,6 @@ import foliocontrol.android.foliocontrol_android.R
 import foliocontrol.android.foliocontrolandroid.data.remote.common.Constants
 import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.DeleteDialog
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
 @OptIn(ExperimentalGlideComposeApi::class)

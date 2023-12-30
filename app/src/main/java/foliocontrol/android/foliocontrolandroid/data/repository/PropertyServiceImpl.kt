@@ -17,7 +17,7 @@ import okhttp3.MultipartBody
 
 class PropertyServiceImpl : PropertyService {
     override suspend fun getProperties(token: String, partnership: Partnership): List<Property> {
-        return fetchProperties(token, partnership.partnershipID)!!
+        return fetchProperties(token, partnership.partnershipID)
     }
 
 
@@ -30,17 +30,17 @@ class PropertyServiceImpl : PropertyService {
     }
 
     override suspend fun getDetailsForProperty(token: String, property: Property): Property {
-        return fetchProperty(token, property.propertyID)!!
+        return fetchProperty(token, property.propertyID)
     }
 
     override suspend fun getDocumentsForProperty(
         token: String, property: Property
     ): List<PropertyDocument> {
-        return fetchDocuments(token, property.propertyID)!!
+        return fetchDocuments(token, property.propertyID)
     }
 
     override suspend fun getPremisesForProperty(token: String, property: Property): List<Premise> {
-        return fetchPremises(token, property.propertyID)!!
+        return fetchPremises(token, property.propertyID)
     }
 
     override suspend fun addProperty(token: String, property: Property) {

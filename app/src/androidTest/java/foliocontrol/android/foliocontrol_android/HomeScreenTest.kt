@@ -1,17 +1,11 @@
 package foliocontrol.android.foliocontrol_android
 
 import androidx.compose.ui.test.assertHasClickAction
-import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import foliocontrol.android.foliocontrolandroid.domain.LoginCredentials
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.screens.HomeScreen
-import foliocontrol.android.foliocontrolandroid.screens.LoginScreen
-import foliocontrol.android.foliocontrolandroid.ui.components.card.PropertyCardSkeleton
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import org.junit.Rule
 import org.junit.Test

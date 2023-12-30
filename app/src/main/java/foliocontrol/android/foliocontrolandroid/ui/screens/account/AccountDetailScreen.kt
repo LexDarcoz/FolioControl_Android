@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.domain.User
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioTextField
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.AccountViewModel
 
 @Composable
 fun AccountDetailScreen(

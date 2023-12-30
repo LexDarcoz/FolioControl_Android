@@ -7,7 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.core.view.WindowCompat
 import foliocontrol.android.foliocontrolandroid.ui.theme.FolioControlAndroidTheme
 
 class MainActivity : ComponentActivity() {

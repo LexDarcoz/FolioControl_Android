@@ -99,7 +99,8 @@ fun FolioControlApplication(
                                         it
                                     )
                                 },
-                                navController.currentBackStackEntryAsState().value?.destination?.route ?: "",
+                                navController.currentBackStackEntryAsState().value?.destination?.route
+                                    ?: "",
                             )
                         }
                     }

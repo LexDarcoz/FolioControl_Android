@@ -31,8 +31,6 @@ import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.domain.LoginCredentials
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.Property
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.AuthViewModel
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
@@ -71,7 +69,7 @@ fun AuthScreen(
 ) {
     when (loginUiState) {
         is UiState.LoggedOut -> {
-            LoginScreen(errorName = (loginUiState as UiState.LoggedOut).message,
+            LoginScreen(errorName = loginUiState.message,
                 loginCredentials,
                 { updateLoginStateEmail(it) },
                 { updateLoginStatePassword(it) },
@@ -79,7 +77,8 @@ fun AuthScreen(
         }
 
         is UiState.Success -> {
-            HomeScreen(getData = { getData() },
+            HomeScreen(
+                getData = { getData() },
                 toggleSearchBar = { toggleSearchBar() },
                 isSearchBarEnabled = isSearchBarEnabled,
                 filteredList = filteredList,

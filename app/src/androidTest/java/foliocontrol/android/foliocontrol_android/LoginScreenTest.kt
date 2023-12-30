@@ -26,9 +26,15 @@ class LoginScreenTest {
                 )
         }
 
-        composeTestRule.onAllNodesWithText("Sign In", ignoreCase = true, substring = true)[0].assertExists()
+        composeTestRule.onAllNodesWithText(
+            "Sign In",
+            ignoreCase = true,
+            substring = true
+        )[0].assertExists()
         composeTestRule.onNodeWithText("Email", ignoreCase = true, substring = true).assertExists()
-        composeTestRule.onNodeWithText("Password",ignoreCase = true, substring = true).assertExists()
-        composeTestRule.onNodeWithText("Login",ignoreCase = true, substring = true).assertHasClickAction()
+        composeTestRule.onNodeWithText("Password", ignoreCase = true, substring = true)
+            .assertExists()
+        composeTestRule.onNodeWithText("Login", ignoreCase = true, substring = true)
+            .assertHasClickAction()
     }
 }

@@ -14,8 +14,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.navigation.NavHostController
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.AuthViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.rememberWindowInfo

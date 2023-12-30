@@ -28,8 +28,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.AuthViewModel
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

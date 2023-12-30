@@ -1,6 +1,6 @@
 package foliocontrol.android.foliocontrol_android
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**

@@ -8,11 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddHomeWork
-import androidx.compose.material.icons.filled.FileUpload
 import androidx.compose.material.icons.filled.WifiOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -25,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.domain.Premise
 import foliocontrol.android.foliocontrolandroid.ui.components.OfflineScreen
 import foliocontrol.android.foliocontrolandroid.ui.components.card.PremiseCard
-import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.EmptyListScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
 
@@ -36,11 +32,13 @@ fun PremisesListScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
-                16.dp
-            } else {
-                4.dp
-            })
+            .padding(
+                if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+                    16.dp
+                } else {
+                    4.dp
+                }
+            )
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
