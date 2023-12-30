@@ -18,6 +18,9 @@ import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 
+/**
+ * Retrofit API interface for handling property-related requests.
+ */
 interface PropertyAPI {
     @Headers("Accept: application/json")
     @GET("api/property/partnership/{partnershipID}")
@@ -96,6 +99,13 @@ interface PropertyAPI {
 
 private val propertyApi = createRetrofit(PropertyAPI::class.java)
 
+/**
+ * Function to fetch a list of properties for a given partnership ID.
+ *
+ * @param token The authorization token.
+ * @param partnershipID The ID of the partnership.
+ * @return List of [Property] objects.
+ */
 suspend fun fetchProperties(
     token: String,
     partnershipID: Int,
@@ -109,6 +119,13 @@ suspend fun fetchProperties(
     return properties
 }
 
+/**
+ * Function to fetch a list of premises for a given property ID.
+ *
+ * @param token The authorization token.
+ * @param propertyID The ID of the property.
+ * @return List of [Premise] objects.
+ */
 suspend fun fetchPremises(
     token: String,
     propertyID: Int,
@@ -117,6 +134,13 @@ suspend fun fetchPremises(
     return premises
 }
 
+/**
+ * Function to fetch details for a given property ID.
+ *
+ * @param token The authorization token.
+ * @param propertyID The ID of the property.
+ * @return [Property] object.
+ */
 suspend fun fetchProperty(
     token: String,
     propertyID: Int,
@@ -125,6 +149,13 @@ suspend fun fetchProperty(
     return property
 }
 
+/**
+ * Function to fetch a list of documents for a given property ID.
+ *
+ * @param token The authorization token.
+ * @param propertyID The ID of the property.
+ * @return List of [PropertyDocument] objects.
+ */
 suspend fun fetchDocuments(
     token: String,
     propertyID: Int,
@@ -132,10 +163,23 @@ suspend fun fetchDocuments(
     return propertyApi.getDocumentsForProperty(token, propertyID)
 }
 
+/**
+ * Function to get partnerships for the logged-in user.
+ *
+ * @param token The authorization token.
+ * @return List of [Partnership] objects.
+ */
 suspend fun getUserPartnerships(token: String): List<Partnership> {
     return propertyApi.getUserPartnerships(token = token)
 }
 
+/**
+ * Function to save a property by its ID.
+ *
+ * @param token The authorization token.
+ * @param property The [Property] to save.
+ * @param propertyImage The image of the property.
+ */
 suspend fun savePropertyByID(
     token: String,
     property: Property,
@@ -153,6 +197,13 @@ suspend fun savePropertyByID(
     }
 }
 
+/**
+ * Function to upload a document for a property.
+ *
+ * @param token The authorization token.
+ * @param documentFile The document file to upload.
+ * @param document The [PropertyDocument] object.
+ */
 suspend fun uploadDocumentByPropertyID(
     token: String,
     documentFile: MultipartBody.Part,
@@ -169,6 +220,12 @@ suspend fun uploadDocumentByPropertyID(
     }
 }
 
+/**
+ * Function to create a property.
+ *
+ * @param token The authorization token.
+ * @param property The [Property] to create.
+ */
 suspend fun createProperty(
     token: String,
     property: Property,
@@ -180,6 +237,12 @@ suspend fun createProperty(
     }
 }
 
+/**
+ * Function to delete a property by its ID.
+ *
+ * @param token The authorization token.
+ * @param propertyID The ID of the property to delete.
+ */
 suspend fun deletePropertyById(
     token: String,
     propertyID: Int,
@@ -191,6 +254,12 @@ suspend fun deletePropertyById(
     }
 }
 
+/**
+ * Function to delete a document by its ID.
+ *
+ * @param token The authorization token.
+ * @param documentID The ID of the document to delete.
+ */
 suspend fun deleteDocumentByID(
     token: String,
     documentID: Int,

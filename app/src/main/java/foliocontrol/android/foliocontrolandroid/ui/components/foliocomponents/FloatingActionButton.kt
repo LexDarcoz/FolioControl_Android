@@ -48,7 +48,15 @@ import foliocontrol.android.foliocontrolandroid.screens.Identifier
 import foliocontrol.android.foliocontrolandroid.screens.MinFabItem
 import foliocontrol.android.foliocontrolandroid.screens.MultiFloatingState
 import kotlin.math.roundToInt
-
+/**
+ * Composable function representing a multi-floating action button with expandable options.
+ *
+ * @param multiFloatingState The state of the multi-floating action button, either [MultiFloatingState.Collapsed] or [MultiFloatingState.Expanded].
+ * @param onMultiFabStateChange Callback function to handle changes in the multi-floating action button state.
+ * @param items List of [MinFabItem] representing the individual options of the multi-floating action button.
+ * @param toggleAddPropertyDialog Callback function to toggle the visibility of the add property dialog.
+ * @param toggleSearchBar Callback function to toggle the visibility of the search bar.
+ */
 @Composable
 fun MultiFloatingButton(
     multiFloatingState: MultiFloatingState,
@@ -167,7 +175,14 @@ fun MultiFloatingButton(
         }
     }
 }
-
+/**
+ * Composable function representing a mini-floating action button.
+ *
+ * @param item The [MinFabItem] representing the individual option.
+ * @param alpha The alpha value to control the visibility of the mini-floating action button.
+ * @param showLabel Boolean indicating whether to show the label text.
+ * @param onMinFabItemClick Callback function invoked when the mini-floating action button is clicked.
+ */
 @SuppressLint("UnrememberedMutableInteractionSource")
 @Composable
 fun MinFab(

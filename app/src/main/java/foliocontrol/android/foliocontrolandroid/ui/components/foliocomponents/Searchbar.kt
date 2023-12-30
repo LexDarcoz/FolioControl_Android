@@ -28,6 +28,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 
+/**
+ * Composable function representing a search bar for filtering properties in the Folio app.
+ *
+ * @param toggleSearchBar Callback function to toggle the visibility of the search bar.
+ * @param filterProperties Callback function to filter properties based on the provided query.
+ */
 @Composable
 fun SearchBar(
     toggleSearchBar: () -> Unit,
@@ -46,11 +52,10 @@ fun SearchBar(
     val searchIcon = Icons.Default.Search
 
     Box(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .background(searchBarBackgroundColor)
-                .padding(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(searchBarBackgroundColor)
+            .padding(16.dp),
     ) {
         // Search bar with border
         TextField(
@@ -58,16 +63,15 @@ fun SearchBar(
             onValueChange = {
                 query = it
             },
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .clip(RoundedCornerShape(cornerRadius))
-                    .border(
-                        width = borderWidth,
-                        color = borderColor,
-                        shape = RoundedCornerShape(cornerRadius),
-                    ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .clip(RoundedCornerShape(cornerRadius))
+                .border(
+                    width = borderWidth,
+                    color = borderColor,
+                    shape = RoundedCornerShape(cornerRadius),
+                ),
             textStyle = LocalTextStyle.current.copy(color = contentColor),
             placeholder = {
                 Text(
@@ -87,22 +91,19 @@ fun SearchBar(
                     imageVector = Icons.Default.Close,
                     contentDescription = null,
                     tint = iconTint,
-                    modifier =
-                        Modifier
-                            .padding(end = 8.dp)
-                            .clickable {
-                                toggleSearchBar()
-                            },
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .clickable {
+                            toggleSearchBar()
+                        },
                 )
             },
-            keyboardOptions =
-                KeyboardOptions(
-                    imeAction = ImeAction.Search,
-                ),
-            keyboardActions =
-                KeyboardActions(onSearch = {
-                    filterProperties(query)
-                }),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search,
+            ),
+            keyboardActions = KeyboardActions(onSearch = {
+                filterProperties(query)
+            }),
         )
     }
 }

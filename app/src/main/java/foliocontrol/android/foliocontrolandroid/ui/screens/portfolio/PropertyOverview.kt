@@ -45,13 +45,12 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.rememberWindowInfo
 
-val tabItemsList =
-    listOf(
-        TabItem("Details", Icons.Outlined.HomeWork, Icons.Filled.HomeWork),
-        TabItem("Photos", Icons.Outlined.PictureInPicture, Icons.Filled.PictureInPicture),
-        TabItem("Document", Icons.Outlined.FileCopy, Icons.Filled.FileCopy),
-        TabItem("Premises", Icons.Outlined.Room, Icons.Filled.Room),
-    )
+val tabItemsList = listOf(
+    TabItem("Details", Icons.Outlined.HomeWork, Icons.Filled.HomeWork),
+    TabItem("Photos", Icons.Outlined.PictureInPicture, Icons.Filled.PictureInPicture),
+    TabItem("Document", Icons.Outlined.FileCopy, Icons.Filled.FileCopy),
+    TabItem("Premises", Icons.Outlined.Room, Icons.Filled.Room),
+)
 
 data class TabItem(
     val title: String,
@@ -59,6 +58,33 @@ data class TabItem(
     val selectedIcon: ImageVector,
 )
 
+/**
+ * Composable function representing the screen for displaying an overview of a property.
+ *
+ * @param uiState The UI state representing the current state of the screen (e.g., loading, success, offline).
+ * @param propertyState The state of the property being displayed.
+ * @param handlePropertyEditName Callback to handle editing the name of the property.
+ * @param handlePropertyEditType Callback to handle editing the type of the property.
+ * @param handlePropertyEditStreet Callback to handle editing the street of the property.
+ * @param handlePropertyEditStreetNumber Callback to handle editing the street number of the property.
+ * @param handlePropertyEditZipCode Callback to handle editing the zip code of the property.
+ * @param handlePropertyEditCity Callback to handle editing the city of the property.
+ * @param handlePropertyEditCountry Callback to handle editing the country of the property.
+ * @param clearImage Callback to clear the property image.
+ * @param uploadImage Callback to upload an image for the property.
+ * @param propertyDocuments List of property documents associated with the property.
+ * @param handleDocumentDelete Callback to handle the deletion of a property document.
+ * @param downloadFile Callback to download a file associated with a property document.
+ * @param handleAddDocumentDateEdit Callback to handle editing the date of a new property document.
+ * @param handleAddDocumentTypeEdit Callback to handle editing the type of a new property document.
+ * @param propertyDocumentState The state representing a new property document being added.
+ * @param uploadDocument Callback to upload a new property document.
+ * @param propertyPremises List of premises associated with the property.
+ * @param getDataForActiveProperty Callback to fetch data for the active property.
+ * @param saveDataForActiveProperty Callback to save data for the active property.
+ * @param navigateTo Callback to navigate to a different screen or destination.
+ * @param offline Boolean flag indicating whether the app is in offline mode.
+ */
 @Composable
 fun PropertyOverviewScreen(
     // UISTATE
@@ -170,6 +196,33 @@ fun PropertyOverviewScreen(
     }
 }
 
+/**
+ * Composable function representing the overview of a property, including details, photos, documents, and premises.
+ *
+ * @param uiState The UI state representing the current state of the screen (e.g., loading, success, offline).
+ * @param propertyState The state of the property being displayed.
+ * @param handlePropertyEditName Callback to handle editing the name of the property.
+ * @param handlePropertyEditType Callback to handle editing the type of the property.
+ * @param handlePropertyEditStreet Callback to handle editing the street of the property.
+ * @param handlePropertyEditStreetNumber Callback to handle editing the street number of the property.
+ * @param handlePropertyEditZipCode Callback to handle editing the zip code of the property.
+ * @param handlePropertyEditCity Callback to handle editing the city of the property.
+ * @param handlePropertyEditCountry Callback to handle editing the country of the property.
+ * @param clearImage Callback to clear the property image.
+ * @param uploadImage Callback to upload an image for the property.
+ * @param propertyDocuments List of property documents associated with the property.
+ * @param handleDocumentDelete Callback to handle the deletion of a property document.
+ * @param downloadFile Callback to download a file associated with a property document.
+ * @param handleAddDocumentDateEdit Callback to handle editing the date of a new property document.
+ * @param handleAddDocumentTypeEdit Callback to handle editing the type of a new property document.
+ * @param propertyDocumentState The state representing a new property document being added.
+ * @param uploadDocument Callback to upload a new property document.
+ * @param propertyPremises List of premises associated with the property.
+ * @param getDataForActiveProperty Callback to fetch data for the active property.
+ * @param saveDataForActiveProperty Callback to save data for the active property.
+ * @param navigateTo Callback to navigate to a different screen or destination.
+ * @param offline Boolean flag indicating whether the app is in offline mode.
+ */
 @SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -224,10 +277,9 @@ fun Overview(
     }
 
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = loading)
-    val pagerState =
-        rememberPagerState {
-            tabItems.size
-        }
+    val pagerState = rememberPagerState {
+        tabItems.size
+    }
     var selectedTabIndex by remember {
         mutableStateOf(0)
     }
@@ -262,8 +314,7 @@ fun Overview(
                     }, text = {
                         Text(text = item.title, color = MaterialTheme.colorScheme.primary)
                     }, icon = {
-                        @Suppress("ktlint:standard:max-line-length")
-                        (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary).let {
+                        @Suppress("ktlint:standard:max-line-length") (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary).let {
                             Icon(
                                 tint = it,
                                 imageVector = if (selectedTabIndex == index) item.selectedIcon else item.unselectedIcon,

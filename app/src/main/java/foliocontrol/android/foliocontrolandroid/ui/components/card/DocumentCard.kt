@@ -26,7 +26,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import foliocontrol.android.foliocontrolandroid.data.remote.common.Constants.PROPERTYDOCUMENTS_URL
 import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
-
+/**
+ * Composable function representing a card for displaying property documents.
+ *
+ * @param document The [PropertyDocument] to be displayed on the card.
+ * @param downloadFile Callback function to initiate the download of the document.
+ * @param toggleDialog Callback function to toggle the deletion confirmation dialog.
+ */
 @Composable
 fun DocumentCard(
     document: PropertyDocument,

@@ -19,7 +19,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
-
+/**
+ * Composable function representing a card for displaying partnership information.
+ *
+ * @param partnership The [Partnership] data to be displayed on the card.
+ */
 @Composable
 fun PartnershipCard(partnership: Partnership) {
     Card(

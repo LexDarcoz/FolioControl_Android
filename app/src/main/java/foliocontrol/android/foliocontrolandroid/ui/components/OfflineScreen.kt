@@ -7,7 +7,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-
+/**
+ * Composable function representing the offline screen.
+ * It displays a message indicating that the user is offline and suggests checking the internet connection.
+ */
 @Composable
 fun OfflineScreen() {
     // Customize this composable to show the offline screen

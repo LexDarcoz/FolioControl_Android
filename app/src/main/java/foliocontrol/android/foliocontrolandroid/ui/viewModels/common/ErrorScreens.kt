@@ -23,7 +23,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import foliocontrol.android.foliocontrol_android.R
-
+/**
+ * Composable function for displaying an empty list screen with a specified text message.
+ *
+ * @param text The text message to be displayed on the empty list screen. Default is "No data available."
+ */
 @Composable
 fun EmptyListScreen(text: String = "No data available.") {
     Box(
@@ -40,7 +44,12 @@ fun EmptyListScreen(text: String = "No data available.") {
         )
     }
 }
-
+/**
+ * Composable function for displaying an error screen with an error message and a retry button.
+ *
+ * @param errorMessage The error message to be displayed on the error screen.
+ * @param onRetry The callback function to be invoked when the user clicks the retry button.
+ */
 @Composable
 fun ErrorScreen(
     errorMessage: String,

@@ -29,6 +29,16 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
 
+/**
+ * Composable function representing the bottom navigation bar of the Folio Control Android application.
+ * It provides navigation options for Home, Account, and the user's partnerships.
+ *
+ * @param currentPartnership The currently selected partnership.
+ * @param partnershipList The list of partnerships available to the user.
+ * @param switchPartnership A callback function to switch the current partnership.
+ * @param navigateTo A callback function to navigate to a specific destination.
+ * @param currentScreen The current screen being displayed.
+ */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun BottomNavigation(

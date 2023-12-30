@@ -49,7 +49,31 @@ enum class Identifier {
     SearchFab,
     AddPropertyFab,
 }
-
+/**
+ * Composable function for the home screen.
+ *
+ * @param getData Function to retrieve data for the home screen.
+ * @param toggleSearchBar Function to toggle the visibility of the search bar.
+ * @param isSearchBarEnabled Flag indicating whether the search bar is enabled.
+ * @param filteredList List of filtered properties.
+ * @param filterProperties Function to filter properties based on a query.
+ * @param propertyListState List of properties to display.
+ * @param uiState Current UI state.
+ * @param addPropertyState State of the property being added.
+ * @param handlePropertyNameEdit Callback for editing property name.
+ * @param handlePropertyTypeEdit Callback for editing property type.
+ * @param handlePropertyStreetAddEdit Callback for editing property street address.
+ * @param handlePropertyStreetNumberAddEdit Callback for editing property street number.
+ * @param handlePropertyZipCodeAddEdit Callback for editing property ZIP code.
+ * @param handlePropertyCityAddEdit Callback for editing property city.
+ * @param handlePropertyCountryAddEdit Callback for editing property country.
+ * @param selectProperty Callback to select a property.
+ * @param deleteProperty Callback to delete a property.
+ * @param togglePropertyAddDialog Function to toggle the property add dialog.
+ * @param handlePropertyAdd Callback for adding a new property.
+ * @param isAddPropertyDialogOpen Flag indicating whether the add property dialog is open.
+ * @param navigateTo Function to navigate to a different screen.
+ */
 @Composable
 fun HomeScreen(
     getData: () -> Unit = { },
@@ -155,7 +179,33 @@ fun HomeScreen(
         }
     }
 }
-
+/**
+ * Composable function for the main UI of the home screen.
+ *
+ * @param getData Function to retrieve data for the home screen.
+ * @param toggleSearchBar Function to toggle the visibility of the search bar.
+ * @param isSearchBarEnabled Flag indicating whether the search bar is enabled.
+ * @param filteredList List of filtered properties.
+ * @param filterProperties Function to filter properties based on a query.
+ * @param propertyListState List of properties to display.
+ * @param uiState Current UI state.
+ * @param addPropertyState State of the property being added.
+ * @param handlePropertyNameEdit Callback for editing property name.
+ * @param handlePropertyTypeEdit Callback for editing property type.
+ * @param handlePropertyStreetAddEdit Callback for editing property street address.
+ * @param handlePropertyStreetNumberAddEdit Callback for editing property street number.
+ * @param handlePropertyZipCodeAddEdit Callback for editing property ZIP code.
+ * @param handlePropertyCityAddEdit Callback for editing property city.
+ * @param handlePropertyCountryAddEdit Callback for editing property country.
+ * @param selectProperty Callback to select a property.
+ * @param deleteProperty Callback to delete a property.
+ * @param togglePropertyAddDialog Function to toggle the property add dialog.
+ * @param handlePropertyAdd Callback for adding a new property.
+ * @param isAddPropertyDialogOpen Flag indicating whether the add property dialog is open.
+ * @param offline Flag indicating whether the app is in offline mode.
+ * @param loading Flag indicating whether data is still loading.
+ * @param navigateTo Function to navigate to a different screen.
+ */
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun Home(

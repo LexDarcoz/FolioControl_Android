@@ -13,6 +13,13 @@ import foliocontrol.android.foliocontrolandroid.data.local.schema.PropertyRoomEn
 import foliocontrol.android.foliocontrolandroid.data.local.schema.UserRoomEntity
 import kotlinx.coroutines.CoroutineScope
 
+/**
+ * RoomDatabase class for the Folio application, representing the local database.
+ *
+ * @property partnershipDao DAO for Partnership entities.
+ * @property propertyDao DAO for Property entities.
+ * @property userDao DAO for User entities.
+ */
 @Database(
     entities = [PartnershipRoomEntity::class, PropertyRoomEntity::class, UserRoomEntity::class],
     // change this to version+1 when you change the schema
@@ -30,6 +37,13 @@ abstract class FolioRoomDatabase : RoomDatabase() {
         @Volatile
         private var Instance: FolioRoomDatabase? = null
 
+        /**
+         * Retrieves an instance of the FolioRoomDatabase.
+         *
+         * @param context The application context.
+         * @param scope The CoroutineScope.
+         * @return An instance of the FolioRoomDatabase.
+         */
         fun getDatabase(
             context: Context,
             scope: CoroutineScope,

@@ -14,6 +14,11 @@ import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.ui.components.card.PartnershipCard
 
+/**
+ * Composable function representing the screen displaying a list of partnerships associated with the user's account.
+ *
+ * @param partnershipList The list of partnerships to be displayed.
+ */
 @Composable
 fun AccountPartnershipScreen(partnershipList: List<Partnership>) {
     Box(

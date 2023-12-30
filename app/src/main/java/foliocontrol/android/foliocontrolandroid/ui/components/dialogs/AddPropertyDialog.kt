@@ -149,7 +149,22 @@ val items =
             "Other",
         ),
     )
-
+/**
+ * Composable function representing the dialog for adding a new property in the Folio app.
+ *
+ * @param onDismissRequest Callback function to handle the dismissal of the dialog.
+ * @param onConfirmation Callback function to handle the confirmation or saving of the property data.
+ * @param getData Callback function to retrieve data (typically used for retrying data fetching).
+ * @param addPropertyState State object representing the property being added.
+ * @param handlePropertyNameAddEdit Callback function to handle changes in the property name.
+ * @param handlePropertyTypeAddEdit Callback function to handle changes in the property type.
+ * @param handlePropertyStreetAddEdit Callback function to handle changes in the property street.
+ * @param handlePropertyStreetNumberAddEdit Callback function to handle changes in the property street number.
+ * @param handlePropertyZipCodeAddEdit Callback function to handle changes in the property zip code.
+ * @param handlePropertyCityAddEdit Callback function to handle changes in the property city.
+ * @param handlePropertyCountryAddEdit Callback function to handle changes in the property country.
+ * @param offline Boolean flag indicating whether the app is currently offline.
+ */
 @Composable
 fun AddPropertyDialog(
     onDismissRequest: () -> Unit,

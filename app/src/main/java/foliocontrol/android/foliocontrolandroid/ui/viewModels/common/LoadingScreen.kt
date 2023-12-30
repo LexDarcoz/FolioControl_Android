@@ -18,30 +18,34 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
+/**
+ * Composable function that displays a loading screen with a circular progress indicator.
+ *
+ * @see CircularProgressIndicator
+ *
+ * @sample foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
+ */
 @Composable
 fun LoadingScreen() {
     Box(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.9f))
-                .padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background.copy(alpha = 0.9f))
+            .padding(16.dp),
         contentAlignment = Alignment.Center,
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier =
-                Modifier
-                    .background(MaterialTheme.colorScheme.background.copy(alpha = 0.9f))
-                    .padding(16.dp)
-                    .clip(RoundedCornerShape(8.dp)),
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.9f))
+                .padding(16.dp)
+                .clip(RoundedCornerShape(8.dp)),
         ) {
             CircularProgressIndicator(
-                modifier =
-                    Modifier
-                        .size(150.dp)
-                        .padding(16.dp),
+                modifier = Modifier
+                    .size(150.dp)
+                    .padding(16.dp),
                 color = MaterialTheme.colorScheme.primary,
             )
             Text(

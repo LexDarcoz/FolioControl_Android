@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name="foliocontrol.android.foliocontrolandroid.FolioControlApp"
@@ -34,12 +34,13 @@
             </intent-filter>
         </activity>
         <receiver
-            android:name="foliocontrol.android.foliocontrolandroid.data.document.DownloadCompletedReceiver"
-            android:exported="true">
+            android:name="foliocontrol.android.foliocontrolandroid.data.document.DownloadCompleteReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
+
 
     </application>
 

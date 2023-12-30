@@ -37,7 +37,16 @@ import foliocontrol.android.foliocontrolandroid.data.remote.common.Constants
 import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.DeleteDialog
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
-
+/**
+ * Composable function representing a card for displaying property information.
+ *
+ * @param property The [Property] data to be displayed on the card.
+ * @param uiState The UI state to determine whether to show delete confirmation or network error dialog.
+ * @param handlePropertyDelete Callback to handle the deletion of the property.
+ * @param getData Callback to fetch data when retrying the connection.
+ * @param selectProperty Callback to select a property.
+ * @param navigateTo Callback to navigate to a specific destination.
+ */
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun PropertyCard(

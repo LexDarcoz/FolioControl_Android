@@ -26,6 +26,13 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import foliocontrol.android.foliocontrol_android.R
 
+/**
+ * Composable function representing an informational dialog.
+ *
+ * @param title The title of the dialog. Defaults to "Message" if not provided.
+ * @param desc The description or message content of the dialog. Defaults to "Your Message" if not provided.
+ * @param onDismiss Callback function invoked when the dialog is dismissed.
+ */
 @Composable
 fun InfoDialog(
     title: String? = "Message",
@@ -37,31 +44,28 @@ fun InfoDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         Box(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .background(
-                        color = Color.Transparent,
-                    ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(
+                    color = Color.Transparent,
+                ),
         ) {
             Box(
-                modifier =
-                    Modifier
-                        .background(
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            shape = RoundedCornerShape(25.dp, 5.dp, 25.dp, 5.dp),
-                        )
-                        .align(Alignment.BottomCenter),
+                modifier = Modifier
+                    .background(
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        shape = RoundedCornerShape(25.dp, 5.dp, 25.dp, 5.dp),
+                    )
+                    .align(Alignment.BottomCenter),
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.bolt_uix_no_internet),
                     contentDescription = null,
                     contentScale = ContentScale.Fit,
-                    modifier =
-                        Modifier
-                            .height(180.dp)
-                            .fillMaxWidth(),
+                    modifier = Modifier
+                        .height(180.dp)
+                        .fillMaxWidth(),
                 )
                 Column(
                     modifier = Modifier.padding(16.dp),
@@ -72,10 +76,9 @@ fun InfoDialog(
                     Text(
                         text = title!!,
                         textAlign = TextAlign.Center,
-                        modifier =
-                            Modifier
-                                .padding(top = 130.dp)
-                                .fillMaxWidth(),
+                        modifier = Modifier
+                            .padding(top = 130.dp)
+                            .fillMaxWidth(),
                         style = MaterialTheme.typography.headlineSmall,
                         color = MaterialTheme.colorScheme.primary,
                     )
@@ -83,10 +86,9 @@ fun InfoDialog(
                     Text(
                         text = desc!!,
                         textAlign = TextAlign.Center,
-                        modifier =
-                            Modifier
-                                .padding(top = 10.dp, start = 25.dp, end = 25.dp)
-                                .fillMaxWidth(),
+                        modifier = Modifier
+                            .padding(top = 10.dp, start = 25.dp, end = 25.dp)
+                            .fillMaxWidth(),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.primary,
                     )
@@ -96,10 +98,9 @@ fun InfoDialog(
                     Button(
                         onClick = onDismiss,
                         modifier = Modifier.align(Alignment.CenterHorizontally),
-                        colors =
-                            ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                            ),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                        ),
                     ) {
                         Text(
                             text = "OK",

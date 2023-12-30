@@ -20,39 +20,37 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+/**
+ * Composable function representing a skeleton loading card for a property.
+ */
 @Composable
 fun PropertyCardSkeleton() {
     Card(
         modifier = Modifier.padding(8.dp),
-        elevation =
-            CardDefaults.cardElevation(
-                defaultElevation = 6.dp,
-            ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 6.dp,
+        ),
         shape = MaterialTheme.shapes.small,
-        colors =
-            CardDefaults.cardColors(
-                contentColor = MaterialTheme.colorScheme.primary,
-                containerColor = MaterialTheme.colorScheme.secondary,
-            ),
+        colors = CardDefaults.cardColors(
+            contentColor = MaterialTheme.colorScheme.primary,
+            containerColor = MaterialTheme.colorScheme.secondary,
+        ),
     ) {
         Box(
-            modifier =
-                Modifier
-                    .height(165.dp)
-                    .fillMaxSize(),
+            modifier = Modifier
+                .height(165.dp)
+                .fillMaxSize(),
         ) {
             Shimmer(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .width(200.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .width(200.dp),
             )
             Shimmer(
-                modifier =
-                    Modifier
-                        .size(40.dp)
-                        .align(Alignment.BottomStart)
-                        .padding(8.dp),
+                modifier = Modifier
+                    .size(40.dp)
+                    .align(Alignment.BottomStart)
+                    .padding(8.dp),
             )
             Shimmer(
                 modifier = Modifier.align(Alignment.TopEnd),
@@ -61,10 +59,9 @@ fun PropertyCardSkeleton() {
                     imageVector = Icons.Default.Close,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onPrimary,
-                    modifier =
-                        Modifier
-                            .size(40.dp)
-                            .padding(8.dp),
+                    modifier = Modifier
+                        .size(40.dp)
+                        .padding(8.dp),
                 )
             }
         }
@@ -72,36 +69,38 @@ fun PropertyCardSkeleton() {
             modifier = Modifier.padding(16.dp),
         ) {
             Shimmer(
-                modifier =
-                    Modifier
-                        .padding(bottom = 8.dp)
-                        .fillMaxWidth()
-                        .height(24.dp),
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .fillMaxWidth()
+                    .height(24.dp),
             )
             Shimmer(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(16.dp),
             )
             Shimmer(
-                modifier =
-                    Modifier
-                        .padding(top = 8.dp)
-                        .fillMaxWidth()
-                        .height(16.dp),
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .fillMaxWidth()
+                    .height(16.dp),
             )
             Shimmer(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 4.dp)
-                        .height(48.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp)
+                    .height(48.dp),
             )
         }
     }
 }
 
+/**
+ * Composable function representing a shimmer loading effect.
+ *
+ * @param modifier The [Modifier] to be applied to the shimmer effect.
+ * @param content The content to be displayed with the shimmer effect.
+ */
 @Composable
 fun Shimmer(
     modifier: Modifier = Modifier,

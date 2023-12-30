@@ -13,7 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-
+/**
+ * Composable function representing a custom text field for the Folio app.
+ *
+ * @param enabled Boolean representing the enabled state of the text field.
+ * @param label String representing the label or title of the text field.
+ * @param value String representing the current value of the text field.
+ * @param onValueChange Callback function invoked when the value of the text field changes.
+ */
 @Composable
 fun FolioTextField(
     enabled: Boolean = true,

@@ -25,6 +25,13 @@ import foliocontrol.android.foliocontrolandroid.ui.components.card.PremiseCard
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.EmptyListScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
 
+/**
+ * Composable function representing the screen for displaying a list of premises associated with a property.
+ *
+ * @param propertyPremises List of premises to be displayed.
+ * @param windowInfo Information about the window dimensions and layout type.
+ * @param offline Boolean flag indicating whether the app is in offline mode.
+ */
 @Composable
 fun PremisesListScreen(
     propertyPremises: List<Premise>,
@@ -32,43 +39,39 @@ fun PremisesListScreen(
     offline: Boolean = false,
 ) {
     Box(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(
-                    if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
-                        16.dp
-                    } else {
-                        4.dp
-                    },
-                ),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+                    16.dp
+                } else {
+                    4.dp
+                },
+            ),
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {
             Text(
                 text = "Premises:",
-                style =
-                    if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
-                        MaterialTheme.typography.titleLarge
-                    } else {
-                        MaterialTheme.typography.bodySmall
-                    },
+                style = if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+                    MaterialTheme.typography.titleLarge
+                } else {
+                    MaterialTheme.typography.bodySmall
+                },
                 fontWeight = FontWeight.Bold,
-                modifier =
-                    if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
-                        Modifier.padding(8.dp)
-                    } else {
-                        Modifier.padding(4.dp)
-                    },
+                modifier = if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+                    Modifier.padding(8.dp)
+                } else {
+                    Modifier.padding(4.dp)
+                },
             )
 
             when {
                 offline -> OfflineScreen()
-                propertyPremises.isEmpty() ->
-                    EmptyListScreen(
-                        "No premises available.",
-                    )
+                propertyPremises.isEmpty() -> EmptyListScreen(
+                    "No premises available.",
+                )
 
                 else -> PremisesList(propertyPremises)
             }
@@ -77,10 +80,9 @@ fun PremisesListScreen(
                 onClick = {
                     // TODO
                 },
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
             ) {
                 if (offline) {
                     Row {
@@ -106,6 +108,11 @@ fun PremisesListScreen(
     }
 }
 
+/**
+ * Composable function representing a list of premises.
+ *
+ * @param propertyPremises List of premises to be displayed.
+ */
 @Composable
 fun PremisesList(propertyPremises: List<Premise>) {
     LazyColumn(

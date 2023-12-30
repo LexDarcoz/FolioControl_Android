@@ -16,6 +16,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.io.IOException
 
+/**
+ * ViewModel responsible for managing user account-related logic and data.
+ *
+ * @property accountRepo The local database representing the account repository.
+ */
 class AccountViewModel(
     private val accountRepo: AccountDatabase,
 ) : ViewModel() {
@@ -26,6 +31,9 @@ class AccountViewModel(
     var uiState: UiState by mutableStateOf(UiState.LoggedOut("You are not logged in"))
         private set
 
+    /**
+     * Initiates the process of fetching user data. Updates [uiState] based on the success or failure of the operation.
+     */
     fun getData() {
         viewModelScope.launch {
             uiState = UiState.Loading
@@ -39,6 +47,11 @@ class AccountViewModel(
         }
     }
 
+    /**
+     * Retrieves the user token from encrypted preferences.
+     *
+     * @return The user token.
+     */
     fun getToken(): String {
         return getEncryptedPreference("token")
     }
@@ -55,6 +68,19 @@ class AccountViewModel(
         }
     }
 
+    /**
+     * Handles user data editing, updating the relevant properties of the [user].
+     *
+     * @param name The user's name.
+     * @param firstName The user's first name.
+     * @param lastName The user's last name.
+     * @param email The user's email.
+     * @param street The user's street.
+     * @param streetNumber The user's street number.
+     * @param city The user's city.
+     * @param zipCode The user's zip code.
+     * @param country The user's country.
+     */
     fun handleUserEdit(
         name: String? = null,
         firstName: String? = null,
@@ -95,6 +121,9 @@ class AccountViewModel(
         }
     }
 
+    /**
+     * Initiates the process of saving user data to the server.
+     */
     fun handleUserSave() {
         viewModelScope.launch {
             try {

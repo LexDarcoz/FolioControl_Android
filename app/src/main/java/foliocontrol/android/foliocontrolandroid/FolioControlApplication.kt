@@ -36,6 +36,17 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.rememberWindowInfo
 import kotlinx.coroutines.launch
 
+
+/**
+ * Composable function representing the main entry point of the FolioControl Android application.
+ * This function defines the overall structure of the app using Jetpack Compose and integrates
+ * various view models, navigation, and UI components.
+ *
+ * @param authViewModel The view model for authentication-related data.
+ * @param propertyViewModel The view model for property-related data.
+ * @param accountViewModel The view model for user account-related data.
+ * @param navController The navigation controller used for navigating between different screens.
+ */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -146,7 +157,15 @@ fun FolioControlApplication(
         }
     }
 }
-
+/**
+ * Composable function responsible for defining the navigation structure of the Folio Control Android application.
+ * It uses Jetpack Compose's [NavHost] to manage the navigation flow between different screens.
+ *
+ * @param navController The navigation controller used for navigating between different screens.
+ * @param authViewModel The view model for authentication-related data.
+ * @param propertyViewModel The view model for property-related data.
+ * @param accountViewModel The view model for user account-related data.
+ */
 @Composable
 fun AppNavigator(
     navController: NavHostController,

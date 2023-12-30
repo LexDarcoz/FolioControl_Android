@@ -8,6 +8,10 @@ import foliocontrol.android.foliocontrolandroid.screens.MultiFloatingState
 import foliocontrol.android.foliocontrolandroid.ui.components.card.PropertyCardSkeleton
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.MultiFloatingButton
 
+/**
+ * Composable function representing the loading skeleton for the Home screen.
+ * It displays a scaffold with a multi-floating action button and a lazy column containing property card skeletons.
+ */
 @Composable
 fun HomeSkeleton() {
     Scaffold(floatingActionButton = {
@@ -17,9 +21,11 @@ fun HomeSkeleton() {
                 MultiFloatingState.Collapsed
             },
             toggleAddPropertyDialog = {
+                // Do nothing
             },
             items = listOf(),
             toggleSearchBar = {
+                // Do nothing
             },
         )
     }) { values ->

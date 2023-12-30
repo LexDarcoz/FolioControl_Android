@@ -41,6 +41,12 @@ import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
+/**
+ * Composable function displaying an image in a dialog with zoom and pan capabilities.
+ *
+ * @param onDismissRequest Callback function to handle the dismissal of the image dialog.
+ * @param imageUrl URL of the image to be displayed.
+ */
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ImageDialog(
@@ -52,49 +58,42 @@ fun ImageDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         Column(
-            modifier =
-                Modifier
-                    .background(
-                        brush =
-                            Brush.verticalGradient(
-                                colors =
-                                    listOf(
-                                        Color.Black.copy(),
-                                        Color.Black,
-                                    ),
-                            ),
-                    )
-                    .fillMaxSize(),
+            modifier = Modifier
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Black.copy(),
+                            Color.Black,
+                        ),
+                    ),
+                )
+                .fillMaxSize(),
         ) {
             Box(
-                modifier =
-                    Modifier
-                        .weight(1f)
-                        .clip(RoundedCornerShape(8.dp)),
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(8.dp)),
             ) {
                 ZoomableImage(imageUrl)
 
                 // Close button with icon
                 IconButton(
                     onClick = { onDismissRequest() },
-                    modifier =
-                        Modifier
-                            .align(Alignment.TopEnd)
-                            .width(80.dp)
-                            .height(80.dp),
-                    colors =
-                        IconButtonDefaults.iconButtonColors(
-                            contentColor = MaterialTheme.colorScheme.onPrimary,
-                        ),
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .width(80.dp)
+                        .height(80.dp),
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                    ),
                 ) {
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = null,
                         tint = Color.White,
-                        modifier =
-                            Modifier
-                                .fillMaxSize()
-                                .padding(8.dp), // Adjust padding as needed
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(8.dp), // Adjust padding as needed
                     )
                 }
             }
@@ -102,6 +101,12 @@ fun ImageDialog(
     }
 }
 
+/**
+ * Composable function providing a zoomable and pannable image with the option to dismiss the dialog.
+ *
+ * @param model The image URL or resource to be displayed.
+ * @param contentDescription Optional content description for accessibility.
+ */
 @ExperimentalGlideComposeApi
 @Composable
 fun ZoomableImage(
@@ -120,36 +125,35 @@ fun ZoomableImage(
         model,
         contentDescription = contentDescription,
         contentScale = ContentScale.Fit,
-        modifier =
-            Modifier
-                .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
-                .graphicsLayer(
-                    scaleX = zoom,
-                    scaleY = zoom,
-                    rotationZ = angle,
-                )
-                .fillMaxSize()
-                .pointerInput(Unit) {
-                    detectTransformGestures(onGesture = { _, pan, gestureZoom, _ ->
-                        zoom = (zoom * gestureZoom).coerceIn(1F..4F)
-                        if (zoom > 1) {
-                            val x = (pan.x * zoom)
-                            val y = (pan.y * zoom)
-                            val angleRad = angle * PI / 180.0
+        modifier = Modifier
+            .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
+            .graphicsLayer(
+                scaleX = zoom,
+                scaleY = zoom,
+                rotationZ = angle,
+            )
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTransformGestures(onGesture = { _, pan, gestureZoom, _ ->
+                    zoom = (zoom * gestureZoom).coerceIn(1F..4F)
+                    if (zoom > 1) {
+                        val x = (pan.x * zoom)
+                        val y = (pan.y * zoom)
+                        val angleRad = angle * PI / 180.0
 
-                            offsetX =
-                                (offsetX + (x * cos(angleRad) - y * sin(angleRad)).toFloat()).coerceIn(
-                                    -(screenWidth * zoom)..(screenWidth * zoom),
-                                )
-                            offsetY =
-                                (offsetY + (x * sin(angleRad) + y * cos(angleRad)).toFloat()).coerceIn(
-                                    -(screenHeight * zoom)..(screenHeight * zoom),
-                                )
-                        } else {
-                            offsetX = 0F
-                            offsetY = 0F
-                        }
-                    })
-                },
+                        offsetX =
+                            (offsetX + (x * cos(angleRad) - y * sin(angleRad)).toFloat()).coerceIn(
+                                -(screenWidth * zoom)..(screenWidth * zoom),
+                            )
+                        offsetY =
+                            (offsetY + (x * sin(angleRad) + y * cos(angleRad)).toFloat()).coerceIn(
+                                -(screenHeight * zoom)..(screenHeight * zoom),
+                            )
+                    } else {
+                        offsetX = 0F
+                        offsetY = 0F
+                    }
+                })
+            },
     )
 }

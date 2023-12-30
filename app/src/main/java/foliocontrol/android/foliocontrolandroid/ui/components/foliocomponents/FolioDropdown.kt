@@ -26,12 +26,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * Data class representing an item in the dropdown menu.
+ *
+ * @property text String representing the text of the dropdown menu item.
+ * @property icon Composable function representing the icon of the dropdown menu item.
+ * @property description String providing additional information about the dropdown menu item.
+ */
 data class DropDownMenuItem(
     val text: String,
     val icon: @Composable () -> Unit,
     val description: String,
 )
 
+/**
+ * Composable function representing a custom dropdown menu for the Folio app.
+ *
+ * @param expanded Boolean representing the expanded state of the dropdown menu.
+ * @param toggleExpanded Callback function to toggle the expanded state of the dropdown menu.
+ * @param items List of [DropDownMenuItem] representing the menu items in the dropdown.
+ * @param label String representing the label or title of the dropdown.
+ * @param onItemSelect Callback function invoked when a dropdown menu item is selected.
+ * @param initialValue String representing the initial selected value.
+ */
 @Composable
 fun FolioDropdown(
     expanded: Boolean,
@@ -45,34 +62,30 @@ fun FolioDropdown(
     Column {
         Text(
             text = label,
-            style =
-                MaterialTheme.typography.bodyLarge.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                ),
+            style = MaterialTheme.typography.bodyLarge.copy(
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.primary,
+            ),
             modifier = Modifier.padding(bottom = 4.dp),
         )
 
         Box(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.secondary)
-                    .height(50.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.secondary)
+                .height(50.dp),
         ) {
             OutlinedTextField(
                 value = selected,
                 onValueChange = { },
                 enabled = false,
-                textStyle =
-                    MaterialTheme.typography.bodySmall.copy(
-                        color = MaterialTheme.colorScheme.onSurface,
-                    ),
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .clickable { toggleExpanded() },
+                textStyle = MaterialTheme.typography.bodySmall.copy(
+                    color = MaterialTheme.colorScheme.onSurface,
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { toggleExpanded() },
                 leadingIcon = {
                     Icon(
                         Icons.Default.MoreVert,
@@ -85,11 +98,10 @@ fun FolioDropdown(
                         contentDescription = "Localized description",
                     )
                 },
-                colors =
-                    OutlinedTextFieldDefaults.colors(
-                        disabledTextColor = MaterialTheme.colorScheme.onSurface, // Set the text color for disabled state
-                        disabledBorderColor = MaterialTheme.colorScheme.onSurface, // Set the border color for disabled state
-                    ),
+                colors = OutlinedTextFieldDefaults.colors(
+                    disabledTextColor = MaterialTheme.colorScheme.onSurface, // Set the text color for disabled state
+                    disabledBorderColor = MaterialTheme.colorScheme.onSurface, // Set the border color for disabled state
+                ),
             )
 
             DropdownMenu(

@@ -38,6 +38,21 @@ import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.items
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioDropdown
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioTextField
 
+/**
+ * Composable function to display the detailed view of a property.
+ *
+ * @param saveProperty Callback function to save property data.
+ * @param propertyState Current state of the property.
+ * @param handlePropertyEditName Callback function to handle editing property name.
+ * @param handlePropertyEditType Callback function to handle editing property type.
+ * @param handlePropertyEditStreet Callback function to handle editing property street.
+ * @param handlePropertyEditStreetNumber Callback function to handle editing property street number.
+ * @param handlePropertyEditZipCode Callback function to handle editing property zip code.
+ * @param handlePropertyEditCity Callback function to handle editing property city.
+ * @param handlePropertyEditCountry Callback function to handle editing property country.
+ * @param navigateTo Callback function to navigate to a destination.
+ * @param offline Boolean flag indicating whether the app is offline.
+ */
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun PropertyDetailScreen(
@@ -61,55 +76,53 @@ fun PropertyDetailScreen(
         modifier = Modifier.fillMaxSize(),
     ) {
         Column(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .verticalScroll(
-                        enabled = true,
-                        state = rememberScrollState(),
-                    ),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(
+                    enabled = true,
+                    state = rememberScrollState(),
+                ),
         ) {
+            // Display default image if property image is not available
             if (propertyState.propertyImg == "null") {
                 Image(
                     painter = painterResource(id = R.drawable.ic_default),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight(0.3f)
-                            .aspectRatio(16f / 9f) // Adjust the aspect ratio as needed
-                            .align(Alignment.CenterHorizontally),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.3f)
+                        .aspectRatio(16f / 9f) // Adjust the aspect ratio as needed
+                        .align(Alignment.CenterHorizontally),
                 )
             } else {
+                // Display property image using Glide
                 GlideImage(
                     model = "$imageUrl/${propertyState.propertyImg}",
                     contentDescription = "${propertyState.propertyName} image",
                     contentScale = ContentScale.Crop,
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(16f / 9f) // Adjust the aspect ratio as needed
-                            .align(Alignment.CenterHorizontally),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(16f / 9f) // Adjust the aspect ratio as needed
+                        .align(Alignment.CenterHorizontally),
                 )
             }
-
+            // Display property details in a Surface
             Surface(
                 color = MaterialTheme.colorScheme.secondary,
                 contentColor = MaterialTheme.colorScheme.primary,
                 shape = MaterialTheme.shapes.small,
                 shadowElevation = 4.dp,
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
             ) {
+                // Column to arrange property details
                 var expanded by remember { mutableStateOf(false) }
                 Column(
-                    modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
                 ) {
                     Text(
                         text = "Details - ${propertyState.propertyName}",
@@ -135,6 +148,7 @@ fun PropertyDetailScreen(
                         },
                         initialValue = propertyState.propertyType,
                     )
+                    // Row for street and street number input fields
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
@@ -159,6 +173,7 @@ fun PropertyDetailScreen(
                             }
                         }
                     }
+                    // Row for zip code and city input fields
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
@@ -185,6 +200,7 @@ fun PropertyDetailScreen(
                             }
                         }
                     }
+                    // Input field for country
                     FolioTextField(
                         !offline,
                         "Country",
@@ -194,19 +210,21 @@ fun PropertyDetailScreen(
                             it,
                         )
                     }
+                    // Spacer to occupy remaining space
                     Spacer(modifier = Modifier.weight(1f))
+                    // Save button with different text for offline mode
                     Button(
                         enabled = !offline,
                         onClick = {
                             saveProperty()
                             navigateTo("Home")
                         },
-                        modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 16.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
                     ) {
                         if (offline) {
+                            // Display offline preview information
                             Row {
                                 Icon(
                                     Icons.Default.WifiOff,
@@ -216,6 +234,7 @@ fun PropertyDetailScreen(
                                 Text(text = "Offline preview")
                             }
                         } else {
+                            // Display regular save button
                             Row {
                                 Icon(
                                     Icons.Default.Save,

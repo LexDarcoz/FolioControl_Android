@@ -34,11 +34,43 @@ import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
+/**
+ * Composable function representing the authentication screen of the Folio Control Android application.
+ * It dynamically switches between the login screen, success screen (home), and loading screen based on the [UiState].
+ *
+ * @param loginUiState The current state of the authentication process.
+ * @param getData A callback function to retrieve data.
+ * @param getUserData A callback function to retrieve user-specific data.
+ * @param toggleSearchBar A callback function to toggle the search bar.
+ * @param isSearchBarEnabled A flag indicating whether the search bar is enabled.
+ * @param filteredList The filtered list of properties based on the search criteria.
+ * @param filterProperties A callback function to filter properties based on a search query.
+ * @param propertyListState The list of properties to display.
+ * @param uiState The current state of the UI.
+ * @param addPropertyState The state of the property being added.
+ * @param handlePropertyNameEdit A callback function to handle changes to the property name during property addition/editing.
+ * @param handlePropertyTypeEdit A callback function to handle changes to the property type during property addition/editing.
+ * @param handlePropertyStreetAddEdit A callback function to handle changes to the property street during property addition/editing.
+ * @param handlePropertyStreetNumberAddEdit A callback function to handle changes to the property street number during property addition/editing.
+ * @param handlePropertyZipCodeAddEdit A callback function to handle changes to the property zip code during property addition/editing.
+ * @param handlePropertyCityAddEdit A callback function to handle changes to the property city during property addition/editing.
+ * @param handlePropertyCountryAddEdit A callback function to handle changes to the property country during property addition/editing.
+ * @param selectProperty A callback function to select a property from the list.
+ * @param deleteProperty A callback function to delete a property.
+ * @param togglePropertyAddDialog A callback function to toggle the property addition dialog.
+ * @param handlePropertyAdd A callback function to handle the addition of a property.
+ * @param currentPartnership The currently selected partnership.
+ * @param isAddPropertyDialogOpen A flag indicating whether the property addition dialog is open.
+ * @param loginCredentials The login credentials, including email and password.
+ * @param updateLoginStateEmail A callback function to update the email in the login credentials.
+ * @param updateLoginStatePassword A callback function to update the password in the login credentials.
+ * @param login A callback function to perform the login.
+ * @param navigateTo A callback function to navigate to a specific destination.
+ */
 @Composable
 fun AuthScreen(
     loginUiState: UiState,
     getData: () -> Unit = { },
-    getUserData: () -> Unit = {},
     toggleSearchBar: () -> Unit = { },
     isSearchBarEnabled: Boolean = false,
     filteredList: List<Property>,
@@ -118,6 +150,15 @@ fun AuthScreen(
     }
 }
 
+/**
+ * Composable function representing the login screen of the Folio Control Android application.
+ *
+ * @param errorName The error message to display.
+ * @param loginCredentials The login credentials, including email and password.
+ * @param updateLoginStateEmail A callback function to update the email in the login credentials.
+ * @param updateLoginStatePassword A callback function to update the password in the login credentials.
+ * @param login A callback function to perform the login.
+ */
 @Composable
 fun LoginScreen(
     errorName: String,
@@ -127,17 +168,15 @@ fun LoginScreen(
     login: () -> Unit,
 ) {
     Box(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.8f),
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.8f),
         contentAlignment = Alignment.Center,
     ) {
         Column(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
         ) {
             Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                 Text(
@@ -149,10 +188,9 @@ fun LoginScreen(
             }
 
             Column(
-                modifier =
-                    Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 OutlinedTextField(
@@ -160,10 +198,9 @@ fun LoginScreen(
                     onValueChange = { updateLoginStateEmail(it) },
                     label = { Text("Email") },
                     singleLine = true,
-                    keyboardOptions =
-                        KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Email,
-                        ),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Email,
+                    ),
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.Email, contentDescription = null)
                     },
@@ -176,10 +213,9 @@ fun LoginScreen(
                     onValueChange = { updateLoginStatePassword(it) },
                     label = { Text("Password") },
                     visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions =
-                        KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Password,
-                        ),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Password,
+                    ),
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.Lock, contentDescription = null)
                     },
@@ -197,11 +233,10 @@ fun LoginScreen(
                     onClick = {
                         login()
                     },
-                    modifier =
-                        Modifier
-                            .height(64.dp)
-                            .width(200.dp)
-                            .padding(top = 16.dp),
+                    modifier = Modifier
+                        .height(64.dp)
+                        .width(200.dp)
+                        .padding(top = 16.dp),
                 ) {
                     Text(
                         "Login",

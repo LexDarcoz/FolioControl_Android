@@ -16,6 +16,13 @@ import foliocontrol.android.foliocontrolandroid.domain.LoginCredentials
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel responsible for managing authentication-related logic and user login state.
+ *
+ * @property propertyRepo The local database representing the property repository.
+ * @property partnershipRepo The local database representing the partnership repository.
+ * @property accountRepo The local database representing the account repository.
+ */
 class AuthViewModel(
     private val propertyRepo: PropertyDatabase,
     private val partnershipRepo: PartnershipDatabase,
@@ -49,14 +56,28 @@ class AuthViewModel(
         }
     }
 
+    /**
+     * Retrieves the saved user token from encrypted preferences.
+     *
+     * @return The user token.
+     */
     fun getToken(): String {
         return getEncryptedPreference("token")
     }
 
+    /**
+     * Resets the user token to an empty string, indicating a logged-out state.
+     */
     fun resetToken() {
         userToken = ""
     }
 
+    /**
+     * Updates the login credentials with the provided [email] and [password].
+     *
+     * @param email The user's email.
+     * @param password The user's password.
+     */
     fun updateLoginState(
         email: String? = null,
         password: String? = null,
@@ -69,24 +90,25 @@ class AuthViewModel(
         }
     }
 
+    /**
+     * Initiates the login process, updating the [loginUiState] accordingly.
+     */
     fun login() {
         viewModelScope.launch {
             loginUiState = UiState.Loading
 
             try {
-                var auth =
-                    authService.login(loginCredentials, updateTokenState = { token ->
-                        updateTokenState(token)
-                    })
+                var auth = authService.login(loginCredentials, updateTokenState = { token ->
+                    updateTokenState(token)
+                })
 
                 if (auth) {
                     saveEncryptedPreference("token", userToken)
                     loginUiState = UiState.Success("You have logged in")
                 } else {
-                    loginUiState =
-                        UiState.LoggedOut(
-                            "Something went wrong logging in, check credentials",
-                        )
+                    loginUiState = UiState.LoggedOut(
+                        "Something went wrong logging in, check credentials",
+                    )
                 }
             } catch (e: Exception) {
                 loginUiState = UiState.LoggedOut(e.localizedMessage ?: "You logged out")
@@ -94,6 +116,9 @@ class AuthViewModel(
         }
     }
 
+    /**
+     * Logs the user out, clearing saved preferences and local databases.
+     */
     fun logOut() {
         viewModelScope.launch {
             try {
@@ -108,13 +133,5 @@ class AuthViewModel(
         }
 
         loginUiState = UiState.LoggedOut("You logged out")
-    }
-
-    fun setLoading(boolean: Boolean) {
-        if (boolean) {
-            loginUiState = UiState.Loading
-        } else {
-            loginUiState = UiState.Success("Succesfully got data")
-        }
     }
 }

@@ -29,6 +29,13 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.IOException
 
+/**
+ * ViewModel responsible for managing the data and logic related to the properties in the application.
+ *
+ * @property propertyRepo The local database representing the property repository.
+ * @property partnershipRepo The local database representing the partnership repository.
+ * @property downloader An instance of [AndroidDownloader] for handling file downloads.
+ */
 class PropertyViewModel(
     private val propertyRepo: PropertyDatabase,
     private val partnershipRepo: PartnershipDatabase,
@@ -118,28 +125,39 @@ class PropertyViewModel(
         }
     }
 
+    /**
+     * Filters the list of properties based on the provided query.
+     *
+     * @param query The search query to filter the property list.
+     */
     fun filterProperties(query: String) {
-        filteredList =
-            propertyListState.filter {
-                it.propertyName.contains(query, ignoreCase = true) ||
-                    it.propertyType.contains(
-                        query, ignoreCase = true,
-                    ) || it.country.contains(query, ignoreCase = true)
-            }
+        filteredList = propertyListState.filter {
+            it.propertyName.contains(query, ignoreCase = true) || it.propertyType.contains(
+                query, ignoreCase = true,
+            ) || it.country.contains(query, ignoreCase = true)
+        }
     }
 
+    /**
+     * Selects a specific property, updating the [propertyState] and clearing associated data.
+     *
+     * @param property The property to be selected.
+     */
     fun selectProperty(property: Property) {
         propertyState = property
         propertyDocuments = emptyList()
         propertyPremises = emptyList()
     }
 
+    /**
+     * Retrieves the list of properties for the active partnership.
+     * If online, the list is fetched from the server and stored in the local database.
+     */
     suspend fun getPropertyListForPartnership() {
         try {
-            propertyListState =
-                propertyService.getProperties(
-                    getEncryptedPreference("token"), currentPartnership,
-                )
+            propertyListState = propertyService.getProperties(
+                getEncryptedPreference("token"), currentPartnership,
+            )
             if (propertyListState.isNotEmpty()) {
                 propertyRepo.dropTable(currentPartnership.partnershipID)
             }
@@ -151,6 +169,10 @@ class PropertyViewModel(
         }
     }
 
+    /**
+     * Retrieves the list of partnerships for the currently logged-in user.
+     * If online, the list is fetched from the server; otherwise, it retrieves the data from the local database.
+     */
     suspend fun getPartnershipListForLoggedInUser() {
         partnershipListState =
             authService.getPartnershipsForLoggedInUser(getEncryptedPreference("token"))
@@ -161,10 +183,21 @@ class PropertyViewModel(
         )
     }
 
+    /**
+     * Downloads a file from the provided URL using [downloader].
+     *
+     * @param url The URL of the file to be downloaded.
+     * @return The download ID for tracking the download progress.
+     */
     fun downloadFile(url: String): Long {
         return downloader.downloadFile(url)
     }
 
+    /**
+     * Switches the active partnership, updating the [propertyListState] and [currentPartnership].
+     *
+     * @param partnership The partnership to switch to.
+     */
     fun switchPartnership(partnership: Partnership) {
         propertyListState = emptyList()
         currentPartnership = partnership
@@ -174,6 +207,10 @@ class PropertyViewModel(
         currentPartnership = partnershipListState[0]
     }
 
+    /**
+     * Retrieves property details, premises, and documents for the active property.
+     * If online, it fetches the data from the server; otherwise, it previews the offline data.
+     */
     fun getDataForActiveProperty() {
         viewModelScope.launch {
             try {
@@ -190,6 +227,12 @@ class PropertyViewModel(
         }
     }
 
+    /**
+     * Uploads an image for the active property.
+     *
+     * @param context The context to retrieve the content resolver.
+     * @param uri The URI of the image to be uploaded.
+     */
     fun uploadImage(
         context: Context,
         uri: Uri,
@@ -223,6 +266,12 @@ class PropertyViewModel(
         }
     }
 
+    /**
+     * Uploads a document for the active property.
+     *
+     * @param context The context to retrieve the content resolver.
+     * @param uri The URI of the document to be uploaded.
+     */
     fun uploadDocument(
         context: Context,
         uri: Uri,
@@ -263,24 +312,21 @@ class PropertyViewModel(
     }
 
     suspend fun getPremisesForProperty(property: Property) {
-        propertyPremises =
-            propertyService.getPremisesForProperty(
-                getEncryptedPreference("token"), property,
-            )
+        propertyPremises = propertyService.getPremisesForProperty(
+            getEncryptedPreference("token"), property,
+        )
     }
 
     suspend fun getDetailsForProperty(property: Property) {
-        propertyState =
-            propertyService.getDetailsForProperty(
-                getEncryptedPreference("token"), property,
-            )
+        propertyState = propertyService.getDetailsForProperty(
+            getEncryptedPreference("token"), property,
+        )
     }
 
     suspend fun getDocumentsForProperty(property: Property) {
-        propertyDocuments =
-            propertyService.getDocumentsForProperty(
-                getEncryptedPreference("token"), property,
-            )
+        propertyDocuments = propertyService.getDocumentsForProperty(
+            getEncryptedPreference("token"), property,
+        )
     }
 
     fun handlePropertyEdit(
@@ -339,23 +385,27 @@ class PropertyViewModel(
         }
     }
 
+    /**
+     * Clears the selected image and resets [propertyImageState].
+     */
     fun clearImage() {
         handlePropertyEdit(
             propertyImg = "null",
         )
-        propertyImageState =
-            MultipartBody.Part.createFormData(
-                "propertyImage", "null",
-            )
+        propertyImageState = MultipartBody.Part.createFormData(
+            "propertyImage", "null",
+        )
 
         handlePropertySave()
     }
 
+    /**
+     * Clears the selected document and resets [propertyDocumentState].
+     */
     fun clearDocument() {
-        propertyDocumentState =
-            MultipartBody.Part.createFormData(
-                "document", "null",
-            )
+        propertyDocumentState = MultipartBody.Part.createFormData(
+            "document", "null",
+        )
         handleAddDocumentEdit(
             name = " ",
             documentType = " ",
@@ -364,6 +414,9 @@ class PropertyViewModel(
         )
     }
 
+    /**
+     * Handles the save operation for the active property, including updating property details and uploading the image.
+     */
     fun handlePropertySave() {
         viewModelScope.launch {
             try {
@@ -381,6 +434,11 @@ class PropertyViewModel(
         }
     }
 
+    /**
+     * Handles the deletion of a property with the given [propertyId].
+     *
+     * @param propertyId The ID of the property to be deleted.
+     */
     fun handlePropertyDelete(propertyId: Int) {
         viewModelScope.launch {
             try {
@@ -398,6 +456,11 @@ class PropertyViewModel(
         }
     }
 
+    /**
+     * Handles the deletion of a document with the given [selectedDocumentID].
+     *
+     * @param selectedDocumentID The ID of the document to be deleted.
+     */
     fun handleDocumentDelete(selectedDocumentID: Int) {
         viewModelScope.launch {
             try {
@@ -415,15 +478,32 @@ class PropertyViewModel(
         }
     }
 
+    /**
+     * Toggles the visibility of the property add dialog.
+     */
     fun togglePropertyAddDialog() {
         isAddPropertyDialogOpen = !isAddPropertyDialogOpen
     }
 
+    /**
+     * Toggles the visibility of the search bar.
+     */
     fun toggleSearchBar() {
         isSearchBarEnabled = !isSearchBarEnabled
         filteredList = propertyListState
     }
 
+    /**
+     * Handles the property addition or editing, updating [addPropertyState] accordingly.
+     *
+     * @param propertyName The name of the property.
+     * @param propertyType The type of the property.
+     * @param street The street address of the property.
+     * @param streetNumber The street number of the property.
+     * @param city The city of the property.
+     * @param zipCode The zip code of the property.
+     * @param country The country of the property.
+     */
     fun handlePropertyAddEdit(
         propertyName: String? = null,
         propertyType: String? = null,
@@ -458,6 +538,9 @@ class PropertyViewModel(
             addPropertyState.copy(FK_partnershipID = currentPartnership.partnershipID)
     }
 
+    /**
+     * Handles the addition of a property using [propertyService].
+     */
     fun handlePropertyAdd() {
         viewModelScope.launch {
             try {

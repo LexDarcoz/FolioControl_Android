@@ -25,6 +25,23 @@ import androidx.compose.ui.unit.dp
 import foliocontrol.android.foliocontrolandroid.domain.User
 import foliocontrol.android.foliocontrolandroid.ui.components.foliocomponents.FolioTextField
 
+/**
+ * Composable function representing the detailed view of the user's account information.
+ * Users can edit their personal details such as name, last name, email, address, and country.
+ *
+ * @param userState The current state of the user, including user details.
+ * @param handleUserSave A callback function to handle saving user information.
+ * @param handleUserNameEdit A callback function to handle changes to the user's first name.
+ * @param handleUserLastNameEdit A callback function to handle changes to the user's last name.
+ * @param handleUserEmailEdit A callback function to handle changes to the user's email.
+ * @param handleUserStreetEdit A callback function to handle changes to the user's street address.
+ * @param handleUserStreetNumberEdit A callback function to handle changes to the user's street number.
+ * @param handleUserZipCodeEdit A callback function to handle changes to the user's ZIP code.
+ * @param handleUserCityEdit A callback function to handle changes to the user's city.
+ * @param handleUserCountryEdit A callback function to handle changes to the user's country.
+ * @param offline A flag indicating whether the application is in offline mode.
+ * @param navigateTo A callback function to navigate to a specific destination.
+ */
 @Composable
 fun AccountDetailScreen(
     userState: User,
@@ -51,26 +68,23 @@ fun AccountDetailScreen(
             )
 
             Column(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
             ) {
                 Surface(
                     color = MaterialTheme.colorScheme.secondary,
                     contentColor = MaterialTheme.colorScheme.primary,
                     shape = MaterialTheme.shapes.small,
                     shadowElevation = 4.dp,
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
                 ) {
                     Column(
-                        modifier =
-                            Modifier
-                                .fillMaxSize()
-                                .padding(16.dp),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
                     ) {
                         FolioTextField(!offline, "Name", userState.name) {
                             handleUserNameEdit(
@@ -136,10 +150,9 @@ fun AccountDetailScreen(
                                 handleUserSave()
                                 navigateTo("Home")
                             },
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 16.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp),
                         ) {
                             if (offline) {
                                 Row {

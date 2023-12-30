@@ -15,7 +15,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import foliocontrol.android.foliocontrolandroid.domain.Premise
-
+/**
+ * Composable function representing a card for displaying premise information.
+ *
+ * @param premise The [Premise] data to be displayed on the card.
+ */
 @Composable
 fun PremiseCard(premise: Premise) {
     Card(

@@ -51,6 +51,25 @@ data class TabItem(
     val selectedIcon: ImageVector,
 )
 
+/**
+ * Composable function representing the account screen of the Folio Control Android application.
+ * It displays the user's account details and partnerships, allowing users to edit and save their information.
+ *
+ * @param userState The current state of the user, including user details.
+ * @param handleUserSave A callback function to handle saving user information.
+ * @param handleUserNameEdit A callback function to handle changes to the user's first name.
+ * @param handleUserLastNameEdit A callback function to handle changes to the user's last name.
+ * @param handleUserEmailEdit A callback function to handle changes to the user's email.
+ * @param handleUserStreetEdit A callback function to handle changes to the user's street address.
+ * @param handleUserStreetNumberEdit A callback function to handle changes to the user's street number.
+ * @param handleUserZipCodeEdit A callback function to handle changes to the user's ZIP code.
+ * @param handleUserCityEdit A callback function to handle changes to the user's city.
+ * @param handleUserCountryEdit A callback function to handle changes to the user's country.
+ * @param partnershipList The list of partnerships associated with the user.
+ * @param getData A callback function to retrieve data.
+ * @param uiState The current state of the UI.
+ * @param navigateTo A callback function to navigate to a specific destination.
+ */
 @Composable
 fun AccountScreen(
     userState: User,
@@ -122,6 +141,24 @@ fun AccountScreen(
     }
 }
 
+/**
+ * Composable function representing the overview of the user's account details and partnerships.
+ * It includes a tab-based interface to switch between the "Details" and "Partnerships" views.
+ *
+ * @param userState The current state of the user, including user details.
+ * @param handleUserSave A callback function to handle saving user information.
+ * @param handleUserNameEdit A callback function to handle changes to the user's first name.
+ * @param handleUserLastNameEdit A callback function to handle changes to the user's last name.
+ * @param handleUserEmailEdit A callback function to handle changes to the user's email.
+ * @param handleUserStreetEdit A callback function to handle changes to the user's street address.
+ * @param handleUserStreetNumberEdit A callback function to handle changes to the user's street number.
+ * @param handleUserZipCodeEdit A callback function to handle changes to the user's ZIP code.
+ * @param handleUserCityEdit A callback function to handle changes to the user's city.
+ * @param handleUserCountryEdit A callback function to handle changes to the user's country.
+ * @param partnershipList The list of partnerships associated with the user.
+ * @param offline A flag indicating whether the application is in offline mode.
+ * @param navigateTo A callback function to navigate to a specific destination.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AccountOverview(
