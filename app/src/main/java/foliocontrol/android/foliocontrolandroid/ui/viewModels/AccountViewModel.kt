@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import foliocontrol.android.foliocontrolandroid.data.local.auth.TokenRepo
 import foliocontrol.android.foliocontrolandroid.data.local.database.AccountDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.schema.asDomainModel
+import foliocontrol.android.foliocontrolandroid.data.repository.AuthService
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
 import foliocontrol.android.foliocontrolandroid.domain.User
 import foliocontrol.android.foliocontrolandroid.domain.asUserRoomEntity
@@ -25,7 +26,7 @@ class AccountViewModel(
     private val accountRepo: AccountDatabase,
     private val tokenRepo: TokenRepo,
 ) : ViewModel() {
-    private val authService = AuthServiceImpl()
+    var authService: AuthService = AuthServiceImpl()
     var user: User by mutableStateOf(User())
         private set
 
@@ -36,8 +37,8 @@ class AccountViewModel(
      * Initiates the process of fetching user data. Updates [uiState] based on the success or failure of the operation.
      */
     fun getData() {
+        uiState = UiState.Loading
         viewModelScope.launch {
-            uiState = UiState.Loading
             try {
                 getUserData()
             } catch (e: IOException) {
@@ -66,6 +67,8 @@ class AccountViewModel(
         } catch (e: IOException) {
             user = accountRepo.getUser().first().asDomainModel()
             uiState = UiState.Offline("Failed to connect to server: ${e.message}")
+        } catch (e: Exception) {
+            uiState = UiState.Error("Something went very wrong: ${e.message}")
         }
     }
 

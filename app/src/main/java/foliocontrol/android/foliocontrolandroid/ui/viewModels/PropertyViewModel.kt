@@ -112,6 +112,7 @@ class PropertyViewModel(
                 } else {
                     uiState = UiState.Error("No data found")
                 }
+                println(uiState)
             } catch (e: IOException) {
                 val partnershipList =
                     partnershipRepo.getPartnerships().first().map { it.asDomainModel() }
@@ -174,7 +175,7 @@ class PropertyViewModel(
         } catch (e: Exception) {
             println("Error: ${e.message}")
         } finally {
-            println("Finally")
+
         }
     }
 
