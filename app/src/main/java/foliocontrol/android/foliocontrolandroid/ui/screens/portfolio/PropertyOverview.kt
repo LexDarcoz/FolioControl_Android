@@ -208,7 +208,9 @@ fun Overview(
     navigateTo: (Any?) -> Unit,
     offline: Boolean = false,
 ) {
-    var loading by remember { mutableStateOf(true) }
+    var loading by remember {
+        mutableStateOf(false)
+    }
     var tabItems = tabItemsList
     if (propertyState.propertyType != "Apartment") {
         tabItems = tabItems.subList(0, tabItems.size - 1)

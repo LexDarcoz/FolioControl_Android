@@ -99,7 +99,8 @@ fun PropertyPhotosScreen(
         openDeleteDialog.value -> {
             if (uiState is UiState.Success) {
                 if (selectedImageUri != null) {
-                    DeleteDialog(onDismissRequest = { openDeleteDialog.value = false },
+                    DeleteDialog(
+                        onDismissRequest = { openDeleteDialog.value = false },
                         onConfirmation = {
                             openDeleteDialog.value = false
                             selectedImageUri = null
@@ -111,7 +112,8 @@ fun PropertyPhotosScreen(
                         icon = Icons.Default.Warning
                     )
                 } else {
-                    DeleteDialog(onDismissRequest = { openDeleteDialog.value = false },
+                    DeleteDialog(
+                        onDismissRequest = { openDeleteDialog.value = false },
                         onConfirmation = {
                             clearImage()
                             openDeleteDialog.value = false
@@ -124,10 +126,10 @@ fun PropertyPhotosScreen(
                     )
                 }
             } else {
-                DeleteDialog(onDismissRequest = { openDeleteDialog.value = false },
+                DeleteDialog(
+                    onDismissRequest = { openDeleteDialog.value = false },
                     onConfirmation = {
                         openDeleteDialog.value = false
-
                         getDataForActiveProperty()
                     },
                     confirmText = "Retry Connection",

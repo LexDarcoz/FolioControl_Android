@@ -52,7 +52,6 @@ enum class Identifier {
 @Composable
 fun HomeScreen(
     getData: () -> Unit = { },
-    getUserData: () -> Unit = {},
     toggleSearchBar: () -> Unit = { },
     isSearchBarEnabled: Boolean = false,
     filteredList: List<Property>,
@@ -255,7 +254,8 @@ fun Home(
                     SearchBar(toggleSearchBar = toggleSearchBar,
                         filterProperties = { filterProperties(it) })
                     LazyColumn(contentPadding = values) {
-                        items(items = filteredList,
+                        items(
+                            items = filteredList,
                             key = { property -> property.propertyID }) { property ->
                             PropertyCard(
                                 property = property,

@@ -80,7 +80,6 @@ fun AuthScreen(
 
         is UiState.Success -> {
             HomeScreen(getData = { getData() },
-                getUserData = { getUserData() },
                 toggleSearchBar = { toggleSearchBar() },
                 isSearchBarEnabled = isSearchBarEnabled,
                 filteredList = filteredList,

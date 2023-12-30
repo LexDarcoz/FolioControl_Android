@@ -19,13 +19,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 object Constants {
 
     // ONLINE
-//    const val BASE_URL = "https://api.schattemanit.com/"
-//    const val PROPERTYPHOTOS_URL = "https://api.schattemanit.com/propertyImages"
-//    const val PROPERTYDOCUMENTS_URL = "https://api.schattemanit.com/propertyDocuments"
+    const val BASE_URL = "https://api.schattemanit.com/"
+    const val PROPERTYPHOTOS_URL = "https://api.schattemanit.com/propertyImages"
+    const val PROPERTYDOCUMENTS_URL = "https://api.schattemanit.com/propertyDocuments"
     // OFFLINE
-    const val BASE_URL = "http://10.0.2.2:9000"
-    const val PROPERTYPHOTOS_URL = "http://10.0.2.2:9000/propertyImages"
-    const val PROPERTYDOCUMENTS_URL = "http://10.0.2.2:9000/propertyDocuments"
+//    const val BASE_URL = "http://10.0.2.2:9000"
+//    const val PROPERTYPHOTOS_URL = "http://10.0.2.2:9000/propertyImages"
+//    const val PROPERTYDOCUMENTS_URL = "http://10.0.2.2:9000/propertyDocuments"
 
     val propertyTypesIcons: Map<String, ImageVector> = mapOf(
         "Apartment" to Icons.Default.Apartment,
