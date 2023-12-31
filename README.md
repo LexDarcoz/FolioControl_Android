@@ -1,6 +1,8 @@
 # FolioControl Android App
 
-The FolioControl Android App is a mobile application designed to manage real estate properties and partnerships. It allows users to view, add, edit, and delete properties associated with different partnerships.
+The FolioControl Android App is a mobile application designed to manage real estate properties and
+partnerships. It allows users to view, add, edit, and delete properties associated with different
+partnerships.
 
 ## Features
 
@@ -12,11 +14,63 @@ The FolioControl Android App is a mobile application designed to manage real est
 
 ## Screenshots
 
-![Screenshot 1](screenshots/screenshot1.png)
-*Caption for Screenshot 1*
+# Dark Mode
 
-![Screenshot 2](screenshots/screenshot2.png)
-*Caption for Screenshot 2*
+![Login Screen](screenshots/Screenshot%202023-12-31%20010937.png)
+*Login Screen*
+
+![Property Overview Screen](screenshots/Screenshot%202023-12-31%20011056.png)
+*Property Overview Screen*
+
+![Property Delete dialog](screenshots/Screenshot%202023-12-31%20011158.png)
+*Property Delete dialog*
+
+![Property Overview Screen](screenshots/Screenshot%202023-12-31%20011158.png)
+*Property Delete dialog*
+
+![Property Detail Screen](screenshots/Screenshot%202023-12-31%20011256.png)
+*Property Detail Screen*
+
+![Property Photos Screen](screenshots/Screenshot%202023-12-31%20011350.png)
+*Property Photos Screen*
+
+![Property Documents Screen](screenshots/Screenshot%202023-12-31%20011626.png)
+*Property Documents Screen*
+
+![Property Premises (Only for apartments) Screen](screenshots/Screenshot%202023-12-31%20011719.png)
+*Property Premises (Only for apartments) Screen*
+
+![Property Account Details Screen](screenshots/Screenshot%202023-12-31%20011550.png)
+*Property Account Details Screen*
+
+# Light Mode
+
+![Login Screen](screenshots/Screenshot%202023-12-31%20011851.png)
+*Login Screen*
+
+![Property Overview Screen](screenshots/Screenshot%202023-12-31%20011752.png)
+*Property Overview Screen*
+
+![Property Delete dialog](screenshots/Screenshot%202023-12-31%20010937.png)
+*Property Delete dialog*
+
+![Property Overview Screen](screenshots/Screenshot%202023-12-31%20011922.png)
+*Property Overview Screen*
+
+![Property Detail Screen](screenshots/Screenshot%202023-12-31%20011056.png)
+*Property Detail Screen*
+
+![Property Photos Screen](screenshots/Screenshot%202023-12-31%20011949.png)
+*Property Photos Screen*
+
+![Property Documents Screen](screenshots/Screenshot%202023-12-31%20012036.png)
+*Property Documents Screen*
+
+![Property Premises (Only for apartments) Screen](screenshots/Screenshot%202023-12-31%20012108.png)
+*Property Premises (Only for apartments) Screen*
+
+![Property Account Details Screen](screenshots/Screenshot%202023-12-31%20012130.png)
+*Property Account Details Screen*
 
 ## Technologies Used
 
@@ -39,7 +93,8 @@ The FolioControl Android App is a mobile application designed to manage real est
 
 ## Dependencies
 
-- [Compose Shimmer](https://github.com/marcinmoskala/compose-shimmer): Library for adding shimmer effect in Jetpack Compose.
+- [Compose Shimmer](https://github.com/marcinmoskala/compose-shimmer): Library for adding shimmer
+  effect in Jetpack Compose.
 - [Gson](https://github.com/google/gson): Library for JSON serialization and deserialization.
 - [Retrofit](https://github.com/square/retrofit): HTTP client for Android.
 
