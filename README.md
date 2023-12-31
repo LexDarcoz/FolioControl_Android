@@ -14,57 +14,73 @@ partnerships.
 
 ## Screenshots
 
-# Dark Mode
+### Dark Mode
 
+#### Login Screen
 ![Login Screen](screenshots/Screenshot%202023-12-31%20010937.png)
-*Login Screen*
+*Caption: Start your journey with a secure and stylish login screen.*
 
+#### Property Overview Screen
 ![Property Overview Screen](screenshots/Screenshot%202023-12-31%20011056.png)
-*Property Overview Screen*
+*Caption: Easily manage your properties with a comprehensive overview.*
 
-![Property Delete dialog](screenshots/Screenshot%202023-12-31%20011158.png)
-*Property Delete dialog*
+#### Property Delete Dialog
+![Property Delete Dialog](screenshots/Screenshot%202023-12-31%20011158.png)
+*Caption: Make informed decisions with a confirmation dialog for property deletion.*
 
+#### Property Detail Screen
 ![Property Detail Screen](screenshots/Screenshot%202023-12-31%20011256.png)
-*Property Detail Screen*
+*Caption: Dive into the details of each property, including its images, documents, and account information.*
 
+#### Property Photos Screen
 ![Property Photos Screen](screenshots/Screenshot%202023-12-31%20011350.png)
-*Property Photos Screen*
+*Caption: Property Photos Screen*
 
+#### Property Documents Screen
 ![Property Documents Screen](screenshots/Screenshot%202023-12-31%20011626.png)
-*Property Documents Screen*
+*Caption: Access and manage property-related documents with ease.*
 
-![Property Premises (Only for apartments) Screen](screenshots/Screenshot%202023-12-31%20011719.png)
-*Property Premises (Only for apartments) Screen*
+#### Property Premises (Only for Apartments) Screen
+![Property Premises Screen](screenshots/Screenshot%202023-12-31%20011719.png)
+*Caption: Explore premises information specifically tailored for apartments.*
 
+#### Property Account Details Screen
 ![Property Account Details Screen](screenshots/Screenshot%202023-12-31%20011550.png)
-*Property Account Details Screen*
+*Caption: Review and update account details associated with each property.*
 
-# Light Mode
+### Light Mode
 
+#### Login Screen
 ![Login Screen](screenshots/Screenshot%202023-12-31%20011851.png)
-*Login Screen*
+*Caption: Start your journey with a secure and stylish login screen.*
 
+#### Property Overview Screen
 ![Property Overview Screen](screenshots/Screenshot%202023-12-31%20011752.png)
-*Property Overview Screen*
+*Caption: Easily manage your properties with a comprehensive overview.*
 
-![Property Delete dialog](screenshots/Screenshot%202023-12-31%20012152.png)
-*Property Delete dialog*
+#### Property Detail Screen
+![Property Detail Screen](screenshots/Screenshot%202023-12-31%20011922.png)
+*Caption: Dive into the details of each property, including its images, documents, and account information.*
 
-![Property Detail Screen](screenshots/Screenshot%202023-12-31%20011922.pn)
-*Property Detail Screen*
+#### Property Delete Dialog
+![Property Delete Dialog](screenshots/Screenshot%202023-12-31%20012152.png)
+*Caption: Make informed decisions with a confirmation dialog for property deletion.*
 
+#### Property Photos Screen
 ![Property Photos Screen](screenshots/Screenshot%202023-12-31%20011949.png)
-*Property Photos Screen*
+*Caption: Property Photos Screen*
 
+#### Property Documents Screen
 ![Property Documents Screen](screenshots/Screenshot%202023-12-31%20012036.png)
-*Property Documents Screen*
+*Caption: Property Documents Screen*
 
-![Property Premises (Only for apartments) Screen](screenshots/Screenshot%202023-12-31%20012108.png)
-*Property Premises (Only for apartments) Screen*
+#### Property Premises (Only for Apartments) Screen
+![Property Premises Screen](screenshots/Screenshot%202023-12-31%20012108.png)
+*Caption: Explore premises information specifically tailored for apartments.*
 
+#### Property Account Details Screen
 ![Property Account Details Screen](screenshots/Screenshot%202023-12-31%20012130.png)
-*Property Account Details Screen*
+*Caption: Review and update account details associated with each property.*
 
 ## Technologies Used
 
