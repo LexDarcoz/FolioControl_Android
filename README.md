@@ -25,9 +25,6 @@ partnerships.
 ![Property Delete dialog](screenshots/Screenshot%202023-12-31%20011158.png)
 *Property Delete dialog*
 
-![Property Overview Screen](screenshots/Screenshot%202023-12-31%20011158.png)
-*Property Delete dialog*
-
 ![Property Detail Screen](screenshots/Screenshot%202023-12-31%20011256.png)
 *Property Detail Screen*
 
@@ -51,13 +48,10 @@ partnerships.
 ![Property Overview Screen](screenshots/Screenshot%202023-12-31%20011752.png)
 *Property Overview Screen*
 
-![Property Delete dialog](screenshots/Screenshot%202023-12-31%20010937.png)
+![Property Delete dialog](screenshots/Screenshot%202023-12-31%20012152.png)
 *Property Delete dialog*
 
-![Property Overview Screen](screenshots/Screenshot%202023-12-31%20011922.png)
-*Property Overview Screen*
-
-![Property Detail Screen](screenshots/Screenshot%202023-12-31%20011056.png)
+![Property Detail Screen](screenshots/Screenshot%202023-12-31%20011922.pn)
 *Property Detail Screen*
 
 ![Property Photos Screen](screenshots/Screenshot%202023-12-31%20011949.png)
