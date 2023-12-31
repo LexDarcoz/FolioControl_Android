@@ -9,15 +9,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,6 +38,8 @@ import foliocontrol.android.foliocontrolandroid.domain.Partnership
 import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
+import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.rememberWindowInfo
 
 /**
  * Composable function representing the authentication screen of the Folio Control Android application.
@@ -167,30 +174,37 @@ fun LoginScreen(
     updateLoginStatePassword: (String) -> Unit,
     login: () -> Unit,
 ) {
+    val windowInfo = rememberWindowInfo()
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.8f),
-        contentAlignment = Alignment.Center,
+            .fillMaxHeight(),
+        contentAlignment = Alignment.TopCenter,
     ) {
         Column(
             modifier = Modifier
+                .verticalScroll(
+                    enabled = true, state = rememberScrollState()
+                )
                 .fillMaxWidth()
-                .padding(16.dp),
+
         ) {
-            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Row(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compact) 64.dp else 0.dp)
+                    .wrapContentHeight()
+            ) {
                 Text(
                     text = "Sign In",
                     style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(bottom = 6.dp),
-                )
+
+                    )
                 Icon(imageVector = Icons.Default.ExitToApp, contentDescription = null)
             }
 
             Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 OutlinedTextField(
@@ -201,8 +215,18 @@ fun LoginScreen(
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Email,
                     ),
+
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface, ),
                     leadingIcon = {
-                        Icon(imageVector = Icons.Default.Email, contentDescription = null)
+                        Icon(
+                            imageVector = Icons.Default.Email,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
                     },
                 )
 
@@ -216,8 +240,18 @@ fun LoginScreen(
                     keyboardOptions = KeyboardOptions.Default.copy(
                         keyboardType = KeyboardType.Password,
                     ),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface,
+                    ),
                     leadingIcon = {
-                        Icon(imageVector = Icons.Default.Lock, contentDescription = null)
+                        Icon(
+                            imageVector = Icons.Default.Lock,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
                     },
                 )
 

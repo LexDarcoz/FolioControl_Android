@@ -56,25 +56,34 @@ fun Navbar(
             )
         },
         navigationIcon = {
-            if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compact) {
-                if (currentScreen != "Home") {
-                    IconButton(onClick = { navigateUp() }) {
-                        Icon(
-                            tint = MaterialTheme.colorScheme.onPrimary,
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Back",
-                        )
+
+            when (loginUiState) {
+                is UiState.Success -> {
+                    if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compact) {
+                        if (currentScreen != "Home") {
+                            IconButton(onClick = { navigateUp() }) {
+                                Icon(
+                                    tint = MaterialTheme.colorScheme.onPrimary,
+                                    imageVector = Icons.Filled.ArrowBack,
+                                    contentDescription = "Back",
+                                )
+                            }
+                        }
+                    } else {
+                        IconButton(onClick = { toggleDrawer() }) {
+                            Icon(
+                                tint = MaterialTheme.colorScheme.onPrimary,
+                                imageVector = Icons.Filled.Menu,
+                                contentDescription = "Open Navigation Menu",
+                            )
+                        }
                     }
                 }
-            } else {
-                IconButton(onClick = { toggleDrawer() }) {
-                    Icon(
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        imageVector = Icons.Filled.Menu,
-                        contentDescription = "Open Navigation Menu",
-                    )
+
+                else -> {
                 }
             }
+
         },
         actions = {
             when (loginUiState) {
