@@ -68,23 +68,26 @@ fun AccountDetailScreen(
             )
 
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
             ) {
                 Surface(
                     color = MaterialTheme.colorScheme.secondary,
                     contentColor = MaterialTheme.colorScheme.primary,
                     shape = MaterialTheme.shapes.small,
                     shadowElevation = 4.dp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
                 ) {
                     Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .padding(16.dp),
                     ) {
                         FolioTextField(!offline, "Name", userState.name) {
                             handleUserNameEdit(
@@ -150,9 +153,10 @@ fun AccountDetailScreen(
                                 handleUserSave()
                                 navigateTo("Home")
                             },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 16.dp),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 16.dp),
                         ) {
                             if (offline) {
                                 Row {

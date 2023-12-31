@@ -43,10 +43,11 @@ fun Navbar(
 ) {
     val windowInfo = rememberWindowInfo()
     CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.largeTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.secondary,
-        ),
+        colors =
+            TopAppBarDefaults.largeTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                titleContentColor = MaterialTheme.colorScheme.secondary,
+            ),
         title = {
             Text(
                 "FolioControl",
@@ -56,7 +57,6 @@ fun Navbar(
             )
         },
         navigationIcon = {
-
             when (loginUiState) {
                 is UiState.Success -> {
                     if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compact) {
@@ -83,7 +83,6 @@ fun Navbar(
                 else -> {
                 }
             }
-
         },
         actions = {
             when (loginUiState) {

@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import foliocontrol.android.foliocontrolandroid.data.remote.common.Constants.PROPERTYDOCUMENTS_URL
 import foliocontrol.android.foliocontrolandroid.domain.PropertyDocument
+
 /**
  * Composable function representing a card for displaying property documents.
  *

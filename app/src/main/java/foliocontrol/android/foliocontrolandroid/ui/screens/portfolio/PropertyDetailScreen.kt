@@ -76,12 +76,13 @@ fun PropertyDetailScreen(
         modifier = Modifier.fillMaxSize(),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(
-                    enabled = true,
-                    state = rememberScrollState(),
-                ),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(
+                        enabled = true,
+                        state = rememberScrollState(),
+                    ),
         ) {
             // Display default image if property image is not available
             if (propertyState.propertyImg == "null") {
@@ -89,11 +90,12 @@ fun PropertyDetailScreen(
                     painter = painterResource(id = R.drawable.ic_default),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.3f)
-                        .aspectRatio(16f / 9f) // Adjust the aspect ratio as needed
-                        .align(Alignment.CenterHorizontally),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.3f)
+                            .aspectRatio(16f / 9f) // Adjust the aspect ratio as needed
+                            .align(Alignment.CenterHorizontally),
                 )
             } else {
                 // Display property image using Glide
@@ -101,10 +103,11 @@ fun PropertyDetailScreen(
                     model = "$imageUrl/${propertyState.propertyImg}",
                     contentDescription = "${propertyState.propertyName} image",
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(16f / 9f) // Adjust the aspect ratio as needed
-                        .align(Alignment.CenterHorizontally),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(16f / 9f) // Adjust the aspect ratio as needed
+                            .align(Alignment.CenterHorizontally),
                 )
             }
             // Display property details in a Surface
@@ -113,16 +116,18 @@ fun PropertyDetailScreen(
                 contentColor = MaterialTheme.colorScheme.primary,
                 shape = MaterialTheme.shapes.small,
                 shadowElevation = 4.dp,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
             ) {
                 // Column to arrange property details
                 var expanded by remember { mutableStateOf(false) }
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
                 ) {
                     Text(
                         text = "Details - ${propertyState.propertyName}",
@@ -219,9 +224,10 @@ fun PropertyDetailScreen(
                             saveProperty()
                             navigateTo("Home")
                         },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 16.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp),
                     ) {
                         if (offline) {
                             // Display offline preview information

@@ -62,74 +62,75 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.EmptyListSc
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
 
-val documentTypes = listOf(
-    DropDownMenuItem(
-        "AKTE",
-        {
-            Icon(
-                Icons.Default.FileCopy,
-                contentDescription = "Akte",
-                tint = MaterialTheme.colorScheme.onSurface,
-            )
-        },
-        "Apartment",
-    ),
-    DropDownMenuItem(
-        "JAARLIJKSE AFREKENING",
-        {
-            Icon(
-                Icons.Default.MoneyOff,
-                contentDescription = "Jaarlijkse afrekening",
-                tint = MaterialTheme.colorScheme.onSurface,
-            )
-        },
-        "Jaarlijkse afrekening",
-    ),
-    DropDownMenuItem(
-        "AFSCHRIFT",
-        {
-            Icon(
-                Icons.Default.AttachMoney,
-                contentDescription = "Afschrift",
-                tint = MaterialTheme.colorScheme.onSurface,
-            )
-        },
-        "Afschrift",
-    ),
-    DropDownMenuItem(
-        "EIGENDOMSAKTE",
-        {
-            Icon(
-                Icons.Default.Key,
-                contentDescription = "Eigendomsakte",
-                tint = MaterialTheme.colorScheme.onSurface,
-            )
-        },
-        "Eigendomsakte",
-    ),
-    DropDownMenuItem(
-        "UITTREKSEL",
-        {
-            Icon(
-                Icons.Default.Money,
-                contentDescription = "Uittrekksel",
-                tint = MaterialTheme.colorScheme.onSurface,
-            )
-        },
-        "Uittrekksel",
-    ),
-    DropDownMenuItem(
-        "BODEMATTEST",
-        {
-            Icon(
-                Icons.Default.House,
-                contentDescription = "Bodem attest",
-                tint = MaterialTheme.colorScheme.onSurface,
-            )
-        },
-        "Bodem attest",
-    ),
-)
+val documentTypes =
+    listOf(
+        DropDownMenuItem(
+            "AKTE",
+            {
+                Icon(
+                    Icons.Default.FileCopy,
+                    contentDescription = "Akte",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                )
+            },
+            "Apartment",
+        ),
+        DropDownMenuItem(
+            "JAARLIJKSE AFREKENING",
+            {
+                Icon(
+                    Icons.Default.MoneyOff,
+                    contentDescription = "Jaarlijkse afrekening",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                )
+            },
+            "Jaarlijkse afrekening",
+        ),
+        DropDownMenuItem(
+            "AFSCHRIFT",
+            {
+                Icon(
+                    Icons.Default.AttachMoney,
+                    contentDescription = "Afschrift",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                )
+            },
+            "Afschrift",
+        ),
+        DropDownMenuItem(
+            "EIGENDOMSAKTE",
+            {
+                Icon(
+                    Icons.Default.Key,
+                    contentDescription = "Eigendomsakte",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                )
+            },
+            "Eigendomsakte",
+        ),
+        DropDownMenuItem(
+            "UITTREKSEL",
+            {
+                Icon(
+                    Icons.Default.Money,
+                    contentDescription = "Uittrekksel",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                )
+            },
+            "Uittrekksel",
+        ),
+        DropDownMenuItem(
+            "BODEMATTEST",
+            {
+                Icon(
+                    Icons.Default.House,
+                    contentDescription = "Bodem attest",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                )
+            },
+            "Bodem attest",
+        ),
+    )
 
 /**
  * Composable function for the Property Documents screen.
@@ -169,61 +170,67 @@ fun PropertyDocumentsScreen(
     var selectedDocumentUri by remember {
         mutableStateOf<Uri?>(null)
     }
-    val singleDocumentLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocument(),
-        onResult = { uri ->
-            selectedDocumentUri = uri
-        },
-    )
+    val singleDocumentLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.OpenDocument(),
+            onResult = { uri ->
+                selectedDocumentUri = uri
+            },
+        )
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
-                    16.dp
-                } else {
-                    4.dp
-                },
-            ),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(
+                    if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+                        16.dp
+                    } else {
+                        4.dp
+                    },
+                ),
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {
             Text(
                 text = "Documents:",
-                style = windowInfo.screenWidthInfo.let { windowType ->
-                    if (windowType == WindowInfo.WindowType.Compact) {
-                        MaterialTheme.typography.titleLarge
-                    } else {
-                        MaterialTheme.typography.bodySmall
-                    }
-                },
+                style =
+                    windowInfo.screenWidthInfo.let { windowType ->
+                        if (windowType == WindowInfo.WindowType.Compact) {
+                            MaterialTheme.typography.titleLarge
+                        } else {
+                            MaterialTheme.typography.bodySmall
+                        }
+                    },
                 fontWeight = FontWeight.Bold,
-                modifier = windowInfo.screenWidthInfo.let { windowType ->
-                    if (windowType == WindowInfo.WindowType.Compact) {
-                        Modifier.padding(8.dp)
-                    } else {
-                        Modifier.padding(4.dp)
-                    }
-                },
+                modifier =
+                    windowInfo.screenWidthInfo.let { windowType ->
+                        if (windowType == WindowInfo.WindowType.Compact) {
+                            Modifier.padding(8.dp)
+                        } else {
+                            Modifier.padding(4.dp)
+                        }
+                    },
             )
 
             when {
                 offline -> OfflineScreen()
-                selectedDocumentUri != null -> AddDocument(
-                    selectedDocumentUri,
-                    handleAddDocumentDateEdit,
-                    handleAddDocumentTypeEdit,
-                    propertyDocumentState,
-                    uploadDocument,
-                ) {
-                    selectedDocumentUri = it
-                }
+                selectedDocumentUri != null ->
+                    AddDocument(
+                        selectedDocumentUri,
+                        handleAddDocumentDateEdit,
+                        handleAddDocumentTypeEdit,
+                        propertyDocumentState,
+                        uploadDocument,
+                    ) {
+                        selectedDocumentUri = it
+                    }
 
-                propertyDocuments.isEmpty() -> EmptyListScreen(
-                    "No documents available.",
-                )
+                propertyDocuments.isEmpty() ->
+                    EmptyListScreen(
+                        "No documents available.",
+                    )
 
                 else -> {
                     DocumentsList(
@@ -245,9 +252,10 @@ fun PropertyDocumentsScreen(
                         singleDocumentLauncher.launch(arrayOf(pdfMimeType))
                     }
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
             ) {
                 if (offline) {
                     Row {
@@ -317,37 +325,42 @@ fun AddDocument(
 
     CalendarDialog(
         state = calendarState,
-        selection = CalendarSelection.Date {
-            handleAddDocumentDateEdit(
-                it.toString(),
-            )
-        },
+        selection =
+            CalendarSelection.Date {
+                handleAddDocumentDateEdit(
+                    it.toString(),
+                )
+            },
     )
     // UI Components
     Column(
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxSize(),
+        modifier =
+            Modifier
+                .padding(8.dp)
+                .fillMaxSize(),
     ) {
         Surface(
             color = MaterialTheme.colorScheme.onPrimary,
             contentColor = MaterialTheme.colorScheme.onSurface,
             shape = MaterialTheme.shapes.large,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(MaterialTheme.shapes.medium)
-                .padding(16.dp)
-                .height(500.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .clip(MaterialTheme.shapes.medium)
+                    .padding(16.dp)
+                    .height(500.dp),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
                 ) {
                     Text(
                         "Selected Document: $documentName",
@@ -357,9 +370,10 @@ fun AddDocument(
                 }
                 // Date Selection Text Field
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
                 ) {
                     Text(
                         text = "Enter expiry date",
@@ -373,28 +387,33 @@ fun AddDocument(
                             propertyDocumentState.expiryDate
                         }",
                         onValueChange = {},
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            imeAction = ImeAction.Done,
-                        ),
-                        keyboardActions = KeyboardActions(onDone = {
-                            // Handle done action
-                        }),
-                        textStyle = MaterialTheme.typography.bodySmall.copy(
-                            color = MaterialTheme.colorScheme.onSurface,
-                        ),
+                        keyboardOptions =
+                            KeyboardOptions.Default.copy(
+                                imeAction = ImeAction.Done,
+                            ),
+                        keyboardActions =
+                            KeyboardActions(onDone = {
+                                // Handle done action
+                            }),
+                        textStyle =
+                            MaterialTheme.typography.bodySmall.copy(
+                                color = MaterialTheme.colorScheme.onSurface,
+                            ),
                         singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.secondary)
-                            .height(50.dp)
-                            .clickable { calendarState.show() },
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.secondary)
+                                .height(50.dp)
+                                .clickable { calendarState.show() },
                     )
                 }
 
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
                 ) {
                     // Document Type Dropdown
                     FolioDropdown(
@@ -416,9 +435,10 @@ fun AddDocument(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Button(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(end = 8.dp),
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .padding(end = 8.dp),
                         enabled = propertyDocumentState.expiryDate.isNotBlank() && propertyDocumentState.documentType.isNotBlank(),
                         onClick = {
                             uploadDocument(
@@ -432,9 +452,10 @@ fun AddDocument(
                     }
 
                     Button(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 8.dp),
+                        modifier =
+                            Modifier
+                                .weight(1f)
+                                .padding(start = 8.dp),
                         onClick = { changeSelectedDocumentUri(null) },
                     ) {
                         Text("Clear")
@@ -465,16 +486,18 @@ fun DocumentsList(
     windowInfo: WindowInfo,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.8f)
-            .padding(
-                top = if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
-                    32.dp
-                } else {
-                    8.dp
-                },
-            ),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.8f)
+                .padding(
+                    top =
+                        if (windowInfo.screenWidthInfo == WindowInfo.WindowType.Compact) {
+                            32.dp
+                        } else {
+                            8.dp
+                        },
+                ),
     ) {
         val openDeleteDialog = remember { mutableStateOf(false) }
         var documentID by remember { mutableStateOf(0) }

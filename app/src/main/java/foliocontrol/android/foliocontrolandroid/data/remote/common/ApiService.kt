@@ -29,17 +29,18 @@ object Constants {
     /**
      * Map associating property types with corresponding [ImageVector] icons from the [Icons.Default] set.
      */
-    val propertyTypesIcons: Map<String, ImageVector> = mapOf(
-        "Apartment" to Icons.Default.Apartment,
-        "House" to Icons.Default.House,
-        "Garage" to Icons.Default.Garage,
-        "Store" to Icons.Default.Store,
-        "Terraced House" to Icons.Default.Villa,
-        "Semi-detached" to Icons.Default.Home,
-        "Villa" to Icons.Default.Villa,
-        "Storage" to Icons.Default.Warehouse,
-        "Other" to Icons.Default.Info,
-    )
+    val propertyTypesIcons: Map<String, ImageVector> =
+        mapOf(
+            "Apartment" to Icons.Default.Apartment,
+            "House" to Icons.Default.House,
+            "Garage" to Icons.Default.Garage,
+            "Store" to Icons.Default.Store,
+            "Terraced House" to Icons.Default.Villa,
+            "Semi-detached" to Icons.Default.Home,
+            "Villa" to Icons.Default.Villa,
+            "Storage" to Icons.Default.Warehouse,
+            "Other" to Icons.Default.Info,
+        )
 }
 
 /**
@@ -49,8 +50,9 @@ object Constants {
  * @return Instance of the specified API class with a Retrofit client.
  */
 fun <T> createRetrofit(apiClass: Class<T>): T {
-    val retrofit = Retrofit.Builder().baseUrl(Constants.BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create()).build()
+    val retrofit =
+        Retrofit.Builder().baseUrl(Constants.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create()).build()
 
     return retrofit.create(apiClass)
 }

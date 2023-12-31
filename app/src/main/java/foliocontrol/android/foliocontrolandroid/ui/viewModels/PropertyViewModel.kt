@@ -11,7 +11,6 @@ import foliocontrol.android.foliocontrolandroid.data.document.Downloader
 import foliocontrol.android.foliocontrolandroid.data.local.auth.TokenRepo
 import foliocontrol.android.foliocontrolandroid.data.local.database.PartnershipDatabase
 import foliocontrol.android.foliocontrolandroid.data.local.database.PropertyDatabase
-
 import foliocontrol.android.foliocontrolandroid.data.local.schema.asDomainModel
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthService
 import foliocontrol.android.foliocontrolandroid.data.repository.AuthServiceImpl
@@ -93,7 +92,6 @@ class PropertyViewModel(
     var addPropertyState by mutableStateOf(Property())
         private set
 
-
     fun getToken(): String {
         return tokenRepo.getToken()
     }
@@ -141,11 +139,13 @@ class PropertyViewModel(
      * @param query The search query to filter the property list.
      */
     fun filterProperties(query: String) {
-        filteredList = propertyListState.filter {
-            it.propertyName.contains(query, ignoreCase = true) || it.propertyType.contains(
-                query, ignoreCase = true,
-            ) || it.country.contains(query, ignoreCase = true)
-        }
+        filteredList =
+            propertyListState.filter {
+                it.propertyName.contains(query, ignoreCase = true) ||
+                    it.propertyType.contains(
+                        query, ignoreCase = true,
+                    ) || it.country.contains(query, ignoreCase = true)
+            }
     }
 
     /**
@@ -165,9 +165,10 @@ class PropertyViewModel(
      */
     suspend fun getPropertyListForPartnership() {
         try {
-            propertyListState = propertyService.getProperties(
-                getToken(), currentPartnership,
-            )
+            propertyListState =
+                propertyService.getProperties(
+                    getToken(), currentPartnership,
+                )
             if (propertyListState.isNotEmpty()) {
                 propertyRepo.dropTable(currentPartnership.partnershipID)
             }
@@ -175,7 +176,6 @@ class PropertyViewModel(
         } catch (e: Exception) {
             println("Error: ${e.message}")
         } finally {
-
         }
     }
 
@@ -202,7 +202,6 @@ class PropertyViewModel(
     fun downloadFile(url: String): Long {
         return downloader.downloadFile(url)
     }
-
 
     /**
      * Switches the active partnership, updating the [propertyListState] and [currentPartnership].
@@ -323,21 +322,24 @@ class PropertyViewModel(
     }
 
     suspend fun getPremisesForProperty(property: Property) {
-        propertyPremises = propertyService.getPremisesForProperty(
-            getToken(), property,
-        )
+        propertyPremises =
+            propertyService.getPremisesForProperty(
+                getToken(), property,
+            )
     }
 
     suspend fun getDetailsForProperty(property: Property) {
-        propertyState = propertyService.getDetailsForProperty(
-            getToken(), property,
-        )
+        propertyState =
+            propertyService.getDetailsForProperty(
+                getToken(), property,
+            )
     }
 
     suspend fun getDocumentsForProperty(property: Property) {
-        propertyDocuments = propertyService.getDocumentsForProperty(
-            getToken(), property,
-        )
+        propertyDocuments =
+            propertyService.getDocumentsForProperty(
+                getToken(), property,
+            )
     }
 
     fun handlePropertyEdit(
@@ -403,9 +405,10 @@ class PropertyViewModel(
         handlePropertyEdit(
             propertyImg = "null",
         )
-        propertyImageState = MultipartBody.Part.createFormData(
-            "propertyImage", "null",
-        )
+        propertyImageState =
+            MultipartBody.Part.createFormData(
+                "propertyImage", "null",
+            )
 
         handlePropertySave()
     }
@@ -414,9 +417,10 @@ class PropertyViewModel(
      * Clears the selected document and resets [propertyDocumentState].
      */
     fun clearDocument() {
-        propertyDocumentState = MultipartBody.Part.createFormData(
-            "document", "null",
-        )
+        propertyDocumentState =
+            MultipartBody.Part.createFormData(
+                "document", "null",
+            )
         handleAddDocumentEdit(
             name = " ",
             documentType = " ",

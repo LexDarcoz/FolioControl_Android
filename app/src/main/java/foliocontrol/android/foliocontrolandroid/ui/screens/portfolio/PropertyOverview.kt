@@ -45,12 +45,13 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.rememberWindowInfo
 
-val tabItemsList = listOf(
-    TabItem("Details", Icons.Outlined.HomeWork, Icons.Filled.HomeWork),
-    TabItem("Photos", Icons.Outlined.PictureInPicture, Icons.Filled.PictureInPicture),
-    TabItem("Document", Icons.Outlined.FileCopy, Icons.Filled.FileCopy),
-    TabItem("Premises", Icons.Outlined.Room, Icons.Filled.Room),
-)
+val tabItemsList =
+    listOf(
+        TabItem("Details", Icons.Outlined.HomeWork, Icons.Filled.HomeWork),
+        TabItem("Photos", Icons.Outlined.PictureInPicture, Icons.Filled.PictureInPicture),
+        TabItem("Document", Icons.Outlined.FileCopy, Icons.Filled.FileCopy),
+        TabItem("Premises", Icons.Outlined.Room, Icons.Filled.Room),
+    )
 
 data class TabItem(
     val title: String,
@@ -83,7 +84,6 @@ data class TabItem(
  * @param getDataForActiveProperty Callback to fetch data for the active property.
  * @param saveDataForActiveProperty Callback to save data for the active property.
  * @param navigateTo Callback to navigate to a different screen or destination.
- * @param offline Boolean flag indicating whether the app is in offline mode.
  */
 @Composable
 fun PropertyOverviewScreen(
@@ -277,9 +277,10 @@ fun Overview(
     }
 
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = loading)
-    val pagerState = rememberPagerState {
-        tabItems.size
-    }
+    val pagerState =
+        rememberPagerState {
+            tabItems.size
+        }
     var selectedTabIndex by remember {
         mutableStateOf(0)
     }
@@ -314,7 +315,8 @@ fun Overview(
                     }, text = {
                         Text(text = item.title, color = MaterialTheme.colorScheme.primary)
                     }, icon = {
-                        @Suppress("ktlint:standard:max-line-length") (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary).let {
+                        @Suppress("ktlint:standard:max-line-length")
+                        (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary).let {
                             Icon(
                                 tint = it,
                                 imageVector = if (selectedTabIndex == index) item.selectedIcon else item.unselectedIcon,

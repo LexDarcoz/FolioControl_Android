@@ -59,26 +59,27 @@ fun BottomNavigation(
         mutableStateOf(0)
     }
 
-    val items = listOf(
-        BottomNavigationItem(
-            title = "Home",
-            selectedIcon = Icons.Filled.Domain,
-            unselectedIcon = Icons.Outlined.Domain,
-            onClick = { },
-        ),
-        BottomNavigationItem(
-            title = "Account",
-            selectedIcon = Icons.Filled.AccountCircle,
-            unselectedIcon = Icons.Outlined.AccountCircle,
-            onClick = { },
-        ),
-        BottomNavigationItem(
-            title = currentPartnership.name,
-            selectedIcon = Icons.Filled.Apartment,
-            unselectedIcon = Icons.Outlined.Apartment,
-            onClick = { },
-        ),
-    )
+    val items =
+        listOf(
+            BottomNavigationItem(
+                title = "Home",
+                selectedIcon = Icons.Filled.Domain,
+                unselectedIcon = Icons.Outlined.Domain,
+                onClick = { },
+            ),
+            BottomNavigationItem(
+                title = "Account",
+                selectedIcon = Icons.Filled.AccountCircle,
+                unselectedIcon = Icons.Outlined.AccountCircle,
+                onClick = { },
+            ),
+            BottomNavigationItem(
+                title = currentPartnership.name,
+                selectedIcon = Icons.Filled.Apartment,
+                unselectedIcon = Icons.Outlined.Apartment,
+                onClick = { },
+            ),
+        )
 
     val isPartnershipsSelected =
         selectedIcon == items.indexOfFirst { it.title == currentPartnership.name }
@@ -86,10 +87,11 @@ fun BottomNavigation(
     NavigationBar(
         contentColor = MaterialTheme.colorScheme.onPrimary,
         containerColor = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.graphicsLayer {
-            shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
-            clip = true
-        },
+        modifier =
+            Modifier.graphicsLayer {
+                shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
+                clip = true
+            },
     ) {
         items.forEachIndexed { index, item ->
             NavigationBarItem(

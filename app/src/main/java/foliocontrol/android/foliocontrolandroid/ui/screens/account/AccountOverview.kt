@@ -36,14 +36,15 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.ErrorScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.LoadingScreen
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
 
-val tabItems = listOf(
-    TabItem("Details", Icons.Outlined.AccountBox, Icons.Filled.AccountBox),
-    TabItem(
-        "Partnerships",
-        Icons.Outlined.Apartment,
-        Icons.Filled.Apartment,
-    ),
-)
+val tabItems =
+    listOf(
+        TabItem("Details", Icons.Outlined.AccountBox, Icons.Filled.AccountBox),
+        TabItem(
+            "Partnerships",
+            Icons.Outlined.Apartment,
+            Icons.Filled.Apartment,
+        ),
+    )
 
 data class TabItem(
     val title: String,
@@ -176,9 +177,10 @@ fun AccountOverview(
     offline: Boolean,
     navigateTo: (Any?) -> Unit = {},
 ) {
-    val pagerState = rememberPagerState {
-        tabItems.size
-    }
+    val pagerState =
+        rememberPagerState {
+            tabItems.size
+        }
     var selectedTabIndex by remember {
         mutableStateOf(0)
     }
@@ -200,7 +202,8 @@ fun AccountOverview(
                 }, text = {
                     Text(text = item.title, color = MaterialTheme.colorScheme.primary)
                 }, icon = {
-                    @Suppress("ktlint:standard:max-line-length") (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary).let {
+                    @Suppress("ktlint:standard:max-line-length")
+                    (if (selectedTabIndex == index) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSecondary).let {
                         Icon(
                             tint = it,
                             imageVector = if (selectedTabIndex == index) item.selectedIcon else item.unselectedIcon,

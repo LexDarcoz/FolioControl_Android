@@ -40,16 +40,17 @@ data class PropertyRoomEntity(
  *
  * @return The [Property] domain model.
  */
-fun PropertyRoomEntity.asDomainModel() = Property(
-    propertyID = propertyID,
-    propertyName = propertyName,
-    propertyType = propertyType,
-    propertyImg = propertyImg,
-    street = street,
-    streetNumber = streetNumber,
-    city = city,
-    zipCode = zipCode,
-    country = country,
-    propertyDescription = propertyDescription,
-    FK_partnershipID = FK_partnershipID,
-)
+fun PropertyRoomEntity.asDomainModel() =
+    Property(
+        propertyID = propertyID,
+        propertyName = propertyName,
+        propertyType = propertyType,
+        propertyImg = propertyImg,
+        street = street,
+        streetNumber = streetNumber,
+        city = city,
+        zipCode = zipCode,
+        country = country,
+        propertyDescription = propertyDescription,
+        FK_partnershipID = FK_partnershipID,
+    )

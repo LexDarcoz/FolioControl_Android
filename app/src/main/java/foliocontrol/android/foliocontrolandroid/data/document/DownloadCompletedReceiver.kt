@@ -6,9 +6,11 @@ import android.content.Context
 import android.content.Intent
 
 class DownloadCompleteReceiver : BroadcastReceiver() {
-
     @Suppress("ktlint:standard:function-signature")
-    override fun onReceive(context: Context?, intent: Intent?) {
+    override fun onReceive(
+        context: Context?,
+        intent: Intent?,
+    ) {
         // Check if the received action is "android.intent.action.DOWNLOAD_COMPLETE"
         if (intent?.action == DownloadManager.ACTION_DOWNLOAD_COMPLETE) {
             // Retrieve the download ID from the intent

@@ -49,6 +49,7 @@ enum class Identifier {
     SearchFab,
     AddPropertyFab,
 }
+
 /**
  * Composable function for the home screen.
  *
@@ -179,6 +180,7 @@ fun HomeScreen(
         }
     }
 }
+
 /**
  * Composable function for the main UI of the home screen.
  *
@@ -279,7 +281,7 @@ fun Home(
     SwipeRefresh(state = swipeRefreshState, onRefresh = { getData() }) {
         scope.launch {
             if (uiState is UiState.Offline) {
-                var result =
+                val result =
                     snackbarHostState.showSnackbar(
                         message = uiState.message,
                         actionLabel = "Retry",

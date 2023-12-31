@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import foliocontrol.android.foliocontrolandroid.domain.Partnership
+
 /**
  * Represents a Room database entity for the "partnership_table" table.
  *
@@ -42,6 +43,7 @@ data class PartnershipRoomEntity(
     @ColumnInfo(name = "country")
     val country: String = "",
 )
+
 /**
  * Extension function to convert [PartnershipRoomEntity] to the corresponding domain model [Partnership].
  *

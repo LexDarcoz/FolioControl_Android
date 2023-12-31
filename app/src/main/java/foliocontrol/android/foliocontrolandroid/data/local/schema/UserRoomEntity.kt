@@ -38,15 +38,16 @@ data class UserRoomEntity(
  *
  * @return The [User] domain model.
  */
-fun UserRoomEntity.asDomainModel() = User(
-    userID = userID,
-    name = name,
-    firstName = firstName,
-    lastName = lastName,
-    street = street,
-    streetNumber = streetNumber,
-    city = city,
-    zipCode = zipCode,
-    country = country,
-    email = email,
-)
+fun UserRoomEntity.asDomainModel() =
+    User(
+        userID = userID,
+        name = name,
+        firstName = firstName,
+        lastName = lastName,
+        street = street,
+        streetNumber = streetNumber,
+        city = city,
+        zipCode = zipCode,
+        country = country,
+        email = email,
+    )

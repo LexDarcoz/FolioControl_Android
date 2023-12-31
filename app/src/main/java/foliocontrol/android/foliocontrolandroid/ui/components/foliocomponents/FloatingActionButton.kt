@@ -48,6 +48,7 @@ import foliocontrol.android.foliocontrolandroid.screens.Identifier
 import foliocontrol.android.foliocontrolandroid.screens.MinFabItem
 import foliocontrol.android.foliocontrolandroid.screens.MultiFloatingState
 import kotlin.math.roundToInt
+
 /**
  * Composable function representing a multi-floating action button with expandable options.
  *
@@ -175,6 +176,7 @@ fun MultiFloatingButton(
         }
     }
 }
+
 /**
  * Composable function representing a mini-floating action button.
  *

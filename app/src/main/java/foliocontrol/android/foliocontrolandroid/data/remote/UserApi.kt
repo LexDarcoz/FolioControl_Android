@@ -84,19 +84,20 @@ suspend fun saveUser(
     user: User,
 ) {
     try {
-        val userDto = UserDto(
-            name = user.name,
-            firstName = user.firstName,
-            lastName = user.lastName,
-            street = user.street,
-            streetNumber = user.streetNumber,
-            zipCode = user.zipCode,
-            city = user.city,
-            country = user.country,
-            email = user.email,
-        )
+        val userDto =
+            UserDto(
+                name = user.name,
+                firstName = user.firstName,
+                lastName = user.lastName,
+                street = user.street,
+                streetNumber = user.streetNumber,
+                zipCode = user.zipCode,
+                city = user.city,
+                country = user.country,
+                email = user.email,
+            )
 
-        val call = userApi.saveUser(token, userDto)
+        userApi.saveUser(token, userDto)
     } catch (e: Exception) {
         Log.e("TESTING", "UserLoginRequest: ", e)
     }

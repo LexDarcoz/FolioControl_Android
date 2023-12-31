@@ -62,30 +62,34 @@ fun FolioDropdown(
     Column {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodyLarge.copy(
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.primary,
-            ),
+            style =
+                MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.primary,
+                ),
             modifier = Modifier.padding(bottom = 4.dp),
         )
 
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.secondary)
-                .height(50.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.secondary)
+                    .height(50.dp),
         ) {
             OutlinedTextField(
                 value = selected,
                 onValueChange = { },
                 enabled = false,
-                textStyle = MaterialTheme.typography.bodySmall.copy(
-                    color = MaterialTheme.colorScheme.onSurface,
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { toggleExpanded() },
+                textStyle =
+                    MaterialTheme.typography.bodySmall.copy(
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { toggleExpanded() },
                 leadingIcon = {
                     Icon(
                         Icons.Default.MoreVert,
@@ -98,10 +102,11 @@ fun FolioDropdown(
                         contentDescription = "Localized description",
                     )
                 },
-                colors = OutlinedTextFieldDefaults.colors(
-                    disabledTextColor = MaterialTheme.colorScheme.onSurface, // Set the text color for disabled state
-                    disabledBorderColor = MaterialTheme.colorScheme.onSurface, // Set the border color for disabled state
-                ),
+                colors =
+                    OutlinedTextFieldDefaults.colors(
+                        disabledTextColor = MaterialTheme.colorScheme.onSurface, // Set the text color for disabled state
+                        disabledBorderColor = MaterialTheme.colorScheme.onSurface, // Set the border color for disabled state
+                    ),
             )
 
             DropdownMenu(

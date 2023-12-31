@@ -54,6 +54,4 @@ class PropertyDatabaseImpl(private val propertyDao: PropertyDao) : PropertyDatab
     override suspend fun clearAllTables() {
         propertyDao.clearAllTables()
     }
-
-
 }

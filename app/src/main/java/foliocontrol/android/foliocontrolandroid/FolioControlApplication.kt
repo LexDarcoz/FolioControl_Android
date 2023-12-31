@@ -36,7 +36,6 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.WindowInfo
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.rememberWindowInfo
 import kotlinx.coroutines.launch
 
-
 /**
  * Composable function representing the main entry point of the FolioControl Android application.
  * This function defines the overall structure of the app using Jetpack Compose and integrates
@@ -157,6 +156,7 @@ fun FolioControlApplication(
         }
     }
 }
+
 /**
  * Composable function responsible for defining the navigation structure of the Folio Control Android application.
  * It uses Jetpack Compose's [NavHost] to manage the navigation flow between different screens.

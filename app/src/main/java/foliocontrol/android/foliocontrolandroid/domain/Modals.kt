@@ -166,37 +166,39 @@ data class PropertyDocument(
  *
  * @return [PropertyRoomEntity] representing the property.
  */
-fun Property.asPropertyRoomEntity() = PropertyRoomEntity(
-    propertyID = propertyID,
-    propertyName = propertyName,
-    propertyType = propertyType,
-    propertyImg = propertyImg,
-    street = street,
-    streetNumber = streetNumber,
-    city = city,
-    zipCode = zipCode,
-    country = country,
-    propertyDescription = propertyDescription,
-    FK_partnershipID = FK_partnershipID,
-)
+fun Property.asPropertyRoomEntity() =
+    PropertyRoomEntity(
+        propertyID = propertyID,
+        propertyName = propertyName,
+        propertyType = propertyType,
+        propertyImg = propertyImg,
+        street = street,
+        streetNumber = streetNumber,
+        city = city,
+        zipCode = zipCode,
+        country = country,
+        propertyDescription = propertyDescription,
+        FK_partnershipID = FK_partnershipID,
+    )
 
 /**
  * Extension function converting [User] to [UserRoomEntity].
  *
  * @return [UserRoomEntity] representing the user.
  */
-fun User.asUserRoomEntity() = UserRoomEntity(
-    userID = userID,
-    name = name,
-    firstName = firstName,
-    lastName = lastName,
-    street = street,
-    streetNumber = streetNumber,
-    zipCode = zipCode,
-    city = city,
-    country = country,
-    email = email,
-)
+fun User.asUserRoomEntity() =
+    UserRoomEntity(
+        userID = userID,
+        name = name,
+        firstName = firstName,
+        lastName = lastName,
+        street = street,
+        streetNumber = streetNumber,
+        zipCode = zipCode,
+        city = city,
+        country = country,
+        email = email,
+    )
 
 /**
  * Immutable data class representing partnership information.
@@ -232,18 +234,19 @@ data class Partnership(
  *
  * @return [PartnershipRoomEntity] representing the partnership.
  */
-fun Partnership.asPartnershipRoomEntity() = PartnershipRoomEntity(
-    partnershipID = partnershipID,
-    name = name,
-    logoImg = logoImg,
-    countryCode = countryCode,
-    vatNumber = vatNumber,
-    street = street,
-    streetNumber = streetNumber,
-    zipCode = zipCode,
-    city = city,
-    country = country,
-)
+fun Partnership.asPartnershipRoomEntity() =
+    PartnershipRoomEntity(
+        partnershipID = partnershipID,
+        name = name,
+        logoImg = logoImg,
+        countryCode = countryCode,
+        vatNumber = vatNumber,
+        street = street,
+        streetNumber = streetNumber,
+        zipCode = zipCode,
+        city = city,
+        country = country,
+    )
 
 /**
  * Data class representing an authentication token.

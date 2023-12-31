@@ -18,7 +18,6 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -47,7 +46,6 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.rememberWin
  *
  * @param loginUiState The current state of the authentication process.
  * @param getData A callback function to retrieve data.
- * @param getUserData A callback function to retrieve user-specific data.
  * @param toggleSearchBar A callback function to toggle the search bar.
  * @param isSearchBarEnabled A flag indicating whether the search bar is enabled.
  * @param filteredList The filtered list of properties based on the search criteria.
@@ -176,30 +174,32 @@ fun LoginScreen(
 ) {
     val windowInfo = rememberWindowInfo()
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
         contentAlignment = Alignment.TopCenter,
     ) {
         Column(
-            modifier = Modifier
-                .verticalScroll(
-                    enabled = true, state = rememberScrollState()
-                )
-                .fillMaxWidth()
-
+            modifier =
+                Modifier
+                    .verticalScroll(
+                        enabled = true,
+                        state = rememberScrollState(),
+                    )
+                    .fillMaxWidth(),
         ) {
             Row(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compact) 64.dp else 0.dp)
-                    .wrapContentHeight()
+                modifier =
+                    Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = if (windowInfo.screenWidthInfo is WindowInfo.WindowType.Compact) 64.dp else 0.dp)
+                        .wrapContentHeight(),
             ) {
                 Text(
                     text = "Sign In",
                     style = MaterialTheme.typography.titleLarge,
-
-                    )
+                )
                 Icon(imageVector = Icons.Default.ExitToApp, contentDescription = null)
             }
 
@@ -212,20 +212,22 @@ fun LoginScreen(
                     onValueChange = { updateLoginStateEmail(it) },
                     label = { Text("Email") },
                     singleLine = true,
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Email,
-                    ),
-
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedLabelColor = MaterialTheme.colorScheme.primary,
-                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface, ),
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Email,
+                        ),
+                    colors =
+                        OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedLabelColor = MaterialTheme.colorScheme.primary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onSurface,
+                        ),
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Email,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
+                            tint = MaterialTheme.colorScheme.onSurface,
                         )
                     },
                 )
@@ -237,20 +239,22 @@ fun LoginScreen(
                     onValueChange = { updateLoginStatePassword(it) },
                     label = { Text("Password") },
                     visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Password,
-                    ),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color.White,
-                        unfocusedContainerColor = Color.White,
-                        focusedLabelColor = MaterialTheme.colorScheme.primary,
-                        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface,
-                    ),
+                    keyboardOptions =
+                        KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Password,
+                        ),
+                    colors =
+                        OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedLabelColor = MaterialTheme.colorScheme.primary,
+                            unfocusedLabelColor = MaterialTheme.colorScheme.onSurface,
+                        ),
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Lock,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.onSurface
+                            tint = MaterialTheme.colorScheme.onSurface,
                         )
                     },
                 )
@@ -267,10 +271,11 @@ fun LoginScreen(
                     onClick = {
                         login()
                     },
-                    modifier = Modifier
-                        .height(64.dp)
-                        .width(200.dp)
-                        .padding(top = 16.dp),
+                    modifier =
+                        Modifier
+                            .height(64.dp)
+                            .width(200.dp)
+                            .padding(top = 16.dp),
                 ) {
                     Text(
                         "Login",

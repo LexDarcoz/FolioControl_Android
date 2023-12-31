@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+
 /**
  * Composable function for displaying a loading dialog with a circular progress indicator and optional loading text.
  *
@@ -31,21 +32,24 @@ fun DialogLoader(
     loadingText: String = "Loading...",
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .then(modifier),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .then(modifier),
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .padding(16.dp)
-                .clip(RoundedCornerShape(8.dp)),
+            modifier =
+                Modifier
+                    .padding(16.dp)
+                    .clip(RoundedCornerShape(8.dp)),
         ) {
             CircularProgressIndicator(
-                modifier = Modifier
-                    .size(150.dp)
-                    .padding(16.dp),
+                modifier =
+                    Modifier
+                        .size(150.dp)
+                        .padding(16.dp),
                 color = progressBarColor,
             )
             Text(

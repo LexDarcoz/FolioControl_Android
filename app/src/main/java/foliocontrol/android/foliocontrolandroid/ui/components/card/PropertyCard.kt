@@ -37,6 +37,7 @@ import foliocontrol.android.foliocontrolandroid.data.remote.common.Constants
 import foliocontrol.android.foliocontrolandroid.domain.Property
 import foliocontrol.android.foliocontrolandroid.ui.components.dialogs.DeleteDialog
 import foliocontrol.android.foliocontrolandroid.ui.viewModels.common.UiState
+
 /**
  * Composable function representing a card for displaying property information.
  *
@@ -174,8 +175,7 @@ fun PropertyCard(
             )
             Text(
                 text = "${property.street} ${property.streetNumber}, ${property.city} ${property.zipCode}",
-                style
-                    =
+                style =
                     MaterialTheme.typography.bodySmall,
             )
             Text(

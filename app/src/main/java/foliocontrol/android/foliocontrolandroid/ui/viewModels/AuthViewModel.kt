@@ -99,17 +99,19 @@ class AuthViewModel(
             loginUiState = UiState.Loading
 
             try {
-                var auth = authService.login(loginCredentials, updateTokenState = { token ->
-                    updateTokenState(token)
-                })
+                val auth =
+                    authService.login(loginCredentials, updateTokenState = { token ->
+                        updateTokenState(token)
+                    })
 
                 if (auth) {
                     saveEncryptedPreference("token", userToken)
                     loginUiState = UiState.Success("You have logged in")
                 } else {
-                    loginUiState = UiState.LoggedOut(
-                        "Something went wrong logging in, check credentials",
-                    )
+                    loginUiState =
+                        UiState.LoggedOut(
+                            "Something went wrong logging in, check credentials",
+                        )
                 }
             } catch (e: Exception) {
                 loginUiState = UiState.LoggedOut(e.localizedMessage ?: "You logged out")

@@ -21,17 +21,18 @@ class AndroidDownloader(private val context: Context) : Downloader {
      */
     override fun downloadFile(url: String): Long {
         // Create a download request using DownloadManager.Requests
-        val request = DownloadManager.Request(url.toUri()).setMimeType("application/pdf")
+        val request =
+            DownloadManager.Request(url.toUri()).setMimeType("application/pdf")
 //            .setAllowedNetworkTypes(
 //                DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE
 //            )
-            .setTitle("Download").setDescription("Downloading Property Document...")
+                .setTitle("Download").setDescription("Downloading Property Document...")
 //            .addRequestHeader("Authorization", "Bearer ${"token"}")
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            .setDestinationInExternalPublicDir(
-                Environment.DIRECTORY_DOWNLOADS,
-                "foliocontrol_document.pdf",
-            ).setAllowedOverMetered(true).setAllowedOverRoaming(true)
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                .setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_DOWNLOADS,
+                    "foliocontrol_document.pdf",
+                ).setAllowedOverMetered(true).setAllowedOverRoaming(true)
 
         // Enqueue the download request and return the unique download identifier
         return downloadManager.enqueue(request)

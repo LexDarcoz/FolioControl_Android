@@ -16,35 +16,36 @@ import foliocontrol.android.foliocontrolandroid.ui.viewModels.PropertyViewModel
  */
 object AppViewModelProvider {
     /** Factory for creating instances of ViewModels with appropriate dependencies. */
-    val Factory = viewModelFactory {
-        // Initialize AuthViewModel with property, partnership, and account repositories.
-        initializer {
-            AuthViewModel(
-                propertyRepo = foliocontrolApplication().container.propertyDatabase,
-                partnershipRepo = foliocontrolApplication().container.partnershipDatabase,
-                tokenRepo = TokenRepoImpl(),
-                accountRepo = foliocontrolApplication().container.accountDatabase,
-            )
-        }
+    val Factory =
+        viewModelFactory {
+            // Initialize AuthViewModel with property, partnership, and account repositories.
+            initializer {
+                AuthViewModel(
+                    propertyRepo = foliocontrolApplication().container.propertyDatabase,
+                    partnershipRepo = foliocontrolApplication().container.partnershipDatabase,
+                    tokenRepo = TokenRepoImpl(),
+                    accountRepo = foliocontrolApplication().container.accountDatabase,
+                )
+            }
 
-        // Initialize PropertyViewModel with property, partnership, and downloader dependencies.
-        initializer {
-            PropertyViewModel(
-                propertyRepo = foliocontrolApplication().container.propertyDatabase,
-                partnershipRepo = foliocontrolApplication().container.partnershipDatabase,
-                tokenRepo = TokenRepoImpl(),
-                downloader = foliocontrolApplication().downloader,
-            )
-        }
+            // Initialize PropertyViewModel with property, partnership, and downloader dependencies.
+            initializer {
+                PropertyViewModel(
+                    propertyRepo = foliocontrolApplication().container.propertyDatabase,
+                    partnershipRepo = foliocontrolApplication().container.partnershipDatabase,
+                    tokenRepo = TokenRepoImpl(),
+                    downloader = foliocontrolApplication().downloader,
+                )
+            }
 
-        // Initialize AccountViewModel with the account repository.
-        initializer {
-            AccountViewModel(
-                accountRepo = foliocontrolApplication().container.accountDatabase,
-                tokenRepo = TokenRepoImpl(),
-            )
+            // Initialize AccountViewModel with the account repository.
+            initializer {
+                AccountViewModel(
+                    accountRepo = foliocontrolApplication().container.accountDatabase,
+                    tokenRepo = TokenRepoImpl(),
+                )
+            }
         }
-    }
 }
 
 /**

@@ -52,10 +52,11 @@ fun SearchBar(
     val searchIcon = Icons.Default.Search
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(searchBarBackgroundColor)
-            .padding(16.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(searchBarBackgroundColor)
+                .padding(16.dp),
     ) {
         // Search bar with border
         TextField(
@@ -63,15 +64,16 @@ fun SearchBar(
             onValueChange = {
                 query = it
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .clip(RoundedCornerShape(cornerRadius))
-                .border(
-                    width = borderWidth,
-                    color = borderColor,
-                    shape = RoundedCornerShape(cornerRadius),
-                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .clip(RoundedCornerShape(cornerRadius))
+                    .border(
+                        width = borderWidth,
+                        color = borderColor,
+                        shape = RoundedCornerShape(cornerRadius),
+                    ),
             textStyle = LocalTextStyle.current.copy(color = contentColor),
             placeholder = {
                 Text(
@@ -91,19 +93,22 @@ fun SearchBar(
                     imageVector = Icons.Default.Close,
                     contentDescription = null,
                     tint = iconTint,
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .clickable {
-                            toggleSearchBar()
-                        },
+                    modifier =
+                        Modifier
+                            .padding(end = 8.dp)
+                            .clickable {
+                                toggleSearchBar()
+                            },
                 )
             },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Search,
-            ),
-            keyboardActions = KeyboardActions(onSearch = {
-                filterProperties(query)
-            }),
+            keyboardOptions =
+                KeyboardOptions(
+                    imeAction = ImeAction.Search,
+                ),
+            keyboardActions =
+                KeyboardActions(onSearch = {
+                    filterProperties(query)
+                }),
         )
     }
 }

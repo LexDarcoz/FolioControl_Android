@@ -63,23 +63,24 @@ fun NavigationDrawer(
     navigateTo: (String) -> Unit,
     content: @Composable (Modifier) -> Unit,
 ) {
-    val items = listOf(
-        NavigationItem(
-            title = "Home",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home,
-        ),
-        NavigationItem(
-            title = "Account",
-            selectedIcon = Icons.Filled.AccountCircle,
-            unselectedIcon = Icons.Outlined.AccountCircle,
-        ),
-        NavigationItem(
-            title = currentPartnership.name,
-            selectedIcon = Icons.Filled.Apartment,
-            unselectedIcon = Icons.Outlined.Apartment,
-        ),
-    )
+    val items =
+        listOf(
+            NavigationItem(
+                title = "Home",
+                selectedIcon = Icons.Filled.Home,
+                unselectedIcon = Icons.Outlined.Home,
+            ),
+            NavigationItem(
+                title = "Account",
+                selectedIcon = Icons.Filled.AccountCircle,
+                unselectedIcon = Icons.Outlined.AccountCircle,
+            ),
+            NavigationItem(
+                title = currentPartnership.name,
+                selectedIcon = Icons.Filled.Apartment,
+                unselectedIcon = Icons.Outlined.Apartment,
+            ),
+        )
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -113,11 +114,12 @@ fun NavigationDrawer(
                             },
                             icon = {
                                 Icon(
-                                    imageVector = if (index == selectedItemIndex) {
-                                        item.selectedIcon
-                                    } else {
-                                        item.unselectedIcon
-                                    },
+                                    imageVector =
+                                        if (index == selectedItemIndex) {
+                                            item.selectedIcon
+                                        } else {
+                                            item.unselectedIcon
+                                        },
                                     contentDescription = item.title,
                                     tint = MaterialTheme.colorScheme.primary,
                                 )

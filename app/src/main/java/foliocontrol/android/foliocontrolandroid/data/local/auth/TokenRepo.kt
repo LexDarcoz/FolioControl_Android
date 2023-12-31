@@ -6,10 +6,11 @@ import foliocontrol.android.foliocontrolandroid.data.local.saveEncryptedPreferen
 
 interface TokenRepo {
     fun getToken(): String
+
     fun setToken(token: String)
+
     fun removeToken()
 }
-
 
 class TokenRepoImpl : TokenRepo {
     override fun getToken(): String {
@@ -23,5 +24,4 @@ class TokenRepoImpl : TokenRepo {
     override fun removeToken() {
         removeEncryptedPreference("token")
     }
-
 }

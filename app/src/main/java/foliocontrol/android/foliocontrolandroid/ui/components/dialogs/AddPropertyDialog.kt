@@ -149,6 +149,7 @@ val items =
             "Other",
         ),
     )
+
 /**
  * Composable function representing the dialog for adding a new property in the Folio app.
  *
