@@ -48,13 +48,10 @@ The FolioControl Android App is a mobile application designed to manage real est
 ### Unit Tests
 
 - **ViewModels**: Ensure correct behavior of viewmodels by testing their logic.
-- **Room Database Operations**: Verify proper functioning of database-related operations.
 
 ### UI Tests
 
 - **User Flow**: Confirm that the user interface responds correctly to user interactions.
-- **Download Functionality**: Test the download functionality using a mock server.
-
 
 ## License
 
