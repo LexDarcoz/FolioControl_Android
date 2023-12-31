@@ -4,6 +4,8 @@ The FolioControl Android App is a mobile application designed to manage real est
 partnerships. It allows users to view, add, edit, and delete properties associated with different
 partnerships.
 
+## Documentation can be found [here](https://documentation.schattemanit.com)
+
 ## Features
 
 - **User Authentication**: Secure user login and authentication process.
