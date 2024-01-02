@@ -9,8 +9,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class PropertyDetailScreenTest {
-
-
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -19,17 +17,18 @@ class PropertyDetailScreenTest {
         composeTestRule.setContent {
             PropertyDetailScreen(
                 saveProperty = {},
-                propertyState = Property(
-                    0,
-                    "De poorter",
-                    "Apartment",
-                    "yes.img",
-                    "straat",
-                    "straatnr",
-                    "zip",
-                    "stad",
-                    "country",
-                ),
+                propertyState =
+                    Property(
+                        0,
+                        "De poorter",
+                        "Apartment",
+                        "yes.img",
+                        "straat",
+                        "straatnr",
+                        "zip",
+                        "stad",
+                        "country",
+                    ),
                 handlePropertyEditName = {},
                 handlePropertyEditType = {},
                 handlePropertyEditStreet = {},
@@ -38,28 +37,34 @@ class PropertyDetailScreenTest {
                 handlePropertyEditCity = {},
                 handlePropertyEditCountry = {},
                 navigateTo = {},
-                offline = false
-
+                offline = false,
             )
         }
 
         composeTestRule.onNodeWithText(
-            "Details", ignoreCase = true, substring = true
+            "Details",
+            ignoreCase = true,
+            substring = true,
         ).assertExists()
         composeTestRule.onNodeWithText(
-            "Apartment", ignoreCase = true, substring = true
+            "Apartment",
+            ignoreCase = true,
+            substring = true,
         ).assertExists()
         composeTestRule.onNodeWithText(
-            "Details - De poorter", ignoreCase = true
+            "Details - De poorter",
+            ignoreCase = true,
         ).assertExists()
         composeTestRule.onNodeWithText(
-            "City", ignoreCase = true, substring = true
+            "City",
+            ignoreCase = true,
+            substring = true,
         ).assertExists()
         composeTestRule.onNodeWithText(
-            "zip"
+            "zip",
         ).assertExists()
         composeTestRule.onNodeWithText(
-            "Save"
+            "Save",
         ).assertExists().assertHasClickAction()
     }
 
@@ -68,17 +73,18 @@ class PropertyDetailScreenTest {
         composeTestRule.setContent {
             PropertyDetailScreen(
                 saveProperty = {},
-                propertyState = Property(
-                    0,
-                    "De poorter",
-                    "Apartment",
-                    "yes.img",
-                    "straat",
-                    "straatnr",
-                    "zip",
-                    "stad",
-                    "country",
-                ),
+                propertyState =
+                    Property(
+                        0,
+                        "De poorter",
+                        "Apartment",
+                        "yes.img",
+                        "straat",
+                        "straatnr",
+                        "zip",
+                        "stad",
+                        "country",
+                    ),
                 handlePropertyEditName = {},
                 handlePropertyEditType = {},
                 handlePropertyEditStreet = {},
@@ -87,28 +93,36 @@ class PropertyDetailScreenTest {
                 handlePropertyEditCity = {},
                 handlePropertyEditCountry = {},
                 navigateTo = {},
-                offline = true
-
+                offline = true,
             )
         }
 
         composeTestRule.onNodeWithText(
-            "Details", ignoreCase = true, substring = true
+            "Details",
+            ignoreCase = true,
+            substring = true,
         ).assertExists()
         composeTestRule.onNodeWithText(
-            "Apartment", ignoreCase = true, substring = true
+            "Apartment",
+            ignoreCase = true,
+            substring = true,
         ).assertExists()
         composeTestRule.onNodeWithText(
-            "Details - De poorter", ignoreCase = true
+            "Details - De poorter",
+            ignoreCase = true,
         ).assertExists()
         composeTestRule.onNodeWithText(
-            "City", ignoreCase = true, substring = true
+            "City",
+            ignoreCase = true,
+            substring = true,
         ).assertExists()
         composeTestRule.onNodeWithText(
-            "zip"
+            "zip",
         ).assertExists()
         composeTestRule.onNodeWithText(
-            "Offline preview", ignoreCase = true, substring = true
+            "Offline preview",
+            ignoreCase = true,
+            substring = true,
         ).assertExists()
     }
 }

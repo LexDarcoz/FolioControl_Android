@@ -17,17 +17,18 @@ class AccountScreenTest {
     fun testAccountScreen() {
         composeTestRule.setContent {
             AccountDetailScreen(
-                userState = User(
-                    0,
-                    "alias",
-                    "naam",
-                    "achternaam",
-                    "straat",
-                    "straatnr",
-                    "zip",
-                    "stad",
-                    "country",
-                ),
+                userState =
+                    User(
+                        0,
+                        "alias",
+                        "naam",
+                        "achternaam",
+                        "straat",
+                        "straatnr",
+                        "zip",
+                        "stad",
+                        "country",
+                    ),
                 handleUserSave = {},
                 handleUserNameEdit = {},
                 handleUserLastNameEdit = {},
@@ -38,16 +39,14 @@ class AccountScreenTest {
                 handleUserCityEdit = {},
                 handleUserCountryEdit = {},
                 offline = false,
-                navigateTo = {}
-
-
+                navigateTo = {},
             )
         }
 
         composeTestRule.onAllNodesWithText(
             "Details:",
             ignoreCase = true,
-            substring = true
+            substring = true,
         )[0].assertExists()
         composeTestRule.onNodeWithText("Last Name", ignoreCase = true, substring = true)
             .assertExists()
@@ -60,17 +59,18 @@ class AccountScreenTest {
     fun testAccountScreenOffline() {
         composeTestRule.setContent {
             AccountDetailScreen(
-                userState = User(
-                    0,
-                    "alias",
-                    "naam",
-                    "achternaam",
-                    "straat",
-                    "straatnr",
-                    "zip",
-                    "stad",
-                    "country",
-                ),
+                userState =
+                    User(
+                        0,
+                        "alias",
+                        "naam",
+                        "achternaam",
+                        "straat",
+                        "straatnr",
+                        "zip",
+                        "stad",
+                        "country",
+                    ),
                 handleUserSave = {},
                 handleUserNameEdit = {},
                 handleUserLastNameEdit = {},
@@ -88,7 +88,7 @@ class AccountScreenTest {
         composeTestRule.onAllNodesWithText(
             "Details:",
             ignoreCase = true,
-            substring = true
+            substring = true,
         )[0].assertExists()
         composeTestRule.onNodeWithText("Last Name", ignoreCase = true, substring = true)
             .assertExists()
@@ -99,7 +99,7 @@ class AccountScreenTest {
         composeTestRule.onAllNodesWithText(
             "naam",
             ignoreCase = true,
-            substring = true
+            substring = true,
         )[0].assertExists()
         composeTestRule.onNodeWithText("achternaam", ignoreCase = true, substring = true)
             .assertExists()
@@ -107,9 +107,5 @@ class AccountScreenTest {
             .assertExists()
         composeTestRule.onNodeWithText("Offline preview", ignoreCase = true, substring = true)
             .assertHasClickAction()
-
-
     }
-
-
 }

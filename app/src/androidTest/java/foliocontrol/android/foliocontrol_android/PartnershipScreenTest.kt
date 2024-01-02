@@ -7,7 +7,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class PartnershipScreenTest {
-
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -15,16 +14,14 @@ class PartnershipScreenTest {
     fun testAccountScreen() {
         composeTestRule.setContent {
             AccountPartnershipScreen(
-                emptyList()
-
-
+                emptyList(),
             )
         }
 
         composeTestRule.onAllNodesWithText(
-            "Partnerships:", ignoreCase = true, substring = true
+            "Partnerships:",
+            ignoreCase = true,
+            substring = true,
         )[0].assertExists()
-
     }
-
 }
