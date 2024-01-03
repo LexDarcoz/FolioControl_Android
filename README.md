@@ -120,8 +120,4 @@ partnerships.
 
 - **User Flow**: Confirm that the user interface responds correctly to user interactions.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 
