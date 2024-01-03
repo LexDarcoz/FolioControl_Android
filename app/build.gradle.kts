@@ -73,6 +73,7 @@ dependencies {
 
     // For room: local database
     implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.test:core-ktx:1.5.0")
     ksp("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
 
